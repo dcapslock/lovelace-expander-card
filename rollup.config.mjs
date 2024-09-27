@@ -7,11 +7,10 @@ import terser from '@rollup/plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import json from '@rollup/plugin-json';
 
-const production = !process.env.ROLLUP_WATCH;
 
 const MAIN_COMPONENT_NAME = 'ExpanderCard';
-const TAG_NAME = production ? 'expander-card' : 'expander-card-dev';
-const CONTAINER_TAG_NAME = production ? 'expander-child-card' : 'expander-child-card-dev';
+const TAG_NAME = 'expander-card';
+const CONTAINER_TAG_NAME ='expander-child-card';
 const FILE_NAME = `${TAG_NAME}.js`;
 
 
@@ -23,7 +22,7 @@ export default (commandlineargs) => {
             sourcemap: true,
             format: 'umd',
             name: MAIN_COMPONENT_NAME,
-            file: `public/${FILE_NAME}`
+            file: `dist/${FILE_NAME}`
         },
         plugins: [
             replace({
