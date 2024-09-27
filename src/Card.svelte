@@ -57,8 +57,12 @@ limitations under the License.
 
 <div use:uplift={{ marginTop: marginTop, type: type, hassParent: hass }}></div>
 {#if loading}
-    <span style={'padding: 1em; display: block; '}> Loading... </span>
+    <span class="loading"> Loading... </span>
 {/if}
 
 <style>
+    .loading {
+        padding: 1em;
+        display: block;
+    }
 </style>

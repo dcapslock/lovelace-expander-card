@@ -45,6 +45,9 @@
 
     export let config;
 
+    let element: HTMLElement;
+    let touchPreventClick = false;
+
     onMount(() => {
         const minWidthExpanded = config['min-width-expanded'];
         const maxWidthExpanded = config['max-width-expanded'];
@@ -61,12 +64,7 @@
         if (config.expanded !== undefined) {
             setTimeout(() => (open = config.expanded as boolean), 100);
         }
-    });
 
-
-    let element: HTMLElement;
-    let touchPreventClick = false;
-    onMount(() => {
         if(isListenerAdded) {
             return;
         }
@@ -164,7 +162,7 @@
             style="--expander-card-display:{config['expander-card-display']};
              --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{config['child-padding']}"
             class="children-container"
-            use:collapse={{ open, duration: 0.2, easing: 'ease' }}
+            use:collapse={{ open, duration: 0.3, easing: 'ease' }}
         >
             {#each config.cards as card (card)}
                 <Card hass={hass} config={card} type={card.type} marginTop={config['child-margin-top']}/>
