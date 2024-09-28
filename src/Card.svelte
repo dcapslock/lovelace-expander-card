@@ -13,56 +13,54 @@ limitations under the License.
 */
 -->
 <!-- eslint-disable-next-line svelte/valid-compile -->
-<svelte:options customElement="expander-sub-card" />
+<svelte:options customElement='expander-sub-card' />
 
 <script lang="ts">
-    import type { HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
-    import { cardUtil } from './cardUtil';
+    import type { LovelaceCard, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
+    import { getCardUtil } from './cardUtil.svelte';
+    import { onMount } from 'svelte';
+    import { slide } from 'svelte/transition';
 
-    export let type = 'div';
-    export let marginTop ='0px';
-    export let config: LovelaceCardConfig;
-    // fix for #199
-    // eslint-disable-next-line no-undef-init
-    export let hass: HomeAssistant | undefined = undefined;
+    const {
+        type = 'div',
+        config,
+        hass,
+        marginTop ='0px'
+    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string} = $props();
 
 
-    let loading = true;
-    const uplift = (
-        node: HTMLElement,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        p: { marginTop: string; type: string; hassParent: HomeAssistant | undefined}
-    ) => ({
-        // eslint-disable-next-line no-shadow
-        update: (p: { marginTop: string; type: string; hassParent: HomeAssistant}) => {
-            if (node) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                if ((node.firstChild as any)?.tagName) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (node.firstChild as any).hass = p.hassParent;
-                    return;
-                }
-                void (async () => {
-                    const el = (await cardUtil).createCardElement(config);
-                    el.hass = p.hassParent;
-                    node.setAttribute('style', 'margin-top: ' + p.marginTop + ';');
-                    node.innerHTML = '';
-                    node.appendChild(el);
-                    loading = false;
-                })();
-            }
+    let container = $state<LovelaceCard>();
+    let loading = $state(true);
+    $effect(() => {
+        if (container) {
+            container.hass = hass;
         }
+    });
+
+    onMount(async () => {
+        console.log('ExpanderSubCard onMount');
+        const util = await getCardUtil();
+        const el = util.createCardElement(config);
+        el.hass = hass;
+        if (!container) {
+            console.error('container doesn\'t exist');
+            return;
+        }
+        container.replaceWith(el);
+        container = el;
+        container.setAttribute('style', 'margin-top: ' + marginTop + ';');
+        loading = false;
     });
 </script>
 
-<div use:uplift={{ marginTop: marginTop, type: type, hassParent: hass }}></div>
+<svelte:element this={type} bind:this={container} transition:slide|local />
 {#if loading}
     <span class="loading"> Loading... </span>
 {/if}
 
 <style>
-    .loading {
-        padding: 1em;
-        display: block;
-    }
+  .loading {
+    padding: 1em;
+    display: block;
+  }
 </style>
