@@ -1,37 +1,33 @@
+<script lang="ts" module>
+        export const defaults = {
+            'gap': '0.0em',
+            'expanded-gap': '0.6em',
+            'padding': '1em',
+            'clear': false,
+            'title': ' ',
+            'overlay-margin': '0.0em',
+            'child-padding': '0.0em',
+            'child-margin-top': '0.0em',
+            'button-background': 'transparent',
+            'expander-card-background': 'var(--ha-card-background,var(--card-background-color,#fff))',
+            'header-color': 'var(--primary-text-color,#fff)',
+            'arrow-color': 'var(--arrow-color,var(--primary-text-color,#fff))',
+            'expander-card-display': 'block',
+            'title-card-clickable': false,
+            'min-width-expanded': 0,
+            'max-width-expanded': 0
+        };
+</script>
+
 <!-- eslint-disable-next-line svelte/valid-compile -->
-<svelte:options
-customElement={{
-    tag: 'tag-name',
+<svelte:options customElement={{
+    tag: 'expander-card',
     extend: (customElementConstructor) => class extends customElementConstructor {
-        // eslint-disable-next-line no-shadow,@typescript-eslint/explicit-member-accessibility
-        setConfig(config) {
-            const defaults = {
-                'gap': '0.0em',
-                'expanded-gap': '0.6em',
-                'padding': '1em',
-                'clear': false,
-                'title': ' ',
-                'overlay-margin': '0.0em',
-                'child-padding': '0.0em',
-                'child-margin-top': '0.0em',
-                'button-background': 'transparent',
-                'expander-card-background': 'var(--ha-card-background,var(--card-background-color,#fff))',
-                'header-color': 'var(--primary-text-color,#fff)',
-                'arrow-color': 'var(--arrow-color,var(--primary-text-color,#fff))',
-                'expander-card-display': 'block',
-                'title-card-clickable': false,
-                'min-width-expanded': 0,
-                'max-width-expanded': 0
-            };
-            this.config = { ...defaults, ...config };
-            // Add the function here, not below in the component so that
-            // it's always available, not just when the inner Svelte component
-            // is mounted
-            // see ticket https://github.com/sveltejs/svelte/issues/8954
-        }
+        public setConfig(conf = {}) {
+            this.config = { ...defaults, ...conf };
+        };
     }
-}}
-/>
+}}/>
 
 <script lang="ts">
     import type { HomeAssistant } from 'custom-card-helpers';
@@ -46,7 +42,11 @@ customElement={{
     // fix for #199
     // eslint-disable-next-line no-undef-init
     export let hass: HomeAssistant | undefined = undefined;
+
     export let config;
+
+    let element: HTMLElement;
+    let touchPreventClick = false;
 
     onMount(() => {
         const minWidthExpanded = config['min-width-expanded'];
@@ -62,14 +62,9 @@ customElement={{
         }
 
         if (config.expanded !== undefined) {
-            setTimeout(() => (open = config.expanded as boolean), 100);
+            open = config.expanded;
         }
-    });
 
-
-    let element: HTMLElement;
-    let touchPreventClick = false;
-    onMount(() => {
         if(isListenerAdded) {
             return;
         }
@@ -140,15 +135,16 @@ customElement={{
     {#if config['title-card']}
         <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
             <div id='id2' class="title-card-container" style="--title-padding:{config['title-card-padding']}" on:touchstart|passive={touchStart} on:touchmove|passive={touchMove} on:touchend={touchEnd}>
-                <Card {hass} config={config['title-card']} type={config['title-card'].type} />
+                <Card hass={hass} config={config['title-card']} type={config['title-card'].type} />
             </div>
             <button bind:this={element}
                 style="--overlay-margin:{config['overlay-margin']}; --button-background:{config[
                     'button-background'
                 ]}; --header-color:{config['header-color']};"
                 class={`header ripple${config['title-card-button-overlay'] ? ' header-overlay' : ''}${open ? ' open' : ' close'}`}
+                aria-label="Toggle button"
             >
-                <ha-icon style="--arrow-color:{config['arrow-color']}" icon="mdi:chevron-down" class={`ico${open ? ' flipped open' : 'close'}`} />
+                <ha-icon style="--arrow-color:{config['arrow-color']}" icon="mdi:chevron-down" class={`ico${open ? ' flipped open' : 'close'}`} ></ha-icon>
             </button>
         </div>
     {:else}
@@ -158,18 +154,18 @@ customElement={{
             style="--header-width:100%; --button-background:{config['button-background']};--header-color:{config['header-color']};"
         >
             <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
-            <ha-icon style="--arrow-color:{config['arrow-color']}" icon="mdi:chevron-down" class={`ico${open ? ' flipped open' : ' close'}`} />
+            <ha-icon style="--arrow-color:{config['arrow-color']}" icon="mdi:chevron-down" class={`ico${open ? ' flipped open' : ' close'}`}></ha-icon>
         </button>
     {/if}
-    {#if config.cards}
+    {#if config.cards && open}
         <div
             style="--expander-card-display:{config['expander-card-display']};
              --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{config['child-padding']}"
             class="children-container"
-            use:collapse={{ open, duration: 0.2, easing: 'ease' }}
+            use:collapse={{ open, duration: 0.3, easing: 'ease' }}
         >
             {#each config.cards as card (card)}
-                <Card {hass} config={card} type={card.type} marginTop={config['child-margin-top']}/>
+                <Card hass={hass} config={card} type={card.type} marginTop={config['child-margin-top']}/>
             {/each}
         </div>
     {/if}
