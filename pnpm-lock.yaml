@@ -78,9 +78,6 @@ importers:
       vite:
         specifier: ^5.4.5
         version: 5.4.8
-      vite-plugin-replace:
-        specifier: ^0.1.1
-        version: 0.1.1(vite@5.4.8)
 
 packages:
 
@@ -1890,11 +1887,6 @@ packages:
   vite-imagetools@7.0.4:
     resolution: {integrity: sha512-C9C7b2p/8/TCN2g26tE9haoer2i8K4x0v2RXUiHsIjiz221vQuKItCQ+VyiVCsUMPXfJC/tlZsmCZVBz5jh7uA==}
     engines: {node: '>=18.0.0'}
-
-  vite-plugin-replace@0.1.1:
-    resolution: {integrity: sha512-v+okl3JNt2pf1jDYijw+WPVt6h9FWa/atTi+qnSFBqmKThLTDhlesx0r3bh+oFPmxRJmis5tNx9HtN6lGFoqWg==}
-    peerDependencies:
-      vite: ^2
 
   vite@5.4.8:
     resolution: {integrity: sha512-FqrItQ4DT1NC4zCUqMB4c4AZORMKIa0m8/URVCZ77OZ/QSNeJ54bU1vrFADbDsuwfIPcgknRkmqakQcgnL4GiQ==}
@@ -3767,10 +3759,6 @@ snapshots:
       sharp: 0.33.5
     transitivePeerDependencies:
       - rollup
-
-  vite-plugin-replace@0.1.1(vite@5.4.8):
-    dependencies:
-      vite: 5.4.8
 
   vite@5.4.8:
     dependencies:
