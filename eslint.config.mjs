@@ -167,7 +167,6 @@ export default tseslint.config(
             'eol-last': 'error',
             'linebreak-style': ['error', 'unix'],
             'block-spacing': ['error', 'always'],
-            'object-curly-spacing': ['error', 'always'],
             'tsdoc/syntax': 'off'
         },
     },
