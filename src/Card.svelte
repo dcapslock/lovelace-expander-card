@@ -38,22 +38,24 @@ limitations under the License.
     });
 
     onMount(async () => {
-        console.log('ExpanderSubCard onMount');
+        if (!container) {
+            /* eslint no-console: 0 */
+            console.error('container not found');
+            return;
+        }
         const util = await getCardUtil();
         const el = util.createCardElement(config);
         el.hass = hass;
-        if (!container) {
-            console.error('container doesn\'t exist');
-            return;
-        }
         container.replaceWith(el);
         container = el;
-        container.setAttribute('style', 'margin-top: ' + marginTop + ';');
         loading = false;
     });
 </script>
 
-<svelte:element this={type} bind:this={container} transition:slide|local />
+<div class="outer-container" style="margin-top: {marginTop};">
+    <svelte:element this={type} bind:this={container} transition:slide|local />
+</div>
+
 {#if loading}
     <span class="loading"> Loading... </span>
 {/if}
