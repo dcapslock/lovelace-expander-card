@@ -62,7 +62,7 @@
         }
 
         if (config.expanded !== undefined) {
-            open = config.expanded;
+            setTimeout(() => (open = config.expanded), 100);
         }
 
         if(isListenerAdded) {
@@ -157,7 +157,7 @@
             <ha-icon style="--arrow-color:{config['arrow-color']}" icon="mdi:chevron-down" class={`ico${open ? ' flipped open' : ' close'}`}></ha-icon>
         </button>
     {/if}
-    {#if config.cards && open}
+    {#if config.cards}
         <div
             style="--expander-card-display:{config['expander-card-display']};
              --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{config['child-padding']}"

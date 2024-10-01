@@ -38,14 +38,14 @@ limitations under the License.
     });
 
     onMount(async () => {
-        if (!container) {
-            /* eslint no-console: 0 */
-            console.error('container not found');
-            return;
-        }
         const util = await getCardUtil();
         const el = util.createCardElement(config);
         el.hass = hass;
+
+        if (!container) {
+            return;
+        }
+
         container.replaceWith(el);
         container = el;
         loading = false;
@@ -54,11 +54,11 @@ limitations under the License.
 
 <div class="outer-container" style="margin-top: {marginTop};">
     <svelte:element this={type} bind:this={container} transition:slide|local />
+    {#if loading}
+        <span class="loading"> Loading... </span>
+    {/if}
 </div>
 
-{#if loading}
-    <span class="loading"> Loading... </span>
-{/if}
 
 <style>
   .loading {
