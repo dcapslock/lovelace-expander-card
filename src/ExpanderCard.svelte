@@ -116,7 +116,9 @@
     {#if config['title-card']}
         <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
             <div id='id2' class="title-card-container" style="--title-padding:{config['title-card-padding']}"
-                ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd}>
+                ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd}
+                onclick={config['title-card-clickable'] ? buttonClick : null}
+                role={config['title-card-clickable'] ? 'button' : undefined}>
                 <Card hass={hass} config={config['title-card']} type={config['title-card'].type} />
             </div>
             <button onclick={buttonClick}
