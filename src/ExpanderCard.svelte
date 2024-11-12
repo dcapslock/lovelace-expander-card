@@ -96,6 +96,11 @@
             } catch (e) {
                 console.error(e);
             }
+        }else{
+            // first time, set the state from config
+            if (config.expanded !== undefined) {
+                setOpenState(config.expanded);
+            }
         }
     });
 
