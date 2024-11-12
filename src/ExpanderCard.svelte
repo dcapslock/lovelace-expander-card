@@ -48,6 +48,25 @@
     let touchPreventClick = $state(false);
     let open = $state(false);
 
+    const configId = config['storgage-id'];
+    const lastStorageOpenStateId = 'expander-open-' + configId;
+
+
+    function toggleOpen() {
+        setOpenState(!open);
+    }
+
+    function setOpenState(openState: boolean) {
+        open = openState;
+        if (configId !== undefined) {
+            try {
+                localStorage.setItem(lastStorageOpenStateId, open ? 'true' : 'false');
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
+
     onMount(() => {
         const minWidthExpanded = config['min-width-expanded'];
         const maxWidthExpanded = config['max-width-expanded'];
@@ -61,8 +80,22 @@
             config.expanded = offsetWidth <= maxWidthExpanded;
         }
 
-        if (config.expanded !== undefined) {
-            setTimeout(() => (open = config.expanded), 100);
+        if (configId !== undefined) {
+            try {
+                const storageValue = localStorage.getItem(lastStorageOpenStateId);
+                if(storageValue === null){
+                    // first time, set the state from config
+                    if (config.expanded !== undefined) {
+                        setOpenState(config.expanded);
+                    }
+                }
+                else {
+                    // last state is stored in local storage
+                    open = storageValue ? storageValue === 'true' : open;
+                }
+            } catch (e) {
+                console.error(e);
+            }
         }
     });
 
@@ -73,7 +106,7 @@
             touchPreventClick = false;
             return false;
         }
-        open = !open;
+        toggleOpen();
     };
 
     const buttonClickDiv = (event: MouseEvent) => {
@@ -103,7 +136,7 @@
 
     const touchEnd = (event: TouchEvent) => {
         if (!isScrolling && touchElement === event.target && config['title-card-clickable']) {
-            open = !open;
+            toggleOpen();
         }
         touchElement = undefined;
         touchPreventClick = true;
