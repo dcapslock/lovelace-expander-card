@@ -48,8 +48,8 @@
     let touchPreventClick = $state(false);
     let open = $state(false);
 
-    const configId = config['expand-id'];
-    const lastStorageOpenStateId = "expander-open-" + configId;
+    const configId = config['storgage-id'];
+    const lastStorageOpenStateId = 'expander-open-' + configId;
 
 
     function toggleOpen() {
@@ -60,10 +60,10 @@
         open = openState;
         if (configId !== undefined) {
             try {
-                    localStorage.setItem(lastStorageOpenStateId, open ? 'true' : 'false');
-                } catch (e) {
-                    console.error(e);
-                }
+                localStorage.setItem(lastStorageOpenStateId, open ? 'true' : 'false');
+            } catch (e) {
+                console.error(e);
+            }
         }
     }
 
@@ -80,12 +80,22 @@
             config.expanded = offsetWidth <= maxWidthExpanded;
         }
 
-        if (config.expanded !== undefined) {
-            setOpenState(config.expanded);
-        }
-
         if (configId !== undefined) {
-     
+            try {
+                const storageValue = localStorage.getItem(lastStorageOpenStateId);
+                if(storageValue === null){
+                    // first time, set the state from config
+                    if (config.expanded !== undefined) {
+                        setOpenState(config.expanded);
+                    }
+                }
+                else {
+                    // last state is stored in local storage
+                    open = storageValue ? storageValue === 'true' : open;
+                }
+            } catch (e) {
+                console.error(e);
+            }
         }
     });
 
