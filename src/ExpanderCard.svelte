@@ -45,8 +45,7 @@
         config = defaults
     }: {hass: HomeAssistant; config: ExpanderConfig} = $props();
 
-    let touchPreventClick = false;
-
+    let touchPreventClick = $state(false);
     let open = $state(false);
 
     onMount(() => {
@@ -65,7 +64,6 @@
         if (config.expanded !== undefined) {
             setTimeout(() => (open = config.expanded), 100);
         }
-
     });
 
     const buttonClick = (event: MouseEvent) => {
@@ -109,7 +107,6 @@
         }
         touchElement = undefined;
         touchPreventClick = true;
-        setTimeout(() => touchPreventClick = false, 300);
     };
 </script>
 
@@ -146,12 +143,12 @@
             <ha-icon style="--arrow-color:{config['arrow-color']}" icon="mdi:chevron-down" class={`ico${open ? ' flipped open' : ' close'}`}></ha-icon>
         </button>
     {/if}
-    {#if config.cards && open}
+    {#if config.cards}
         <div
-            style="--expander-card-display:{config['expander-card-display']};
+            style="--expander-card-display:{open ? config['expander-card-display']: 'none'};
              --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{config['child-padding']}"
             class="children-container"
-            transition:slide={{ duration: 300, easing: cubicOut }}
+            transition:slide={{ duration: 500, easing: cubicOut }}
         >
             {#each config.cards as card (card)}
                 <Card hass={hass} config={card} type={card.type} marginTop={config['child-margin-top']}/>
