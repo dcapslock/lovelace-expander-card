@@ -48,6 +48,25 @@
     let touchPreventClick = $state(false);
     let open = $state(false);
 
+    const configId = config['expand-id'];
+    const lastStorageOpenStateId = "expander-open-" + configId;
+
+
+    function toggleOpen() {
+        setOpenState(!open);
+    }
+
+    function setOpenState(openState: boolean) {
+        open = openState;
+        if (configId !== undefined) {
+            try {
+                    localStorage.setItem(lastStorageOpenStateId, open ? 'true' : 'false');
+                } catch (e) {
+                    console.error(e);
+                }
+        }
+    }
+
     onMount(() => {
         const minWidthExpanded = config['min-width-expanded'];
         const maxWidthExpanded = config['max-width-expanded'];
@@ -62,7 +81,11 @@
         }
 
         if (config.expanded !== undefined) {
-            setTimeout(() => (open = config.expanded), 100);
+            setOpenState(config.expanded);
+        }
+
+        if (configId !== undefined) {
+     
         }
     });
 
@@ -73,7 +96,7 @@
             touchPreventClick = false;
             return false;
         }
-        open = !open;
+        toggleOpen();
     };
 
     const buttonClickDiv = (event: MouseEvent) => {
@@ -103,7 +126,7 @@
 
     const touchEnd = (event: TouchEvent) => {
         if (!isScrolling && touchElement === event.target && config['title-card-clickable']) {
-            open = !open;
+            toggleOpen();
         }
         touchElement = undefined;
         touchPreventClick = true;
