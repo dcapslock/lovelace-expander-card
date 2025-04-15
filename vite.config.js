@@ -9,8 +9,9 @@ export default defineConfig({
        svelte({
           preprocess: vitePreprocess({
             postcss: true,
-            script: true, 
-          })
+            script: true
+            })
+        })
     ],
     build: {
         sourcemap: true,
