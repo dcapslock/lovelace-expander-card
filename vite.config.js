@@ -6,7 +6,11 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
     plugins: [
-        svelte()
+       svelte({
+          preprocess: vitePreprocess({
+            postcss: true,
+            script: true, 
+          })
     ],
     build: {
         sourcemap: true,
