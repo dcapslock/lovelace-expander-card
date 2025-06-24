@@ -258,14 +258,6 @@ views:
     path: my-view
     sections: ...
 ```
-b) Masonory View
-
-Nested layout (e.g. horizontal-stack) with [Masonory View](https://www.home-assistant.io/dashboards/masonry/) are not working.
-Workaround use another view type or custom custom:masonry-layout from https://github.com/thomasloven/lovelace-layout-card 
-
-## Known issue
-
-[Masonory View](https://www.home-assistant.io/dashboards/masonry/) is not working with this card.
 
 ## Support
 
