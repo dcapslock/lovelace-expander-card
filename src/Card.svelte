@@ -43,7 +43,7 @@ limitations under the License.
             media_query: open ? "(max-width: 99999px)" : "(max-width: 0px)"
         }];
         const card = { type: "conditional", conditions: conditions, card: config } as LovelaceCardConfig;
-        // setConfig ecists on condition-card but without ?. svelte will not find it.
+        // setConfig exists on condition-card but without ?. svelte will not find it.
         container?.setConfig?.(card);
     });
 
