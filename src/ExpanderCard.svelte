@@ -116,7 +116,8 @@
     };
 
     const buttonClickDiv = (event: MouseEvent) => {
-        if (event.currentTarget.classList.contains('title-card-container')) {
+        const target = event.currentTarget as HTMLElement | null;
+        if (target?.classList.contains('title-card-container')) {
             buttonClick(event);
         }
     };
@@ -161,7 +162,7 @@
                 ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd}
                 onclick={config['title-card-clickable'] ? buttonClickDiv : null}
                 role={config['title-card-clickable'] ? 'button' : undefined}>
-                <Card hass={hass} config={config['title-card']} type={config['title-card'].type} />
+                <Card hass={hass} config={config['title-card']} type={config['title-card'].type} open={open} />
             </div>
             <button onclick={buttonClick}
                 style="--overlay-margin:{config['overlay-margin']}; --button-background:{config[
@@ -184,13 +185,13 @@
     {/if}
     {#if config.cards}
         <div
-            style="--expander-card-display:{open ? config['expander-card-display']: 'none'};
+            style="--expander-card-display:{config['expander-card-display']}
              --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{config['child-padding']}"
             class="children-container"
             transition:slide={{ duration: 500, easing: cubicOut }}
         >
             {#each config.cards as card (card)}
-                <Card hass={hass} config={card} type={card.type} marginTop={config['child-margin-top']}/>
+                <Card hass={hass} config={card} type={card.type} marginTop={config['child-margin-top']} open={open}/>
             {/each}
         </div>
     {/if}
