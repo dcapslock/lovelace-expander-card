@@ -162,7 +162,7 @@
                 ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd}
                 onclick={config['title-card-clickable'] ? buttonClickDiv : null}
                 role={config['title-card-clickable'] ? 'button' : undefined}>
-                <Card hass={hass} config={config['title-card']} type={config['title-card'].type} open={open} />
+                <Card hass={hass} config={config['title-card']} type={config['title-card'].type} open={true}/>
             </div>
             <button onclick={buttonClick}
                 style="--overlay-margin:{config['overlay-margin']}; --button-background:{config[
