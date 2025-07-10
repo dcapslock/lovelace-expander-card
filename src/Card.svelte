@@ -70,7 +70,7 @@ limitations under the License.
 <div class="outer-container" style="margin-top: {marginTop};">
     <svelte:element this={type} bind:this={container} transition:slide|local />
     {#if loading}
-        <span class="loading {open}"> Loading... </span>
+        <span class="loading"> Loading... </span>
     {/if}
 </div>
 
