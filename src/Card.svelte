@@ -25,8 +25,9 @@ limitations under the License.
         type = 'div',
         config,
         hass,
-        marginTop ='0px'
-    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string} = $props();
+        marginTop ='0px',
+        open
+    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string; open: boolean} = $props();
 
 
     let container = $state<LovelaceCard>();
@@ -36,10 +37,24 @@ limitations under the License.
             container.hass = hass;
         }
     });
+    $effect(() => {
+        const conditions = [{
+            condition: "screen",
+            media_query: open ? "(max-width: 99999px)" : "(max-width: 0px)"
+        }];
+        const card = { type: "conditional", conditions: conditions, card: config } as LovelaceCardConfig;
+        // setConfig exists on condition-card but without ?. svelte will not find it.
+        container?.setConfig?.(card);
+    });
 
     onMount(async () => {
         const util = await getCardUtil();
-        const el = util.createCardElement(config);
+        const conditions = [{
+            condition: "screen",
+            media_query: open ? "(max-width: 99999px)" : "(max-width: 0px)"
+        }];
+        const card = { type: "conditional", conditions: conditions, card: config };
+        const el = util.createCardElement(card);
         el.hass = hass;
 
         if (!container) {
