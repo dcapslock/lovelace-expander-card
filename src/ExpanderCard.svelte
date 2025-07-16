@@ -63,6 +63,7 @@
             try {
                 localStorage.setItem(lastStorageOpenStateId, open ? 'true' : 'false');
             } catch (e) {
+                /* eslint no-console: 0 */
                 console.error(e);
             }
         }

@@ -39,10 +39,10 @@ limitations under the License.
     });
     $effect(() => {
         const conditions = [{
-            condition: "screen",
-            media_query: open ? "(max-width: 99999px)" : "(max-width: 0px)"
+            condition: 'screen',
+            media_query: open ? '(max-width: 99999px)' : '(max-width: 0px)'
         }];
-        const card = { type: "conditional", conditions: conditions, card: config } as LovelaceCardConfig;
+        const card = { type: 'conditional', conditions: conditions, card: config } as LovelaceCardConfig;
         // setConfig exists on condition-card but without ?. svelte will not find it.
         container?.setConfig?.(card);
     });
@@ -50,10 +50,10 @@ limitations under the License.
     onMount(async () => {
         const util = await getCardUtil();
         const conditions = [{
-            condition: "screen",
-            media_query: open ? "(max-width: 99999px)" : "(max-width: 0px)"
+            condition: 'screen',
+            media_query: open ? '(max-width: 99999px)' : '(max-width: 0px)'
         }];
-        const card = { type: "conditional", conditions: conditions, card: config };
+        const card = { type: 'conditional', conditions: conditions, card: config };
         const el = util.createCardElement(card);
         el.hass = hass;
 
