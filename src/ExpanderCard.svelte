@@ -85,7 +85,9 @@
             config.expanded = offsetWidth <= maxWidthExpanded;
         }
 
-        if (configId !== undefined) {
+        if (config['start-expanded-users']?.includes(hass?.user.name)) {
+          setOpenState(true);
+        } else if (configId !== undefined) {
             try {
                 const storageValue = localStorage.getItem(lastStorageOpenStateId);
                 if(storageValue === null){
@@ -156,7 +158,7 @@
 
 <ha-card
     class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'}`}
-    style="--border-radius:{config['border-radius']}; --border{config.border}; --icon-rotate-degree:{config['icon-rotate-degree']}; --expander-card-display:{config['expander-card-display']};
+    style="--show-button-users:{(config['show-button-users'] === undefined || config['show-button-users']?.includes(hass?.user.name)) ? 'flex' : 'none'}; --border-radius:{config['border-radius']}; --border{config.border}; --icon-rotate-degree:{config['icon-rotate-degree']}; --expander-card-display:{config['expander-card-display']};
      --gap:{open ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
      --expander-state:{open};
      --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}">
@@ -234,7 +236,7 @@
         padding: var(--title-padding);
     }
     .header {
-        display: flex;
+        display: var(--show-button-users,flex);
         flex-direction: row;
         align-items: center;
         padding: 0.8em 0.8em;
