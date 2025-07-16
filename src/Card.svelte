@@ -15,7 +15,7 @@ limitations under the License.
 <!-- eslint-disable-next-line svelte/valid-compile -->
 <svelte:options customElement='expander-sub-card' />
 
-<script lang='ts'>
+<script lang="ts">
     import type { LovelaceCard, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
     import { getCardUtil } from './cardUtil.svelte';
     import { onMount } from 'svelte';
@@ -67,7 +67,7 @@ limitations under the License.
     });
 </script>
 
-<div class='outer-container' style='margin-top: {marginTop};'>
+<div class="outer-container" style='margin-top: {marginTop};'>
     <svelte:element this={type} bind:this={container} transition:slide|local />
     {#if loading}
         <span class='loading'> Loading... </span>
