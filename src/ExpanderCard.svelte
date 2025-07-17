@@ -186,8 +186,8 @@
     {/if}
     {#if config.cards}
         <div
-            style="--expander-card-display:{config['expander-card-display']}
-             --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{config['child-padding']}"
+            style="--expander-card-display:{config['expander-card-display']};
+             --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{open ? config['child-padding'] : '0px'};"
             class="children-container"
             transition:slide={{ duration: 500, easing: cubicOut }}
         >
