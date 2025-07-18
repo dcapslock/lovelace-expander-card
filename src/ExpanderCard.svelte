@@ -54,6 +54,7 @@
 
     const configId = config['storgage-id'];
     const lastStorageOpenStateId = 'expander-open-' + configId;
+    const showButtonUsers = (config['show-button-users'] === undefined || config['show-button-users']?.includes(hass?.user.name));
 
 
     function toggleOpen() {
@@ -170,24 +171,28 @@
                 role={config['title-card-clickable'] ? 'button' : undefined}>
                 <Card hass={hass} config={config['title-card']} type={config['title-card'].type} open={true}/>
             </div>
-            <button onclick={buttonClick}
-                style="--overlay-margin:{config['overlay-margin']}; --button-background:{config[
-                    'button-background'
-                ]}; --header-color:{config['header-color']};"
-                class={`header ripple${config['title-card-button-overlay'] ? ' header-overlay' : ''}${open ? ' open' : ' close'}`}
-                aria-label="Toggle button"
-            >
-                <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open ? ' flipped open' : 'close'}`} ></ha-icon>
-            </button>
+            {#if showButtonUsers}
+                <button onclick={buttonClick}
+                    style="--overlay-margin:{config['overlay-margin']}; --button-background:{config[
+                        'button-background'
+                    ]}; --header-color:{config['header-color']};"
+                    class={`header ripple${config['title-card-button-overlay'] ? ' header-overlay' : ''}${open ? ' open' : ' close'}`}
+                    aria-label="Toggle button"
+                >
+                    <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open ? ' flipped open' : 'close'}`} ></ha-icon>
+                </button>
+            {/if}
         </div>
     {:else}
-        <button onclick={buttonClick}
-            class={`header${config['expander-card-background-expanded'] ? '' : ' ripple'}${open ? ' open' : ' close'}`}
-            style="--header-width:100%; --button-background:{config['button-background']};--header-color:{config['header-color']};"
-        >
-            <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
-            <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open ? ' flipped open' : ' close'}`}></ha-icon>
-        </button>
+        {#if showButtonUsers}
+            <button onclick={buttonClick}
+                class={`header${config['expander-card-background-expanded'] ? '' : ' ripple'}${open ? ' open' : ' close'}`}
+                style="--header-width:100%; --button-background:{config['button-background']};--header-color:{config['header-color']};"
+            >
+                <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
+                <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open ? ' flipped open' : ' close'}`}></ha-icon>
+            </button>
+        {/if}
     {/if}
     {#if config.cards}
         <div
@@ -236,7 +241,7 @@
         padding: var(--title-padding);
     }
     .header {
-        display: var(--show-button-users,flex);
+        display: flex;
         flex-direction: row;
         align-items: center;
         padding: 0.8em 0.8em;
