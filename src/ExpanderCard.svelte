@@ -159,7 +159,7 @@
 
 <ha-card
     class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'}`}
-    style="--show-button-users:{(config['show-button-users'] === undefined || config['show-button-users']?.includes(hass?.user.name)) ? 'flex' : 'none'}; --border-radius:{config['border-radius']}; --border{config.border}; --icon-rotate-degree:{config['icon-rotate-degree']}; --expander-card-display:{config['expander-card-display']};
+    style="--border-radius:{config['border-radius']}; --border{config.border}; --icon-rotate-degree:{config['icon-rotate-degree']}; --expander-card-display:{config['expander-card-display']};
      --gap:{open ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
      --expander-state:{open};
      --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}">
