@@ -87,7 +87,7 @@
         }
 
         if (config['start-expanded-users']?.includes(hass?.user.name)) {
-          setOpenState(true);
+            setOpenState(true);
         } else if (configId !== undefined) {
             try {
                 const storageValue = localStorage.getItem(lastStorageOpenStateId);
@@ -159,10 +159,15 @@
 
 <ha-card
     class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'}`}
-    style="--border-radius:{config['border-radius']}; --border{config.border}; --icon-rotate-degree:{config['icon-rotate-degree']}; --expander-card-display:{config['expander-card-display']};
-     --gap:{open ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
-     --expander-state:{open};
-     --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}">
+    style="--border-radius:{config['border-radius']};
+           --border{config.border};
+           --icon-rotate-degree:{config['icon-rotate-degree']};
+           --expander-card-display:{config['expander-card-display']};
+           --gap:{open ? config['expanded-gap'] : config.gap};
+           --padding:{config.padding};
+           --expander-state:{open};
+           --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}
+    ">
     {#if config['title-card']}
         <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
             <div id='id2' class="title-card-container" style="--title-padding:{config['title-card-padding']}"
