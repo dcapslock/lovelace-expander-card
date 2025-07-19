@@ -160,7 +160,7 @@
 <ha-card
     class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'}`}
     style="--border-radius:{config['border-radius']};
-           --border{config.border};
+           --border:{config.border};
            --icon-rotate-degree:{config['icon-rotate-degree']};
            --expander-card-display:{config['expander-card-display']};
            --gap:{open ? config['expanded-gap'] : config.gap};
