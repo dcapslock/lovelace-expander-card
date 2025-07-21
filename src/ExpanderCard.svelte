@@ -17,8 +17,6 @@
             'min-width-expanded': 0,
             'max-width-expanded': 0,
             'icon': 'mdi:chevron-down',
-            'border-radius': '0px',
-            'border': 'none',
             'icon-rotate-degree': '180deg'
         };
 </script>
@@ -159,14 +157,10 @@
 
 <ha-card
     class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'}`}
-    style="--border-radius:{config['border-radius']};
-           --border:{config.border};
-           --icon-rotate-degree:{config['icon-rotate-degree']};
-           --expander-card-display:{config['expander-card-display']};
-           --gap:{open ? config['expanded-gap'] : config.gap};
-           --padding:{config.padding};
-           --expander-state:{open};
-           --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}
+    style="--expander-card-display:{config['expander-card-display']};
+     --gap:{open ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
+     --expander-state:{open};
+     --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}
     ">
     {#if config['title-card']}
         <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
@@ -219,8 +213,6 @@
         gap: var(--gap);
         padding: var(--padding);
         background: var(--card-background,#fff);
-        border-radius: var(--border-radius,0px);
-        border: var(--border,none);
     }
     .children-container {
         padding: var(--child-padding);
