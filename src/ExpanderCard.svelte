@@ -160,6 +160,7 @@
     style="--expander-card-display:{config['expander-card-display']};
      --gap:{open ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
      --expander-state:{open};
+     --icon-rotate-degree:{config['icon-rotate-degree']};
      --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}
     ">
     {#if config['title-card']}
