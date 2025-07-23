@@ -82,7 +82,7 @@ limitations under the License.
 
     function clearHaCardStyle(el: HTMLElement, maxAttempts = 5) {
         let attempts = 0;
-        const findHaCards = () => {
+        const initHaCards = () => {
             const haCards: HTMLElement[] = [];
 
             function collectHaCards(node: Element | ShadowRoot) {
@@ -113,12 +113,12 @@ limitations under the License.
             } else {
                 attempts++;
                 if (attempts < maxAttempts) {
-                    requestAnimationFrame(findHaCards);
+                    requestAnimationFrame(initHaCards);
                 }
             }
         };
 
-        findHaCards();
+        initHaCards();
     }
 
 </script>
