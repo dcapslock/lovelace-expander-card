@@ -20,14 +20,16 @@ limitations under the License.
     import { getCardUtil } from './cardUtil.svelte';
     import { onMount } from 'svelte';
     import { slide } from 'svelte/transition';
+    import { cubicOut } from 'svelte/easing';
 
     const {
         type = 'div',
         config,
         hass,
         marginTop ='0px',
-        open
-    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string; open: boolean} = $props();
+        open,
+        clearCardCss = false
+    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string; open: boolean; clearCardCss: boolean} = $props();
 
 
     let container = $state<LovelaceCard>();
@@ -60,15 +62,69 @@ limitations under the License.
         if (!container) {
             return;
         }
+
+        if (clearCardCss) {
+            const observer = new MutationObserver(() => {
+                clearHaCardStyle(el);
+            });
+
+            observer.observe(el, {
+                childList: true,
+                subtree: true
+            });
+        }
         // eslint-disable-next-line svelte/no-dom-manipulating
         container.replaceWith(el);
         container = el;
         loading = false;
     });
+
+
+    function clearHaCardStyle(el: HTMLElement, maxAttempts = 5) {
+        let attempts = 0;
+        const findHaCards = () => {
+            const haCards: HTMLElement[] = [];
+
+            function collectHaCards(node: Element | ShadowRoot) {
+                if (node instanceof Element && node.tagName.toLowerCase() === 'ha-card') {
+                    haCards.push(node as HTMLElement);
+                    return;
+                }
+
+                if ((node as Element).shadowRoot) {
+                    collectHaCards((node as Element).shadowRoot!);
+                }
+
+                const children = (node instanceof ShadowRoot || node instanceof Element)
+                    ? Array.from((node as Element).children)
+                    : [];
+
+                children.forEach(collectHaCards);
+            }
+
+            collectHaCards(el);
+
+            if (haCards.length > 0) {
+                haCards.forEach((card) => {
+                    card.style.setProperty('border', 'none', 'important');
+                    card.style.setProperty('background', 'transparent', 'important');
+                    card.style.setProperty('boxShadow', 'none', 'important');
+                });
+            } else {
+                attempts++;
+                if (attempts < maxAttempts) {
+                    requestAnimationFrame(findHaCards);
+                }
+            }
+        };
+
+        findHaCards();
+    }
+
 </script>
 
 <div class="outer-container" style="margin-top: {open ? marginTop : '0px'};">
-    <svelte:element this={type} bind:this={container} transition:slide|local />
+    <svelte:element this={type} bind:this={container} transition:slide={{ duration: 500, easing: cubicOut }} />
     {#if loading}
         <span class="loading"> Loading... </span>
     {/if}
@@ -80,4 +136,5 @@ limitations under the License.
     padding: 1em;
     display: block;
   }
+
 </style>
