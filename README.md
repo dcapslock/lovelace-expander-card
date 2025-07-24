@@ -49,7 +49,8 @@ Yaml Options:
 | type                      | string   | **Required**  | `custom:expander-card` | Type of the card.                                     |
 | title                     | string   | Empty         | *                      | Title (Not displayed if using Title-Card)             |
 | icon                      | string   | mdi:chevron-down         | mdi icon shortcut                      | Icon in button           |
-| clear                     | boolean  | _false_       | true\|false            | Remove Background                                     |
+| clear                     | boolean  | _false_       | true\|false            | Remove Background, border                                   |
+| clear-children            | boolean  | _false_       | true\|false            | Remove Background, border from childs                                   |
 | expanded                  | boolean  | _false_       | true\|false            | Start expanded                                        |
 | min-width-expanded        | number   | 0             | number                 | Min screen width (px) to be expanded on start (use with start expanded above)                                     |
 | max-width-expanded        | number   | 0             | number            | Max screen width (px) to be expanded on start (use with start expanded above)                                        |
