@@ -4,6 +4,7 @@
             'expanded-gap': '0.6em',
             'padding': '1em',
             'clear': false,
+            'clear-children': false,
             'title': ' ',
             'overlay-margin': '0.0em',
             'child-padding': '0.0em',
@@ -165,11 +166,17 @@
     ">
     {#if config['title-card']}
         <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
-            <div id='id2' class="title-card-container" style="--title-padding:{config['title-card-padding']}"
+            <div id='id2' class="title-card-container"
+                style="--title-padding:{config['title-card-padding']}"
                 ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd}
                 onclick={config['title-card-clickable'] ? buttonClickDiv : null}
                 role={config['title-card-clickable'] ? 'button' : undefined}>
-                <Card hass={hass} config={config['title-card']} type={config['title-card'].type} open={true}/>
+                <Card hass={hass}
+                    config={config['title-card']}
+                    type={config['title-card'].type}
+                    open={true}
+                    clearCardCss={config['clear-children'] || false}
+                />
             </div>
             {#if showButtonUsers}
                 <button onclick={buttonClick}
@@ -202,7 +209,13 @@
             transition:slide={{ duration: 500, easing: cubicOut }}
         >
             {#each config.cards as card (card)}
-                <Card hass={hass} config={card} type={card.type} marginTop={config['child-margin-top']} open={open}/>
+                <Card hass={hass}
+                    config={card}
+                    type={card.type}
+                    marginTop={config['child-margin-top']}
+                    open={open}
+                    clearCardCss={config['clear-children'] || false}
+                />
             {/each}
         </div>
     {/if}
@@ -219,12 +232,14 @@
         padding: var(--child-padding);
         display: var(--expander-card-display,block);
         gap: var(--gap);
+        transition: all 0.3s ease-in-out;
     }
     .clear {
         background: none !important;
         background-color: transparent !important;
         border-style: none !important;
     }
+
     .title-card-header {
         display: flex;
         align-items: center;
