@@ -244,7 +244,7 @@ Expander-Card is not available in [HACS][hacs] (Home Assistant Community Store) 
 ## FAQ
 
 ### Issue after upgrade to HA 2025.6 
-There are a couple of issues after upgrading to HA 2025.6 
+There is/was an issue after upgrading to HA 2025.6 (maybe with newer version is not valid anymore)
 See [forum](https://community.home-assistant.io/t/expander-accordion-collapsible-card/738817/56?u=melled) and [issue](https://github.com/MelleD/lovelace-expander-card/issues/506) 
 a) For the view type [sections](https://www.home-assistant.io/blog/2024/03/04/dashboard-chapter-1/) `cards` is not working anymore. You have to rename it to `sections`.
 Before
