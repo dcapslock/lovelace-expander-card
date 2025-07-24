@@ -108,7 +108,7 @@ limitations under the License.
                 haCards.forEach((card) => {
                     card.style.setProperty('border', 'none', 'important');
                     card.style.setProperty('background', 'transparent', 'important');
-                    card.style.setProperty('boxShadow', 'none', 'important');
+                    card.style.setProperty('box-shadow', 'none', 'important');
                 });
             } else {
                 attempts++;
