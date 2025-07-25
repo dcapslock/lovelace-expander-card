@@ -1,11 +1,25 @@
 changelog:
+  exclude:
+    authors:
+      - rbs-bot
   categories:
-    - title: 🛠 Dependency Upgrades 
+    - title: ⚠️ Breaking Changes
       labels:
-        - dependencies
-    - title: 🐛 Bug fixes
-      labels:
-        - bug
+        - major-update
+        - breaking-change
     - title: ⭐ New Features
       labels:
         - "*"
+        - "feature"
+    - title: 🐞 Bug Fixes
+      labels:
+        - bugfix
+    - title: 📦 Dependency Upgrades
+      labels:
+        - dependencies
+    - title: 📔 Documentation
+      labels:
+        - documentation
+    - title: ⚙️ Miscellaneous
+      labels:
+        - miscellaneous
