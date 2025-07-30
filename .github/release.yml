@@ -1,16 +1,9 @@
 changelog:
-  exclude:
-    authors:
-      - rbs-bot
   categories:
     - title: ⚠️ Breaking Changes
       labels:
         - major-update
         - breaking-change
-    - title: ⭐ New Features
-      labels:
-        - "*"
-        - "feature"
     - title: 🐞 Bug Fixes
       labels:
         - bugfix
@@ -23,3 +16,7 @@ changelog:
     - title: ⚙️ Miscellaneous
       labels:
         - miscellaneous
+    - title: ⭐ New Features
+      labels:
+        - *
+        - feature
