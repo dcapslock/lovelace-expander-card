@@ -18,5 +18,4 @@ changelog:
         - miscellaneous
     - title: ⭐ New Features
       labels:
-        - *
-        - feature
+        - "*"
