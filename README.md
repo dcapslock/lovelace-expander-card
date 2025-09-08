@@ -69,7 +69,7 @@ Yaml Options:
 | title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card                 |
 | title-card-clickable      | boolean  | _false_       | true\|false            | Should the complete diff clickable?                   |
 | overlay-margin            | string   | _0.0em_       | css-size               | Margin from top right of expander button (if overlay) |
-| storgage-id               | string   | **optional**  | *                      | Save last expander state in local browser storage     |
+| storage-id                | string   | **optional**  | *                      | Save last expander state in local browser storage     |
 | cards                     | object[] | **optional**  | LovelaceCardConfig[]   | Child cards to show when expanded                     |
 | expander-card-display     | string   | block         | css-display            | Layout/Display of the card                            |
 | icon-rotate-degree        | string   | _180deg_      | css-rotate             | Changing the degrees of the button icon when clicked  |
