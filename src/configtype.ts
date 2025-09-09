@@ -37,7 +37,7 @@ export interface ExpanderConfig {
     'min-width-expanded'?: number;
     'max-width-expanded'?: number;
     icon?: string;
-    'storgage-id'?: string;
+    'storage-id'?: string;
     'icon-rotate-degree'?: string;
     'show-button-users'?: { type: string }[];
     'start-expanded-users'?: { type: string }[];

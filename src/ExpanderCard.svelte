@@ -51,7 +51,7 @@
     let touchPreventClick = $state(false);
     let open = $state(false);
 
-    const configId = config['storgage-id'];
+    const configId = config['storage-id'] ?? config['storgage-id'];
     const lastStorageOpenStateId = 'expander-open-' + configId;
     const showButtonUsers = (config['show-button-users'] === undefined || config['show-button-users']?.includes(hass?.user.name));
 
