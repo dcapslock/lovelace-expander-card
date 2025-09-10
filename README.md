@@ -76,6 +76,10 @@ Yaml Options:
 | show-button-users         | object[] | **optional**  | *                      | Choose the users that button is visible to them       |
 | start-expanded-users      | object[] | **optional**  | *                      | Choose the users that card will be start expanded for them|
 
+
+### Deprecation Warning
+* `storgage-id` was introduced in v2.5.0 and is deprecated in favor of `storage-id`. The older `storgage-id` will be removed in a future release.
+
 ## Examples
 
 Here are a few examples of usage.
