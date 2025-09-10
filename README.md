@@ -69,12 +69,16 @@ Yaml Options:
 | title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card                 |
 | title-card-clickable      | boolean  | _false_       | true\|false            | Should the complete diff clickable?                   |
 | overlay-margin            | string   | _0.0em_       | css-size               | Margin from top right of expander button (if overlay) |
-| storgage-id               | string   | **optional**  | *                      | Save last expander state in local browser storage     |
+| storage-id                | string   | **optional**  | *                      | Save last expander state in local browser storage     |
 | cards                     | object[] | **optional**  | LovelaceCardConfig[]   | Child cards to show when expanded                     |
 | expander-card-display     | string   | block         | css-display            | Layout/Display of the card                            |
 | icon-rotate-degree        | string   | _180deg_      | css-rotate             | Changing the degrees of the button icon when clicked  |
 | show-button-users         | object[] | **optional**  | *                      | Choose the users that button is visible to them       |
 | start-expanded-users      | object[] | **optional**  | *                      | Choose the users that card will be start expanded for them|
+
+
+### Deprecation Warning
+* `storgage-id` was introduced in v2.5.0 and is deprecated in favor of `storage-id`. The older `storgage-id` will be removed in a future release.
 
 ## Examples
 
