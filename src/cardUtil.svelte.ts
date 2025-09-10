@@ -29,5 +29,3 @@ export const getCardUtil = () => {
     }
     return cardUtil;
 };
-
-// export const cardUtil: Promise<CardUtil> = (() => ((window as any).loadCardHelpers() as Promise<any>).then((v) => v))();
