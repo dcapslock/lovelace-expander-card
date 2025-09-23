@@ -19,8 +19,6 @@ limitations under the License.
     import type { LovelaceCard, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
     import { getCardUtil } from './cardUtil.svelte';
     import { onMount } from 'svelte';
-    import { slide } from 'svelte/transition';
-    import { cubicOut } from 'svelte/easing';
 
     const {
         type = 'div',
@@ -123,8 +121,8 @@ limitations under the License.
 
 </script>
 
-<div class="outer-container" style="margin-top: {open ? marginTop : '0px'};">
-    <svelte:element this={type} bind:this={container} transition:slide={{ duration: 500, easing: cubicOut }} />
+<div class="outer-container{open ? ' open' : ' close'}" style="margin-top: {open ? marginTop : '0px'};">
+    <svelte:element this={type} bind:this={container}/>
     {#if loading}
         <span class="loading"> Loading... </span>
     {/if}
@@ -136,5 +134,26 @@ limitations under the License.
     padding: 1em;
     display: block;
   }
-
+  .outer-container.open {
+    animation: fadeInOpacity 0.5s forwards ease;
+    -webkit-animation: fadeInOpacity 0.5s forwards ease;
+  }
+  @keyframes fadeInOpacity {
+      0% {
+          opacity: 0;
+      }
+      100% {
+          opacity: 1;
+      }
+  }
+  @-webkit-keyframes fadeInOpacity {
+      0% {
+          opacity: 0;
+          transform: translateY(-10%);
+      }
+      100% {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
 </style>

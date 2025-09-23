@@ -40,8 +40,8 @@
     import Card from './Card.svelte';
     import { onMount } from 'svelte';
     import type { ExpanderConfig } from './configtype';
-    import { slide } from 'svelte/transition';
-    import { cubicOut } from 'svelte/easing';
+    // import { slide } from 'svelte/transition';
+    // import { cubicOut } from 'svelte/easing';
 
     const {
         hass,
@@ -202,21 +202,22 @@
         {/if}
     {/if}
     {#if config.cards}
-        <div
-            style="--expander-card-display:{config['expander-card-display']};
-             --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{open ? config['child-padding'] : '0px'};"
-            class="children-container"
-            transition:slide={{ duration: 500, easing: cubicOut }}
-        >
-            {#each config.cards as card (card)}
-                <Card hass={hass}
-                    config={card}
-                    type={card.type}
-                    marginTop={config['child-margin-top']}
-                    open={open}
-                    clearCardCss={config['clear-children'] || false}
-                />
-            {/each}
+        <div class="children-wrapper">
+            <div
+                style="--expander-card-display:{config['expander-card-display']};
+                --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{open ? config['child-padding'] : '0px'};"
+                class="children-container{open ? ' open' : ' close'}"
+            >
+                {#each config.cards as card (card)}
+                    <Card hass={hass}
+                        config={card}
+                        type={card.type}
+                        marginTop={config['child-margin-top']}
+                        open={open}
+                        clearCardCss={config['clear-children'] || false}
+                    />
+                {/each}
+            </div>
         </div>
     {/if}
 </ha-card>
@@ -228,11 +229,21 @@
         padding: var(--padding);
         background: var(--card-background,#fff);
     }
+    .children-wrapper {
+        overflow: hidden;
+    }
     .children-container {
         padding: var(--child-padding);
         display: var(--expander-card-display,block);
         gap: var(--gap);
-        transition: all 0.3s ease-in-out;
+    }
+    .children-container.open {
+        animation: slide-in 0.35s forwards ease;
+        -webkit-animation: slide-in 0.35s forwards ease;
+    }
+    .children-container.close{
+        transform: translateY(-100%);
+        -webkit-transform: translateY(-100%);
     }
     .clear {
         background: none !important;
@@ -296,5 +307,13 @@
         background-color: #ffffff25;
         background-size: 100%;
         transition: background 0s;
+    }
+    @keyframes slide-in {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(0%); }
+    }
+    @-webkit-keyframes slide-in {
+        0% { -webkit-transform: translateY(-100%); }
+        100% { -webkit-transform: translateY(0%); }
     }
 </style>
