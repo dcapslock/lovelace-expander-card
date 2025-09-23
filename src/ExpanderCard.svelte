@@ -40,8 +40,6 @@
     import Card from './Card.svelte';
     import { onMount } from 'svelte';
     import type { ExpanderConfig } from './configtype';
-    // import { slide } from 'svelte/transition';
-    // import { cubicOut } from 'svelte/easing';
 
     const {
         hass,
