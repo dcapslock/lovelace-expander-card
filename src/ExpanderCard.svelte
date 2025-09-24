@@ -217,7 +217,8 @@
                 style="--header-width:100%; --button-background:{config['button-background']};--header-color:{config['header-color']};"
             >
                 <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
-                <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}`}></ha-icon>
+                <ha-icon style="--arrow-color:{config['arrow-color']}"
+                  icon={config.icon} class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}`}></ha-icon>
             </button>
         {/if}
     {/if}

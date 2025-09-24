@@ -29,8 +29,15 @@ limitations under the License.
         open,
         animationState,
         clearCardCss = false
-    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string; open: boolean; animationState: AnimationState; clearCardCss: boolean} = $props();
-
+    }: {
+        type?: string;
+        config: LovelaceCardConfig;
+        hass: HomeAssistant | undefined;
+        marginTop?: string;
+        open: boolean;
+        animationState: AnimationState;
+        clearCardCss: boolean;
+    } = $props();
 
     let container = $state<LovelaceCard>();
     let loading = $state(true);
