@@ -40,6 +40,7 @@
     import Card from './Card.svelte';
     import { onMount } from 'svelte';
     import type { ExpanderConfig } from './configtype';
+    import type { AnimationState } from './types';
 
     const {
         hass,
@@ -48,6 +49,8 @@
 
     let touchPreventClick = $state(false);
     let open = $state(false);
+    let animationState: AnimationState = $state<AnimationState>('idle');
+    let animationTimeout: ReturnType<typeof setTimeout> | null = $state(null);
 
     const configId = config['storage-id'] ?? config['storgage-id'];
     const lastStorageOpenStateId = 'expander-open-' + configId;
@@ -55,7 +58,25 @@
 
 
     function toggleOpen() {
-        setOpenState(!open);
+        if (animationTimeout) {
+            clearTimeout(animationTimeout);
+            animationTimeout  = null;
+        }
+        const openState = !open;
+        animationState = openState ? 'opening' : 'closing';
+        if (openState) {
+            setOpenState(true);
+            animationTimeout = setTimeout(() => {
+                animationState = 'idle';
+                animationTimeout = null;
+            }, 500);
+        } else {
+            animationTimeout = setTimeout(() => {
+                setOpenState(false);
+                animationState = 'idle';
+                animationTimeout = null;
+            }, 500);
+        }
     }
 
     function setOpenState(openState: boolean) {
@@ -173,6 +194,7 @@
                     config={config['title-card']}
                     type={config['title-card'].type}
                     open={true}
+                    animationState='idle'
                     clearCardCss={config['clear-children'] || false}
                 />
             </div>
@@ -195,7 +217,7 @@
                 style="--header-width:100%; --button-background:{config['button-background']};--header-color:{config['header-color']};"
             >
                 <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
-                <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open ? ' flipped open' : ' close'}`}></ha-icon>
+                <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}`}></ha-icon>
             </button>
         {/if}
     {/if}
@@ -204,7 +226,7 @@
             <div
                 style="--expander-card-display:{config['expander-card-display']};
                 --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{open ? config['child-padding'] : '0px'};"
-                class="children-container{open ? ' open' : ' close'}"
+                class="children-container {animationState}"
             >
                 {#each config.cards as card (card)}
                     <Card hass={hass}
@@ -212,6 +234,7 @@
                         type={card.type}
                         marginTop={config['child-margin-top']}
                         open={open}
+                        animationState={animationState}
                         clearCardCss={config['clear-children'] || false}
                     />
                 {/each}
@@ -235,13 +258,15 @@
         display: var(--expander-card-display,block);
         gap: var(--gap);
     }
-    .children-container.open {
+    .children-container.opening {
         animation: slide-in 0.35s forwards ease;
         -webkit-animation: slide-in 0.35s forwards ease;
     }
-    .children-container.close{
-        transform: translateY(-100%);
-        -webkit-transform: translateY(-100%);
+    .children-container.closing {
+        translate: translateY(-100%);
+        -webkit-translate: translateY(-100%);
+        animation: slide-out 0.35s forwards ease;
+        -webkit-animation: slide-out 0.35s forwards ease;
     }
     .clear {
         background: none !important;
@@ -313,5 +338,13 @@
     @-webkit-keyframes slide-in {
         0% { -webkit-transform: translateY(-100%); }
         100% { -webkit-transform: translateY(0%); }
+    }
+    @keyframes slide-out {
+        0% { transform: translateY(0%); }
+        100% { transform: translateY(-100%); }
+    }
+    @-webkit-keyframes slide-out {
+        0% { -webkit-transform: translateY(0%); }
+        100% { -webkit-transform: translateY(-100%); }
     }
 </style>

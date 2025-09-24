@@ -19,6 +19,7 @@ limitations under the License.
     import type { LovelaceCard, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
     import { getCardUtil } from './cardUtil.svelte';
     import { onMount } from 'svelte';
+    import type { AnimationState } from './types';
 
     const {
         type = 'div',
@@ -26,8 +27,9 @@ limitations under the License.
         hass,
         marginTop ='0px',
         open,
+        animationState,
         clearCardCss = false
-    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string; open: boolean; clearCardCss: boolean} = $props();
+    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string; open: boolean; animationState: AnimationState; clearCardCss: boolean} = $props();
 
 
     let container = $state<LovelaceCard>();
@@ -121,7 +123,7 @@ limitations under the License.
 
 </script>
 
-<div class="outer-container{open ? ' open' : ' close'}" style="margin-top: {open ? marginTop : '0px'};">
+<div class="outer-container {animationState}" style="margin-top: {open ? marginTop : '0px'};">
     <svelte:element this={type} bind:this={container}/>
     {#if loading}
         <span class="loading"> Loading... </span>
@@ -134,9 +136,13 @@ limitations under the License.
     padding: 1em;
     display: block;
   }
-  .outer-container.open {
+  .outer-container.opening {
     animation: fadeInOpacity 0.5s forwards ease;
     -webkit-animation: fadeInOpacity 0.5s forwards ease;
+  }
+  .outer-container.closing {
+      animation: fadeOutOpacity 0.5s forwards ease;
+      -webkit-animation: fadeOutOpacity 0.5s forwards ease;
   }
   @keyframes fadeInOpacity {
       0% {
@@ -149,11 +155,25 @@ limitations under the License.
   @-webkit-keyframes fadeInOpacity {
       0% {
           opacity: 0;
-          transform: translateY(-10%);
       }
       100% {
           opacity: 1;
-          transform: translateY(0);
+      }
+  }
+    @keyframes fadeOutOpacity {
+      0% {
+          opacity: 1;
+      }
+      100% {
+          opacity: 0;
+      }
+  }
+  @-webkit-keyframes fadeOutOpacity {
+      0% {
+          opacity: 1;
+      }
+      100% {
+          opacity: 0;
       }
   }
 </style>
