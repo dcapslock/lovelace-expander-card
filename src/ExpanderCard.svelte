@@ -69,13 +69,13 @@
             animationTimeout = setTimeout(() => {
                 animationState = 'idle';
                 animationTimeout = null;
-            }, 500);
+            }, 350);
         } else {
             animationTimeout = setTimeout(() => {
                 setOpenState(false);
                 animationState = 'idle';
                 animationTimeout = null;
-            }, 500);
+            }, 350);
         }
     }
 
