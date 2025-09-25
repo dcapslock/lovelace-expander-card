@@ -143,6 +143,17 @@ limitations under the License.
     padding: 1em;
     display: block;
   }
+  .outer-container {
+    transition: margin-bottom 0.35s ease;
+  }
+  .outer-container.open,
+  .outer-container.opening {
+    margin-bottom: inherit;
+  }
+  .outer-container.close,
+  .outer-container.closing {
+    margin-bottom: -100%;
+  }
   .outer-container.opening {
     animation: fadeInOpacity 0.5s forwards ease;
     -webkit-animation: fadeInOpacity 0.5s forwards ease;
