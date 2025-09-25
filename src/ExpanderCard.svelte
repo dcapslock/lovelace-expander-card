@@ -227,7 +227,7 @@
             <div
                 style="--expander-card-display:{config['expander-card-display']};
                 --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{open ? config['child-padding'] : '0px'};"
-                class="children-container {animationState}"
+                class="children-container"
             >
                 {#each config.cards as card (card)}
                     <Card hass={hass}
@@ -258,16 +258,6 @@
         padding: var(--child-padding);
         display: var(--expander-card-display,block);
         gap: var(--gap);
-    }
-    .children-container.opening {
-        animation: slide-in 0.35s forwards ease;
-        -webkit-animation: slide-in 0.35s forwards ease;
-    }
-    .children-container.closing {
-        translate: translateY(-100%);
-        -webkit-translate: translateY(-100%);
-        animation: slide-out 0.35s forwards ease;
-        -webkit-animation: slide-out 0.35s forwards ease;
     }
     .clear {
         background: none !important;

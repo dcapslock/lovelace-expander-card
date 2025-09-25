@@ -130,7 +130,7 @@ limitations under the License.
 
 </script>
 
-<div class="outer-container {animationState}" style="margin-top: {open ? marginTop : '0px'};">
+<div class="outer-container{open ? ' open' : ' close'} {animationState}" style="margin-top: {open ? marginTop : '0px'};">
     <svelte:element this={type} bind:this={container}/>
     {#if loading}
         <span class="loading"> Loading... </span>
