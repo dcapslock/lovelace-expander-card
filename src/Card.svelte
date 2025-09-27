@@ -19,8 +19,7 @@ limitations under the License.
     import type { LovelaceCard, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
     import { getCardUtil } from './cardUtil.svelte';
     import { onMount } from 'svelte';
-    import { slide } from 'svelte/transition';
-    import { cubicOut } from 'svelte/easing';
+    import type { AnimationState } from './types';
 
     const {
         type = 'div',
@@ -28,9 +27,17 @@ limitations under the License.
         hass,
         marginTop ='0px',
         open,
+        animationState,
         clearCardCss = false
-    }: { type?: string; config: LovelaceCardConfig; hass: HomeAssistant | undefined; marginTop?: string; open: boolean; clearCardCss: boolean} = $props();
-
+    }: {
+        type?: string;
+        config: LovelaceCardConfig;
+        hass: HomeAssistant | undefined;
+        marginTop?: string;
+        open: boolean;
+        animationState: AnimationState;
+        clearCardCss: boolean;
+    } = $props();
 
     let container = $state<LovelaceCard>();
     let loading = $state(true);
@@ -123,8 +130,8 @@ limitations under the License.
 
 </script>
 
-<div class="outer-container" style="margin-top: {open ? marginTop : '0px'};">
-    <svelte:element this={type} bind:this={container} transition:slide={{ duration: 500, easing: cubicOut }} />
+<div class="outer-container{open ? ' open' : ' close'} {animationState}" style="margin-top: {open ? marginTop : '0px'};">
+    <svelte:element this={type} bind:this={container}/>
     {#if loading}
         <span class="loading"> Loading... </span>
     {/if}
@@ -136,5 +143,55 @@ limitations under the License.
     padding: 1em;
     display: block;
   }
-
+  .outer-container {
+    transition: margin-bottom 0.35s ease;
+  }
+  .outer-container.open,
+  .outer-container.opening {
+    margin-bottom: inherit;
+  }
+  .outer-container.close,
+  .outer-container.closing {
+    margin-bottom: -100%;
+  }
+  .outer-container.opening {
+    animation: fadeInOpacity 0.5s forwards ease;
+    -webkit-animation: fadeInOpacity 0.5s forwards ease;
+  }
+  .outer-container.closing {
+      animation: fadeOutOpacity 0.5s forwards ease;
+      -webkit-animation: fadeOutOpacity 0.5s forwards ease;
+  }
+  @keyframes fadeInOpacity {
+      0% {
+          opacity: 0;
+      }
+      100% {
+          opacity: 1;
+      }
+  }
+  @-webkit-keyframes fadeInOpacity {
+      0% {
+          opacity: 0;
+      }
+      100% {
+          opacity: 1;
+      }
+  }
+    @keyframes fadeOutOpacity {
+      0% {
+          opacity: 1;
+      }
+      100% {
+          opacity: 0;
+      }
+  }
+  @-webkit-keyframes fadeOutOpacity {
+      0% {
+          opacity: 1;
+      }
+      100% {
+          opacity: 0;
+      }
+  }
 </style>
