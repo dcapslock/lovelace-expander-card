@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      custom-card-helpers:
-        specifier: ^1.9.0
-        version: 1.9.0
       svelte:
         specifier: 5.39.6
         version: 5.39.6
@@ -557,25 +554,6 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@formatjs/ecma402-abstract@1.11.4':
-    resolution: {integrity: sha512-EBikYFp2JCdIfGEb5G9dyCkTGDmC57KSHhRQOC3aYxoPWVZvfWCDjZwkGYHN7Lis/fmuWl906bnNTJifDQ3sXw==}
-
-  '@formatjs/fast-memoize@1.2.1':
-    resolution: {integrity: sha512-Rg0e76nomkz3vF9IPlKeV+Qynok0r7YZjL6syLz4/urSg0IbjPZCB/iYUMNsYA643gh4mgrX3T7KEIFIxJBQeg==}
-
-  '@formatjs/icu-messageformat-parser@2.1.0':
-    resolution: {integrity: sha512-Qxv/lmCN6hKpBSss2uQ8IROVnta2r9jd3ymUEIjm2UyIkUCHVcbUVRGL/KS/wv7876edvsPe+hjHVJ4z8YuVaw==}
-
-  '@formatjs/icu-skeleton-parser@1.3.6':
-    resolution: {integrity: sha512-I96mOxvml/YLrwU2Txnd4klA7V8fRhb6JG/4hm3VMNmeJo1F03IpV2L3wWt7EweqNLES59SZ4d6hVOPCSf80Bg==}
-
-  '@formatjs/intl-localematcher@0.2.25':
-    resolution: {integrity: sha512-YmLcX70BxoSopLFdLr1Ds99NdlTI2oWoLbaUW2M406lxOIPzE1KQhRz2fPUkq34xVZQaihCoU29h0KK7An3bhA==}
-
-  '@formatjs/intl-utils@3.8.4':
-    resolution: {integrity: sha512-j5C6NyfKevIxsfLK8KwO1C0vvP7k1+h4A9cFpc+cr6mEwCc1sPkr17dzh0Ke6k9U5pQccAQoXdcNBl3IYa4+ZQ==}
-    deprecated: the package is rather renamed to @formatjs/ecma-abstract with some changes in functionality (primarily selectUnit is removed and we don't plan to make any further changes to this package
-
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -730,12 +708,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
-
-  '@lit-labs/ssr-dom-shim@1.3.0':
-    resolution: {integrity: sha512-nQIWonJ6eFAvUUrSlwyHDm/aE8PBDu5kRpL0vHMg6K8fK3Diq1xdPjTnsJSwxABhaZ+5eBi1btQB5ShUTKo4nQ==}
-
-  '@lit/reactive-element@1.6.3':
-    resolution: {integrity: sha512-QuTgnG52Poic7uM1AN5yJ09QMe0O28e10XzSvWDz02TJiiKee4stsiownEIadWm8nYzyDAyT+gKzUoZmiWQtsQ==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -967,9 +939,6 @@ packages:
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
-  '@types/trusted-types@2.0.7':
-    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
-
   '@typescript-eslint/eslint-plugin@8.44.1':
     resolution: {integrity: sha512-molgphGqOBT7t4YKCSkbasmu1tb1MgrZ2szGzHbclF7PNmOkSTQVHy+2jXOSnxvR3+Xe1yySHFZoqMpz3TfQsw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -1163,9 +1132,6 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  custom-card-helpers@1.9.0:
-    resolution: {integrity: sha512-5IW4OXq3MiiCqDvqeu+MYsM1NmntKW1WfJhyJFsdP2tbzqEI4BOnqRz2qzdp08lE4QLVhYfRLwe0WAqgQVNeFg==}
-
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
     engines: {node: '>=6.0'}
@@ -1200,10 +1166,6 @@ packages:
 
   electron-to-chromium@1.5.222:
     resolution: {integrity: sha512-gA7psSwSwQRE60CEoLz6JBCQPIxNeuzB2nL8vE03GK/OHxlvykbLyeiumQy1iH5C2f3YbRAZpGCMT12a/9ih9w==}
-
-  emojis-list@3.0.0:
-    resolution: {integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==}
-    engines: {node: '>= 4'}
 
   esbuild@0.25.10:
     resolution: {integrity: sha512-9RiGKvCwaqxO2owP61uQ4BgNborAQskMR6QusfWzQqv7AZOg5oGehdY2pRJMTKuwxd1IDBP4rSbI5lHzU7SMsQ==}
@@ -1405,9 +1367,6 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  home-assistant-js-websocket@6.1.1:
-    resolution: {integrity: sha512-TnZFzF4mn5F/v0XKUTK2GMQXrn/+eQpgaSDSELl6U0HSwSbFwRhGWLz330YT+hiKMspDflamsye//RPL+zwhDw==}
-
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -1427,9 +1386,6 @@ packages:
   imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
-
-  intl-messageformat@9.13.0:
-    resolution: {integrity: sha512-7sGC7QnSQGa5LZP7bXLDhVDtQOeKGeBFGHF2Y8LVBwYZoQZCgWeKoPGTa5GMG8g/TzDgeXuYJQis7Ggiw2xTOw==}
 
   is-arrayish@0.3.2:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}
@@ -1492,15 +1448,6 @@ packages:
   lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
-
-  lit-element@3.3.3:
-    resolution: {integrity: sha512-XbeRxmTHubXENkV4h8RIPyr8lXc+Ff28rkcQzw3G6up2xg5E8Zu1IgOWIwBLEQsu3cOVFqdYwiVi0hv0SlpqUA==}
-
-  lit-html@2.8.0:
-    resolution: {integrity: sha512-o9t+MQM3P4y7M7yNzqAyjp7z+mQGa4NS4CxiyLqFPyFWyc4O+nodLrkrxSaCTrla6M5YOLaT3RpbbqjszB5g3Q==}
-
-  lit@2.8.0:
-    resolution: {integrity: sha512-4Sc3OFX9QHOJaHbmTMk28SYgVxLN3ePDjg7hofEft2zWlehFL3LiAuapWc4U/kYwMYJSh2hTCPZ6/LIC7ii0MA==}
 
   locate-character@3.0.0:
     resolution: {integrity: sha512-SW13ws7BjaeJ6p7Q6CO2nchbYEc3X3J6WrmTTDto7yMPqVSZTUyY5Tjbid+Ab8gLnATtygYtiDIJGQRRn2ZOiA==}
@@ -1828,11 +1775,6 @@ packages:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
-  rollup@2.79.2:
-    resolution: {integrity: sha512-fS6iqSPZDs3dr/y7Od6y5nha8dW1YnbgtsyotCVvoFGKbERG++CVRFv1meyGDE1SNItQA8BrnCw7ScdAhRJ3XQ==}
-    engines: {node: '>=10.0.0'}
-    hasBin: true
-
   rollup@4.52.0:
     resolution: {integrity: sha512-+IuescNkTJQgX7AkIDtITipZdIGcWF0pnVvZTWStiazUmcGA2ag8dfg0urest2XlXUi9kuhfQ+qmdc5Stc3z7g==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -1879,9 +1821,6 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
-
-  superstruct@0.15.5:
-    resolution: {integrity: sha512-4AOeU+P5UuE/4nOUkmcQdW5y7i9ndt1cQd/3iUe+LTz3RxESf/W/5lg4B74HbDMMv8PHnPnGCQFH45kBcrQYoQ==}
 
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
@@ -1952,11 +1891,6 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <6.0.0'
-
-  typescript@4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
 
   typescript@5.9.2:
     resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
@@ -2467,34 +2401,6 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@formatjs/ecma402-abstract@1.11.4':
-    dependencies:
-      '@formatjs/intl-localematcher': 0.2.25
-      tslib: 2.8.1
-
-  '@formatjs/fast-memoize@1.2.1':
-    dependencies:
-      tslib: 2.8.1
-
-  '@formatjs/icu-messageformat-parser@2.1.0':
-    dependencies:
-      '@formatjs/ecma402-abstract': 1.11.4
-      '@formatjs/icu-skeleton-parser': 1.3.6
-      tslib: 2.8.1
-
-  '@formatjs/icu-skeleton-parser@1.3.6':
-    dependencies:
-      '@formatjs/ecma402-abstract': 1.11.4
-      tslib: 2.8.1
-
-  '@formatjs/intl-localematcher@0.2.25':
-    dependencies:
-      tslib: 2.8.1
-
-  '@formatjs/intl-utils@3.8.4':
-    dependencies:
-      emojis-list: 3.0.0
-
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -2612,12 +2518,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
-
-  '@lit-labs/ssr-dom-shim@1.3.0': {}
-
-  '@lit/reactive-element@1.6.3':
-    dependencies:
-      '@lit-labs/ssr-dom-shim': 1.3.0
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -2826,8 +2726,6 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/resolve@1.20.2': {}
-
-  '@types/trusted-types@2.0.7': {}
 
   '@typescript-eslint/eslint-plugin@8.44.1(@typescript-eslint/parser@8.44.1(eslint@9.36.0)(typescript@5.9.2))(eslint@9.36.0)(typescript@5.9.2)':
     dependencies:
@@ -3045,16 +2943,6 @@ snapshots:
 
   cssesc@3.0.0: {}
 
-  custom-card-helpers@1.9.0:
-    dependencies:
-      '@formatjs/intl-utils': 3.8.4
-      home-assistant-js-websocket: 6.1.1
-      intl-messageformat: 9.13.0
-      lit: 2.8.0
-      rollup: 2.79.2
-      superstruct: 0.15.5
-      typescript: 4.9.5
-
   debug@4.4.1:
     dependencies:
       ms: 2.1.3
@@ -3072,8 +2960,6 @@ snapshots:
   devalue@5.3.2: {}
 
   electron-to-chromium@1.5.222: {}
-
-  emojis-list@3.0.0: {}
 
   esbuild@0.25.10:
     optionalDependencies:
@@ -3302,8 +3188,6 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  home-assistant-js-websocket@6.1.1: {}
-
   ignore@5.3.2: {}
 
   ignore@7.0.5: {}
@@ -3316,13 +3200,6 @@ snapshots:
       resolve-from: 4.0.0
 
   imurmurhash@0.1.4: {}
-
-  intl-messageformat@9.13.0:
-    dependencies:
-      '@formatjs/ecma402-abstract': 1.11.4
-      '@formatjs/fast-memoize': 1.2.1
-      '@formatjs/icu-messageformat-parser': 2.1.0
-      tslib: 2.8.1
 
   is-arrayish@0.3.2: {}
 
@@ -3374,22 +3251,6 @@ snapshots:
       type-check: 0.4.0
 
   lilconfig@2.1.0: {}
-
-  lit-element@3.3.3:
-    dependencies:
-      '@lit-labs/ssr-dom-shim': 1.3.0
-      '@lit/reactive-element': 1.6.3
-      lit-html: 2.8.0
-
-  lit-html@2.8.0:
-    dependencies:
-      '@types/trusted-types': 2.0.7
-
-  lit@2.8.0:
-    dependencies:
-      '@lit/reactive-element': 1.6.3
-      lit-element: 3.3.3
-      lit-html: 2.8.0
 
   locate-character@3.0.0: {}
 
@@ -3742,10 +3603,6 @@ snapshots:
 
   reusify@1.1.0: {}
 
-  rollup@2.79.2:
-    optionalDependencies:
-      fsevents: 2.3.3
-
   rollup@4.52.0:
     dependencies:
       '@types/estree': 1.0.8
@@ -3834,8 +3691,6 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  superstruct@0.15.5: {}
-
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
@@ -3921,8 +3776,6 @@ snapshots:
       typescript: 5.9.2
     transitivePeerDependencies:
       - supports-color
-
-  typescript@4.9.5: {}
 
   typescript@5.9.2: {}
 
