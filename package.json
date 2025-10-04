@@ -41,7 +41,6 @@
         "vite": "^6.3.6"
     },
     "dependencies": {
-        "custom-card-helpers": "^1.9.0",
         "svelte": "5.39.6"
     },
     "pnpm": {

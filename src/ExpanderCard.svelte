@@ -36,7 +36,7 @@
 }}/>
 
 <script lang="ts">
-    import type { HomeAssistant } from 'custom-card-helpers';
+    import type { HomeAssistant } from './types';
     import Card from './Card.svelte';
     import { onMount } from 'svelte';
     import type { ExpanderConfig } from './configtype';

@@ -1,1 +1,21 @@
 export type AnimationState = 'opening' | 'closing' | 'idle';
+
+export interface HomeAssistant {
+    [key: string]: unknown;
+}
+
+export interface LovelaceCardConfig {
+    index?: number;
+    view_index?: number;
+    type: string;
+    disabled?: boolean;
+    [key: string]: unknown;
+}
+
+export interface LovelaceCard extends HTMLElement {
+    hass?: HomeAssistant;
+    isPanel?: boolean;
+    editMode?: boolean;
+    getCardSize(): number | Promise<number>;
+    setConfig(config: LovelaceCardConfig): void;
+}

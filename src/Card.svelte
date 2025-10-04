@@ -16,10 +16,9 @@ limitations under the License.
 <svelte:options customElement='expander-sub-card' />
 
 <script lang="ts">
-    import type { LovelaceCard, HomeAssistant, LovelaceCardConfig } from 'custom-card-helpers';
     import { getCardUtil } from './cardUtil.svelte';
     import { onMount } from 'svelte';
-    import type { AnimationState } from './types';
+    import type { AnimationState, HomeAssistant,LovelaceCard, LovelaceCardConfig } from './types';
 
     const {
         type = 'div',
@@ -47,22 +46,14 @@ limitations under the License.
         }
     });
     $effect(() => {
-        const conditions = [{
-            condition: 'screen',
-            media_query: open ? '(max-width: 99999px)' : '(max-width: 0px)'
-        }];
-        const card = { type: 'conditional', conditions: conditions, card: config } as LovelaceCardConfig;
-        // setConfig exists on condition-card but without ?. svelte will not find it.
+        const card = { disabled: `"${!open}"`, ...config } as LovelaceCardConfig;
+        // setConfig exists on card but without ?. svelte will not find it.
         container?.setConfig?.(card);
     });
 
     onMount(async () => {
         const util = await getCardUtil();
-        const conditions = [{
-            condition: 'screen',
-            media_query: open ? '(max-width: 99999px)' : '(max-width: 0px)'
-        }];
-        const card = { type: 'conditional', conditions: conditions, card: config };
+        const card = { disabled: `"${!open}"`, ...config } as LovelaceCardConfig;
         const el = util.createCardElement(card);
         el.hass = hass;
 
