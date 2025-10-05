@@ -49,7 +49,7 @@ limitations under the License.
         if (container) {
             container.hidden = !open;
             container.dispatchEvent(new CustomEvent('card-visibility-changed', {
-                detail: { visible: open }
+                detail: { value: open }
             }));
         }
     });
