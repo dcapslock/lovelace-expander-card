@@ -46,9 +46,12 @@ limitations under the License.
         }
     });
     $effect(() => {
-        const card = { disabled: `"${!open}"`, ...config } as LovelaceCardConfig;
-        // setConfig exists on card but without ?. svelte will not find it.
-        container?.setConfig?.(card);
+        if (container) {
+            container.hidden = !open;
+            container.dispatchEvent(new CustomEvent('card-visibility-changed', {
+                detail: { visible: open }
+            }));
+        }
     });
 
     onMount(async () => {
