@@ -206,7 +206,8 @@
                     class={`header ripple${config['title-card-button-overlay'] ? ' header-overlay' : ''}${open ? ' open' : ' close'}`}
                     aria-label="Toggle button"
                 >
-                    <ha-icon style="--arrow-color:{config['arrow-color']}" icon={config.icon} class={`ico${open ? ' flipped open' : ' close'}`} ></ha-icon>
+                    <ha-icon style="--arrow-color:{config['arrow-color']}"
+                      icon={config.icon} class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}`}></ha-icon>
                 </button>
             {/if}
         </div>
