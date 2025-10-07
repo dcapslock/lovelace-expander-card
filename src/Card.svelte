@@ -16,9 +16,8 @@ limitations under the License.
 <svelte:options customElement='expander-sub-card' />
 
 <script lang="ts">
-    import { getCardUtil } from './cardUtil.svelte';
     import { onMount } from 'svelte';
-    import type { AnimationState, HomeAssistant,LovelaceCard, LovelaceCardConfig } from './types';
+    import type { AnimationState, HomeAssistant, HuiCard, LovelaceCardConfig } from './types';
 
     const {
         type = 'div',
@@ -38,8 +37,9 @@ limitations under the License.
         clearCardCss: boolean;
     } = $props();
 
-    let container = $state<LovelaceCard>();
+    let container = $state<HuiCard>();
     let loading = $state(true);
+    const cardConfig = $state<LovelaceCardConfig>(JSON.parse(JSON.stringify(config)));
     $effect(() => {
         if (container) {
             container.hass = hass;
@@ -48,17 +48,19 @@ limitations under the License.
     $effect(() => {
         if (container) {
             container.hidden = !open;
-            container.dispatchEvent(new CustomEvent('card-visibility-changed', {
-                detail: { value: open }
-            }));
+            cardConfig.disabled = !open;
+            // eslint-disable-next-line no-underscore-dangle
+            container._element?.dispatchEvent(new CustomEvent('card-visibility-changed'));
         }
     });
 
     onMount(async () => {
-        const util = await getCardUtil();
-        const card = { disabled: `"${!open}"`, ...config } as LovelaceCardConfig;
-        const el = util.createCardElement(card);
+        const el: HuiCard = document.createElement('hui-card') as HuiCard;
         el.hass = hass;
+        el.hidden = !open;
+        cardConfig.disabled = !open;
+        el.config = cardConfig;
+        el.load();
 
         if (!container) {
             return;
