@@ -17,5 +17,10 @@ export interface LovelaceCard extends HTMLElement {
     isPanel?: boolean;
     editMode?: boolean;
     getCardSize(): number | Promise<number>;
-    setConfig(config: LovelaceCardConfig): void;
+    config?: LovelaceCardConfig;
+}
+
+export interface HuiCard extends LovelaceCard {
+    load(): void;
+    _element?: LovelaceCard;
 }
