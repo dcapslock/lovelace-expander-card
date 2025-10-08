@@ -18,7 +18,8 @@
             'min-width-expanded': 0,
             'max-width-expanded': 0,
             'icon': 'mdi:chevron-down',
-            'icon-rotate-degree': '180deg'
+            'icon-rotate-degree': '180deg',
+            'animation': true
         };
 </script>
 
@@ -63,19 +64,24 @@
             animationTimeout  = null;
         }
         const openState = !open;
-        animationState = openState ? 'opening' : 'closing';
-        if (openState) {
-            setOpenState(true);
-            animationTimeout = setTimeout(() => {
-                animationState = 'idle';
-                animationTimeout = null;
-            }, 350);
+        if (config.animation) {
+            animationState = openState ? 'opening' : 'closing';
+            if (openState) {
+                setOpenState(true);
+                animationTimeout = setTimeout(() => {
+                    animationState = 'idle';
+                    animationTimeout = null;
+                }, 350);
+            } else {
+                animationTimeout = setTimeout(() => {
+                    setOpenState(false);
+                    animationState = 'idle';
+                    animationTimeout = null;
+                }, 350);
+            }
         } else {
-            animationTimeout = setTimeout(() => {
-                setOpenState(false);
-                animationState = 'idle';
-                animationTimeout = null;
-            }, 350);
+            setOpenState(openState);
+            // animation state is always 'idle' if no animation
         }
     }
 
@@ -193,6 +199,7 @@
                 <Card hass={hass}
                     config={config['title-card']}
                     type={config['title-card'].type}
+                    animation={false}
                     open={true}
                     animationState='idle'
                     clearCardCss={config['clear-children'] || false}
@@ -207,7 +214,9 @@
                     aria-label="Toggle button"
                 >
                     <ha-icon style="--arrow-color:{config['arrow-color']}"
-                      icon={config.icon} class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}`}></ha-icon>
+                      icon={config.icon}
+                      class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'} ${config.animation ? 'animation' : ''}`}>
+                    </ha-icon>
                 </button>
             {/if}
         </div>
@@ -219,7 +228,9 @@
             >
                 <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
                 <ha-icon style="--arrow-color:{config['arrow-color']}"
-                  icon={config.icon} class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}`}></ha-icon>
+                  icon={config.icon}
+                  class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'} ${config.animation ? 'animation' : ''}`}>
+                </ha-icon>
             </button>
         {/if}
     {/if}
@@ -236,6 +247,7 @@
                         type={card.type}
                         marginTop={config['child-margin-top']}
                         open={open}
+                        animation={config.animation || false}
                         animationState={animationState}
                         clearCardCss={config['clear-children'] || false}
                     />
@@ -300,10 +312,12 @@
         width: 100%;
         text-align: left;
     }
-    .ico {
-        color: var(--arrow-color,var(--primary-text-color,#fff));
+    .ico.animation {
         transition-property: transform;
         transition-duration: 0.35s;
+    }
+    .ico {
+        color: var(--arrow-color,var(--primary-text-color,#fff));
     }
 
     .flipped {
@@ -322,21 +336,5 @@
         background-color: #ffffff25;
         background-size: 100%;
         transition: background 0s;
-    }
-    @keyframes slide-in {
-        0% { transform: translateY(-100%); }
-        100% { transform: translateY(0%); }
-    }
-    @-webkit-keyframes slide-in {
-        0% { -webkit-transform: translateY(-100%); }
-        100% { -webkit-transform: translateY(0%); }
-    }
-    @keyframes slide-out {
-        0% { transform: translateY(0%); }
-        100% { transform: translateY(-100%); }
-    }
-    @-webkit-keyframes slide-out {
-        0% { -webkit-transform: translateY(0%); }
-        100% { -webkit-transform: translateY(-100%); }
     }
 </style>
