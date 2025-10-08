@@ -25,6 +25,7 @@ limitations under the License.
         hass,
         marginTop ='0px',
         open,
+        animation = true,
         animationState,
         clearCardCss = false
     }: {
@@ -33,12 +34,14 @@ limitations under the License.
         hass: HomeAssistant | undefined;
         marginTop?: string;
         open: boolean;
+        animation: boolean;
         animationState: AnimationState;
         clearCardCss: boolean;
     } = $props();
 
     let container = $state<HuiCard>();
     let loading = $state(true);
+    let cardHeight = $state(0);
     const cardConfig = $state<LovelaceCardConfig>(JSON.parse(JSON.stringify(config)));
     $effect(() => {
         if (container) {
@@ -76,6 +79,23 @@ limitations under the License.
                 subtree: true
             });
         }
+
+        if (animation) {
+            const reszizeObserver = new ResizeObserver((entries) => {
+                for (const entry of entries) {
+                    if (entry.contentBoxSize) {
+                        const contentBoxSize = Array.isArray(entry.contentBoxSize)
+                            ? entry.contentBoxSize[0]
+                            : entry.contentBoxSize;
+                        cardHeight = contentBoxSize.blockSize || cardHeight;
+                    } else {
+                        cardHeight = entry.contentRect.height || cardHeight;
+                    }
+                }
+            });
+            reszizeObserver.observe(el);
+        }
+
         // eslint-disable-next-line svelte/no-dom-manipulating
         container.replaceWith(el);
         container = el;
@@ -126,7 +146,8 @@ limitations under the License.
 
 </script>
 
-<div class="outer-container{open ? ' open' : ' close'} {animationState}" style="margin-top: {open ? marginTop : '0px'};">
+<div class="outer-container{open ? ' open' : ' close'} {animationState} {animation ? 'animation' : ''}"
+  style="margin-top: {open ? marginTop : '0px'};{cardHeight ? ` --expander-animation-height: -${cardHeight}px;` : ''}">
     <svelte:element this={type} bind:this={container}/>
     {#if loading}
         <span class="loading"> Loading... </span>
@@ -139,22 +160,28 @@ limitations under the License.
     padding: 1em;
     display: block;
   }
-  .outer-container {
+ .animation :global {
+    hui-card {
+        display: flex;
+        flex-direction: column;
+    }
+  }
+  .outer-container.animation {
     transition: margin-bottom 0.35s ease;
   }
-  .outer-container.open,
-  .outer-container.opening {
+  .outer-container.animation.open,
+  .outer-container.animation.opening {
     margin-bottom: inherit;
   }
-  .outer-container.close,
-  .outer-container.closing {
-    margin-bottom: -100%;
+  .outer-container.animation.close,
+  .outer-container.animation.closing {
+    margin-bottom: var(--expander-animation-height, -100%);
   }
-  .outer-container.opening {
+  .outer-container.animation.opening {
     animation: fadeInOpacity 0.5s forwards ease;
     -webkit-animation: fadeInOpacity 0.5s forwards ease;
   }
-  .outer-container.closing {
+  .outer-container.animation.closing {
       animation: fadeOutOpacity 0.5s forwards ease;
       -webkit-animation: fadeOutOpacity 0.5s forwards ease;
   }

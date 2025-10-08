@@ -42,4 +42,5 @@ export interface ExpanderConfig {
     'icon-rotate-degree'?: string;
     'show-button-users'?: { type: string }[];
     'start-expanded-users'?: { type: string }[];
+    animation?: boolean;
 }
