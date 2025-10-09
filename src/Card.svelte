@@ -42,7 +42,7 @@ limitations under the License.
     let container = $state<HuiCard>();
     let loading = $state(true);
     let cardHeight = $state(0);
-    const cardConfig = $state<LovelaceCardConfig>(JSON.parse(JSON.stringify(config)));
+    const cardConfig: LovelaceCardConfig = JSON.parse(JSON.stringify(config));
     $effect(() => {
         if (container) {
             container.hass = hass;
