@@ -237,7 +237,7 @@
         {/if}
     {/if}
     {#if config.cards}
-        <div class="children-wrapper">
+        <div class="children-wrapper {config.animation ? 'animation ' + animationState : ''}">
             <div
                 style="--expander-card-display:{config['expander-card-display']};
                 --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{open ? config['child-padding'] : '0px'};"
@@ -268,6 +268,11 @@
         background: var(--card-background,#fff);
     }
     .children-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+    .children-wrapper.animation.opening,
+    .children-wrapper.animation.closing {
         overflow: hidden;
     }
     .children-container {
