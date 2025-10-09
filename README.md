@@ -218,6 +218,15 @@ Only the background of the button
             }
 ```
 
+Switching the arrow from right to left
+```
+        card_mod:
+          style: |
+            .header {
+              flex-direction: row-reverse !important;
+            }
+```
+
 ## Installation
 
 ### HACS
