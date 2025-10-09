@@ -23,6 +23,7 @@ limitations under the License.
         type = 'div',
         config,
         hass,
+        preview,
         marginTop ='0px',
         open,
         animation = true,
@@ -32,6 +33,7 @@ limitations under the License.
         type?: string;
         config: LovelaceCardConfig;
         hass: HomeAssistant | undefined;
+        preview: boolean;
         marginTop?: string;
         open: boolean;
         animation: boolean;
@@ -50,6 +52,11 @@ limitations under the License.
     });
     $effect(() => {
         if (container) {
+            container.preview = preview;
+        }
+    });
+    $effect(() => {
+        if (container) {
             // do not set hui-card hidden as this prevents it from updating its display
             // card disabled config sets hui-card to correctly update its display
             cardConfig.disabled = !open;
@@ -61,6 +68,7 @@ limitations under the License.
     onMount(async () => {
         const el: HuiCard = document.createElement('hui-card') as HuiCard;
         el.hass = hass;
+        el.preview = preview;
         // do not set hui-card hidden as this prevents it from updating its display
         // card disabled config sets hui-card to correctly update its display
         cardConfig.disabled = !open;

@@ -45,8 +45,9 @@
 
     const {
         hass,
+        preview,
         config = defaults
-    }: {hass: HomeAssistant; config: ExpanderConfig} = $props();
+    }: {hass: HomeAssistant; preview: boolean; config: ExpanderConfig} = $props();
 
     let touchPreventClick = $state(false);
     let open = $state(false);
@@ -197,6 +198,7 @@
                 onclick={config['title-card-clickable'] ? buttonClickDiv : null}
                 role={config['title-card-clickable'] ? 'button' : undefined}>
                 <Card hass={hass}
+                    preview={preview}
                     config={config['title-card']}
                     type={config['title-card'].type}
                     animation={false}
@@ -243,6 +245,7 @@
             >
                 {#each config.cards as card (card)}
                     <Card hass={hass}
+                        preview={open && preview}
                         config={card}
                         type={card.type}
                         marginTop={config['child-margin-top']}
