@@ -50,7 +50,8 @@ limitations under the License.
     });
     $effect(() => {
         if (container) {
-            container.hidden = !open;
+            // do not set hui-card hidden as this prevents it from updating its display
+            // card disabled config sets hui-card to correctly update its display
             cardConfig.disabled = !open;
             // eslint-disable-next-line no-underscore-dangle
             container._element?.dispatchEvent(new CustomEvent('card-visibility-changed'));
@@ -60,7 +61,8 @@ limitations under the License.
     onMount(async () => {
         const el: HuiCard = document.createElement('hui-card') as HuiCard;
         el.hass = hass;
-        el.hidden = !open;
+        // do not set hui-card hidden as this prevents it from updating its display
+        // card disabled config sets hui-card to correctly update its display
         cardConfig.disabled = !open;
         el.config = cardConfig;
         el.load();
