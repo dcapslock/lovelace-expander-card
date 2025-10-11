@@ -183,9 +183,9 @@
 </script>
 
 <ha-card
-    class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'}`}
+    class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'} ${animationState} ${config.animation ? 'animation' : ''}`}
     style="--expander-card-display:{config['expander-card-display']};
-     --gap:{open ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
+     --gap:{open && animationState !=='closing' ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
      --expander-state:{open};
      --icon-rotate-degree:{config['icon-rotate-degree']};
      --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}
@@ -240,8 +240,9 @@
         <div class="children-wrapper {config.animation ? 'animation ' + animationState : ''}">
             <div
                 style="--expander-card-display:{config['expander-card-display']};
-                --gap:{open ? config['expanded-gap'] : config.gap}; --child-padding:{open ? config['child-padding'] : '0px'};"
-                class="children-container"
+                --gap:{open && animationState !=='closing' ? config['expanded-gap'] : config.gap};
+                --child-padding:{open && animationState !=='closing' ? config['child-padding'] : '0px'};"
+                class="children-container{open ? ' open' : ' close'} {animationState} {config.animation ? 'animation' : ''}"
             >
                 {#each config.cards as card (card)}
                     <Card hass={hass}
@@ -267,6 +268,9 @@
         padding: var(--padding);
         background: var(--card-background,#fff);
     }
+    .expander-card.animation {
+        transition: gap 0.35s ease;
+    }
     .children-wrapper {
         display: flex;
         flex-direction: column;
@@ -274,6 +278,9 @@
     .children-wrapper.animation.opening,
     .children-wrapper.animation.closing {
         overflow: hidden;
+    }
+    .children-container.animation {
+        transition: padding 0.35s ease, gap 0.35s ease;
     }
     .children-container {
         padding: var(--child-padding);
