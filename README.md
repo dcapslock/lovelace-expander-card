@@ -76,7 +76,7 @@ Yaml Options:
 | show-button-users         | object[] | **optional**  | *                      | Choose the users that button is visible to them       |
 | start-expanded-users      | object[] | **optional**  | *                      | Choose the users that card will be start expanded for them|
 | animation                 | boolean   | _true_       | true\|false            | Should the opening/closing of expander be animated? |
-| expander-card-id          | string    | **optional** | *                      | An id to use with Set state via action        |
+| expander-card-id          | string    | **optional** | *                      | An id to use with [Set state via action](#set-state-via-action)        |
 
 
 ### Deprecation Warning
