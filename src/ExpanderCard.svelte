@@ -37,7 +37,7 @@
 }}/>
 
 <script lang="ts">
-    import type { HomeAssistant } from './types';
+    import type { ExpanderCardDomEventDetail, HomeAssistant } from './types';
     import Card from './Card.svelte';
     import { onMount } from 'svelte';
     import type { ExpanderConfig } from './configtype';
@@ -59,15 +59,15 @@
     const showButtonUsers = (config['show-button-users'] === undefined || config['show-button-users']?.includes(hass?.user.name));
 
 
-    function toggleOpen() {
+    function toggleOpen(openState?: boolean) {
         if (animationTimeout) {
             clearTimeout(animationTimeout);
             animationTimeout  = null;
         }
-        const openState = !open;
+        const newOpenState = openState !== undefined ? openState : !open;
         if (config.animation) {
-            animationState = openState ? 'opening' : 'closing';
-            if (openState) {
+            animationState = newOpenState ? 'opening' : 'closing';
+            if (newOpenState) {
                 setOpenState(true);
                 animationTimeout = setTimeout(() => {
                     animationState = 'idle';
@@ -81,7 +81,7 @@
                 }, 350);
             }
         } else {
-            setOpenState(openState);
+            setOpenState(newOpenState);
             // animation state is always 'idle' if no animation
         }
     }
@@ -97,6 +97,23 @@
             }
         }
     }
+
+    function handleDomEvent(event: Event) {
+        const data: ExpanderCardDomEventDetail = (event as CustomEvent).detail?.['expander-card']?.data;
+        if (data?.['expander-card-id'] === config['expander-card-id']) {
+            if (data.action === 'open' && !open) {
+                toggleOpen(true);
+            } else if (data.action === 'close' && open) {
+                toggleOpen(false);
+            } else if (data.action === 'toggle') {
+                toggleOpen();
+            }
+        }
+    };
+
+    function cleanup() {
+        document.body.removeEventListener('ll-custom', handleDomEvent);
+    };
 
     onMount(() => {
         const minWidthExpanded = config['min-width-expanded'];
@@ -135,6 +152,10 @@
                 setOpenState(config.expanded);
             }
         }
+
+        document.body.addEventListener('ll-custom', handleDomEvent);
+
+        return cleanup;
     });
 
     const buttonClick = (event: MouseEvent) => {
