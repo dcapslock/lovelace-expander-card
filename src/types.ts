@@ -24,3 +24,8 @@ export interface HuiCard extends LovelaceCard {
     load(): void;
     _element?: LovelaceCard;
 }
+
+export interface ExpanderCardDomEventDetail {
+    'expander-card-id'?: string;
+    action?: 'open' | 'close' | 'toggle';
+}
