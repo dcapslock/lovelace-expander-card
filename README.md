@@ -70,8 +70,8 @@ Yaml Options:
 | title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card                 |
 | overlay-margin            | string   | _0.0em_       | css-size               | Margin from top right of expander button (if overlay) |
 | title-card-padding        | string   | _0px_         | css-size               | padding of title-card                                 |
-| show-button-users         | object[] | **optional**  | *                      | Choose the persons/users that button is visible to them. GUI will save person ids. Adding usernames supported only in YAML. |
-| start-expanded-users      | object[] | **optional**  | *                      | Choose the persons/users that card will be start expanded for them. GUI will save person ids. Adding usernames supported only in YAML. |
+| show-button-users         | object[] | **optional**  | *                      | Choose the persons/users that button is visible to them. |
+| start-expanded-users      | object[] | **optional**  | *                      | Choose the persons/users that card will be start expanded for them. |
 | cards                     | object[] | **optional**  | LovelaceCardConfig[]   | Child cards to show when expanded                     |
 
 ### Deprecation Warning
