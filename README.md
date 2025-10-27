@@ -36,7 +36,7 @@ Clear Background (default theme):
 
 ## Options
 
-Graphical config Editor is currently not  supported. Contribution welcome!
+All options are available for editing in Graphical config editor. Title card config is in YAML at this time.
 
 Yaml Options:
 
