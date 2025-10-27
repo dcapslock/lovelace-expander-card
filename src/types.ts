@@ -1,6 +1,14 @@
 export type AnimationState = 'opening' | 'closing' | 'idle';
 
+export interface HomeAssistantUser {
+    id: string;
+    name: string;
+    is_admin: boolean;
+    is_owner: boolean;
+    system_generated: boolean;
+}
 export interface HomeAssistant {
+    user?: HomeAssistantUser;
     [key: string]: unknown;
 }
 
