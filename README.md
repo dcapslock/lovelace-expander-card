@@ -45,16 +45,16 @@ Yaml Options:
 | type                      | string   | **Required**  | `custom:expander-card` | Type of the card.                                     |
 | title                     | string   | Empty         | *                      | Title (Not displayed if using Title-Card)             |
 | icon                      | string   | mdi:chevron-down         | mdi icon shortcut                      | Icon in button           |
-| arrow-color               | string   | primary-text-color,#fff | css-color    | Color of ico expand button                     |
-| icon-rotate-degree        | string   | _180deg_      | css-rotate             | Changing the degrees of the button icon when clicked  |
-| header-color              | string   | primary-text-color,#fff  | css-color   | Color of expand button                     |
-| button-background         | string   | _transparent_ | css-color              | Background color of expand button                     |
 | expanded                  | boolean  | _false_       | true\|false            | Start expanded                                        |
 | animation                 | boolean   | _true_       | true\|false            | Should the opening/closing of expander be animated? |
 | min-width-expanded        | number   | 0             | number                 | Min screen width (px) to be expanded on start (use with start expanded above)                                     |
 | max-width-expanded        | number   | 0             | number            | Max screen width (px) to be expanded on start (use with start expanded above)                                        |
 | storage-id                | string   | **optional**  | *                      | Save last expander state in local browser storage     |
 | expander-card-id          | string    | **optional** | *                      | An id to use with [Set state via action](#set-state-via-action)        |
+| arrow-color               | string   | primary-text-color,#fff | css-color    | Color of ico expand button                     |
+| icon-rotate-degree        | string   | _180deg_      | css-rotate             | Changing the degrees of the button icon when clicked  |
+| header-color              | string   | primary-text-color,#fff  | css-color   | Color of expand button                     |
+| button-background         | string   | _transparent_ | css-color              | Background color of expand button                     |
 | expander-card-background  | string   | ha-card-background, card-background-color,#fff | css-color              | Expander Card Background |
 | expander-card-background-expanded    | string   |  Empty    | css-color              | Expander Card Background when card is opened/expanded|
 | expander-card-display     | string   | block         | css-display            | Layout/Display of the card                            |

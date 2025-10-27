@@ -38,46 +38,9 @@ export const ExpanderCardEditorSchema = [
                 selector: { text: {} }
             },
             {
-                type: 'expandable',
-                label: 'Expander header',
-                icon: 'mdi:card-outline',
-                schema: [
-                    {
-                        type: 'grid',
-                        schema: [
-                            {
-                                name: 'icon',
-                                label: 'Icon',
-                                selector: { icon: {} }
-                            },
-                            {
-                                name: 'arrow-color',
-                                label: 'Icon color',
-                                selector: { text: {} }
-                            },
-                            {
-                                name: 'icon-rotate-degree',
-                                label: 'Icon rotate degree',
-                                selector: { text: {} }
-                            }
-                        ]
-                    },
-                    {
-                        type: 'grid',
-                        schema: [
-                            {
-                                name: 'header-color',
-                                label: 'Header color',
-                                selector: { text: {} }
-                            },
-                            {
-                                name: 'button-background',
-                                label: 'Button background color',
-                                selector: { text: {} }
-                            }
-                        ]
-                    }
-                ]
+                name: 'icon',
+                label: 'Icon',
+                selector: { icon: {} }
             },
             {
                 type: 'expandable',
@@ -137,6 +100,26 @@ export const ExpanderCardEditorSchema = [
                     {
                         type: 'grid',
                         schema: [
+                            {
+                                name: 'arrow-color',
+                                label: 'Icon color',
+                                selector: { text: {} }
+                            },
+                            {
+                                name: 'icon-rotate-degree',
+                                label: 'Icon rotate degree',
+                                selector: { text: {} }
+                            },
+                            {
+                                name: 'header-color',
+                                label: 'Header color',
+                                selector: { text: {} }
+                            },
+                            {
+                                name: 'button-background',
+                                label: 'Button background color',
+                                selector: { text: {} }
+                            },
                             {
                                 name: 'expander-card-background',
                                 label: 'Background',
@@ -258,6 +241,7 @@ export const ExpanderCardEditorSchema = [
                                 selector: {
                                     select: {
                                         multiple: true,
+                                        mode: 'dropdown',
                                         custom: true, // to allow for unknown users
                                         options: ['[[users]]'] // to be populated dynamically
                                     }
@@ -269,6 +253,7 @@ export const ExpanderCardEditorSchema = [
                                 selector: {
                                     select: {
                                         multiple: true,
+                                        mode: 'dropdown',
                                         custom: true, // to allow for unknown users
                                         options: ['[[users]]'] // to be populated dynamically
                                     }
