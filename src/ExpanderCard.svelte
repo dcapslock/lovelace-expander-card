@@ -312,6 +312,7 @@
         background: none !important;
         background-color: transparent !important;
         border-style: none !important;
+        box-shadow: none !important;
     }
 
     .title-card-header {
