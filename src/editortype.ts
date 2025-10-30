@@ -28,11 +28,47 @@ export const ExpanderCardEditorNulls: ExpanderConfig = {
 const iconSelector = { icon: {} };
 const textSelector = { text: {} };
 const booleanSelector = { boolean: {} };
-const numberPxSelector = {
+const objectSelector = { object: {} };
+const numberSelector = (unit_of_measurement: string) => ({
     number: {
-        unit_of_measurement: 'px'
+        unit_of_measurement
     }
-};
+});
+
+const iconField = (name: string, label: string) => ({
+    name,
+    label,
+    selector: iconSelector
+});
+
+const textField = (name: string, label: string) => ({
+    name,
+    label,
+    selector: textSelector
+});
+
+const booleanField = (name: string, label: string) => ({
+    name,
+    label,
+    selector: booleanSelector
+});
+
+const objectField = (name: string, label: string) => ({
+    name,
+    label,
+    selector: objectSelector
+});
+
+const numberField = (name: string, label: string, unit_of_measurement: string) => ({
+    name,
+    label,
+    selector: numberSelector(unit_of_measurement)
+});
+
+const labelField = (label: string) => ({
+    label,
+    type: 'constant'
+});
 
 // See https://www.home-assistant.io/docs/blueprint/selectors
 export const ExpanderCardEditorSchema = [
@@ -42,14 +78,10 @@ export const ExpanderCardEditorSchema = [
         icon: 'mdi:arrow-down-bold-box-outline',
         schema: [
             {
-                name: 'title',
-                label: 'Title',
-                selector: textSelector
+                ...textField('title', 'Title')
             },
             {
-                name: 'icon',
-                label: 'Icon',
-                selector: iconSelector
+                ...iconField('icon', 'Icon')
             },
             {
                 type: 'expandable',
@@ -60,34 +92,22 @@ export const ExpanderCardEditorSchema = [
                         type: 'grid',
                         schema: [
                             {
-                                name: 'expanded',
-                                label: 'Start expanded',
-                                selector: booleanSelector
+                                ...booleanField('expanded', 'Start expanded')
                             },
                             {
-                                name: 'animation',
-                                label: 'Enable animation',
-                                selector: booleanSelector
+                                ...booleanField('animation', 'Enable animation')
                             },
                             {
-                                name: 'min-width-expanded',
-                                label: 'Min width expanded',
-                                selector: numberPxSelector
+                                ...numberField('min-width-expanded', 'Min width expanded', 'px')
                             },
                             {
-                                name: 'max-width-expanded',
-                                label: 'Max width expanded',
-                                selector: numberPxSelector
+                                ...numberField('max-width-expanded', 'Max width expanded', 'px')
                             },
                             {
-                                name: 'storage-id',
-                                label: 'Storage ID',
-                                selector: textSelector
+                                ...textField('storage-id', 'Storage ID')
                             },
                             {
-                                name: 'expander-card-id',
-                                label: 'Expander card ID',
-                                selector: textSelector
+                                ...textField('expander-card-id', 'Expander card ID')
                             }
                         ]
                     }
@@ -102,54 +122,34 @@ export const ExpanderCardEditorSchema = [
                         type: 'grid',
                         schema: [
                             {
-                                name: 'arrow-color',
-                                label: 'Icon color',
-                                selector: textSelector
+                                ...textField('arrow-color', 'Icon color')
                             },
                             {
-                                name: 'icon-rotate-degree',
-                                label: 'Icon rotate degree',
-                                selector: textSelector
+                                ...textField('icon-rotate-degree', 'Icon rotate degree')
                             },
                             {
-                                name: 'header-color',
-                                label: 'Header color',
-                                selector: textSelector
+                                ...textField('header-color', 'Header color')
                             },
                             {
-                                name: 'button-background',
-                                label: 'Button background color',
-                                selector: textSelector
+                                ...textField('button-background', 'Button background color')
                             },
                             {
-                                name: 'expander-card-background',
-                                label: 'Background',
-                                selector: textSelector
+                                ...textField('expander-card-background', 'Background')
                             },
                             {
-                                name: 'expander-card-background-expanded',
-                                label: 'Background when expanded',
-                                selector: textSelector
+                                ...textField('expander-card-background-expanded', 'Background when expanded')
                             },
                             {
-                                name: 'expander-card-display',
-                                label: 'Expander card display',
-                                selector: textSelector
+                                ...textField('expander-card-display', 'Expander card display')
                             },
                             {
-                                name: 'clear',
-                                label: 'Clear border and background',
-                                selector: booleanSelector
+                                ...booleanField('clear', 'Clear border and background')
                             },
                             {
-                                name: 'gap',
-                                label: 'Gap',
-                                selector: textSelector
+                                ...textField('gap', 'Gap')
                             },
                             {
-                                name: 'padding',
-                                label: 'Padding',
-                                selector: textSelector
+                                ...textField('padding', 'Padding')
                             }
                         ]
                     }
@@ -164,24 +164,16 @@ export const ExpanderCardEditorSchema = [
                         type: 'grid',
                         schema: [
                             {
-                                name: 'expanded-gap',
-                                label: 'Card gap',
-                                selector: textSelector
+                                ...textField('expanded-gap', 'Card gap')
                             },
                             {
-                                name: 'child-padding',
-                                label: 'Card padding',
-                                selector: textSelector
+                                ...textField('child-padding', 'Card padding')
                             },
                             {
-                                name: 'child-margin-top',
-                                label: 'Card margin top',
-                                selector: textSelector
+                                ...textField('child-margin-top', 'Card margin top')
                             },
                             {
-                                name: 'clear-children',
-                                label: 'Clear card border and background',
-                                selector: booleanSelector
+                                ...textField('clear-children', 'Clear card border and background')
                             }
                         ]
                     }
@@ -193,36 +185,25 @@ export const ExpanderCardEditorSchema = [
                 icon: 'mdi:subtitles-outline',
                 schema: [
                     {
-                        label: 'Use YAML to specify a title card to replace the expander title',
-                        type: 'constant'
+                        ...labelField('Use YAML to specify a title card to replace the expander title')
                     },
                     {
-                        name: 'title-card',
-                        label: '',
-                        selector: { object: {} }
+                        ...objectField('title-card', '')
                     },
                     {
                         type: 'grid',
                         schema: [
                             {
-                                name: 'title-card-clickable',
-                                label: 'Make title card clickable to expand/collapse',
-                                selector: booleanSelector
+                                ...booleanField('title-card-clickable', 'Make title card clickable to expand/collapse')
                             },
                             {
-                                name: 'title-card-button-overlay',
-                                label: 'Overlay expand button on title card',
-                                selector: booleanSelector
+                                ...booleanField('title-card-button-overlay', 'Overlay expand button on title card')
                             },
                             {
-                                name: 'overlay-margin',
-                                label: 'Overlay margin',
-                                selector: textSelector
+                                ...textField('overlay-margin', 'Overlay margin')
                             },
                             {
-                                name: 'title-card-padding',
-                                label: 'Title card padding',
-                                selector: textSelector
+                                ...textField('title-card-padding', 'Title card padding')
                             }
                         ]
                     }
