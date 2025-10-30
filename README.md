@@ -59,7 +59,7 @@ Yaml Options:
 | header-color              | string   | primary-text-color,#fff  | css-color   | Color of expand button                     |
 | button-background         | string   | _transparent_ | css-color              | Background color of expand button                     |
 | arrow-color               | string   | primary-text-color,#fff | css-color    | Color of ico expand button                     |
-| gap                       | string   | _0.0em_       | css-size               | gap between cards when expander closed                |
+| gap                       | string   | _0.0em_       | css-size               | gap between cards when expander closed. This option depends on your CSS layout: You might need to use `expander-card-display: grid` for this.                 |
 | expanded-gap              | string   | _0.6em_       | css-size               | gap between child cards when expander open            |
 | padding                   | string   | _1em_         | css-size               | padding of all card content                           |
 | child-padding             | string   | _0.0em_       | css-size               | padding of child cards                                |
@@ -318,6 +318,11 @@ views:
     path: my-view
     sections: ...
 ```
+
+### Option Gap is not working
+
+If this option doesn't work, check your browser's console output. Your current CSS layout might not support this option.
+You can use the `expander-card-display: grid` option to set a layout that supports this option.
 
 ## Support
 
