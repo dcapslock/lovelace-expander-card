@@ -59,7 +59,7 @@ Yaml Options:
 | expander-card-background-expanded    | string   |  Empty    | css-color              | Expander Card Background when card is opened/expanded|
 | expander-card-display     | string   | block         | css-display            | Layout/Display of the card                            |
 | clear                     | boolean  | _false_       | true\|false            | Remove Background, border                                   |
-| gap                       | string   | _0.0em_       | css-size               | gap between cards when expander closed                |
+| gap                       | string   | _0.0em_       | css-size               | gap between cards when expander closed. This option depends on your CSS layout: You might need to use `expander-card-display: grid` for this.                |
 | padding                   | string   | _1em_         | css-size               | padding of all card content                           |
 | expanded-gap              | string   | _0.6em_       | css-size               | gap between child cards when expander open            |
 | child-padding             | string   | _0.0em_       | css-size               | padding of child cards                                |
@@ -314,6 +314,11 @@ views:
     path: my-view
     sections: ...
 ```
+
+### Option Gap is not working
+
+If this option doesn't work, check your browser's console output. Your current CSS layout might not support this option.
+You can use the `expander-card-display: grid` option to set a layout that supports this option.
 
 ## Support
 
