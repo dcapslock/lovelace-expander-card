@@ -25,6 +25,15 @@ export const ExpanderCardEditorNulls: ExpanderConfig = {
     'title-card-padding': ''
 };
 
+const iconSelector = { icon: {} };
+const textSelector = { text: {} };
+const booleanSelector = { boolean: {} };
+const numberPxSelector = {
+    number: {
+        unit_of_measurement: 'px'
+    }
+};
+
 // See https://www.home-assistant.io/docs/blueprint/selectors
 export const ExpanderCardEditorSchema = [
     {
@@ -35,12 +44,12 @@ export const ExpanderCardEditorSchema = [
             {
                 name: 'title',
                 label: 'Title',
-                selector: { text: {} }
+                selector: textSelector
             },
             {
                 name: 'icon',
                 label: 'Icon',
-                selector: { icon: {} }
+                selector: iconSelector
             },
             {
                 type: 'expandable',
@@ -53,40 +62,32 @@ export const ExpanderCardEditorSchema = [
                             {
                                 name: 'expanded',
                                 label: 'Start expanded',
-                                selector: { boolean: {} }
+                                selector: booleanSelector
                             },
                             {
                                 name: 'animation',
                                 label: 'Enable animation',
-                                selector: { boolean: {} }
+                                selector: booleanSelector
                             },
                             {
                                 name: 'min-width-expanded',
                                 label: 'Min width expanded',
-                                selector: {
-                                    number: {
-                                        unit_of_measurement: 'px'
-                                    }
-                                }
+                                selector: numberPxSelector
                             },
                             {
                                 name: 'max-width-expanded',
                                 label: 'Max width expanded',
-                                selector: {
-                                    number: {
-                                        unit_of_measurement: 'px'
-                                    }
-                                }
+                                selector: numberPxSelector
                             },
                             {
                                 name: 'storage-id',
                                 label: 'Storage ID',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'expander-card-id',
                                 label: 'Expander card ID',
-                                selector: { text: {} }
+                                selector: textSelector
                             }
                         ]
                     }
@@ -103,52 +104,52 @@ export const ExpanderCardEditorSchema = [
                             {
                                 name: 'arrow-color',
                                 label: 'Icon color',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'icon-rotate-degree',
                                 label: 'Icon rotate degree',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'header-color',
                                 label: 'Header color',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'button-background',
                                 label: 'Button background color',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'expander-card-background',
                                 label: 'Background',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'expander-card-background-expanded',
                                 label: 'Background when expanded',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'expander-card-display',
                                 label: 'Expander card display',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'clear',
                                 label: 'Clear border and background',
-                                selector: { boolean: {} }
+                                selector: booleanSelector
                             },
                             {
                                 name: 'gap',
                                 label: 'Gap',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'padding',
                                 label: 'Padding',
-                                selector: { text: {} }
+                                selector: textSelector
                             }
                         ]
                     }
@@ -165,22 +166,22 @@ export const ExpanderCardEditorSchema = [
                             {
                                 name: 'expanded-gap',
                                 label: 'Card gap',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'child-padding',
                                 label: 'Card padding',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'child-margin-top',
                                 label: 'Card margin top',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'clear-children',
                                 label: 'Clear card border and background',
-                                selector: { boolean: {} }
+                                selector: booleanSelector
                             }
                         ]
                     }
@@ -206,22 +207,22 @@ export const ExpanderCardEditorSchema = [
                             {
                                 name: 'title-card-clickable',
                                 label: 'Make title card clickable to expand/collapse',
-                                selector: { boolean: {} }
+                                selector: booleanSelector
                             },
                             {
                                 name: 'title-card-button-overlay',
                                 label: 'Overlay expand button on title card',
-                                selector: { boolean: {} }
+                                selector: booleanSelector
                             },
                             {
                                 name: 'overlay-margin',
                                 label: 'Overlay margin',
-                                selector: { text: {} }
+                                selector: textSelector
                             },
                             {
                                 name: 'title-card-padding',
                                 label: 'Title card padding',
-                                selector: { text: {} }
+                                selector: textSelector
                             }
                         ]
                     }
