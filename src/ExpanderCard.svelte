@@ -253,7 +253,9 @@
      --gap:{open && animationState !=='closing' ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
      --expander-state:{open};
      --icon-rotate-degree:{config['icon-rotate-degree']};
-     --card-background:{open && config['expander-card-background-expanded'] ? config['expander-card-background-expanded']: config['expander-card-background']}
+     --card-background:{open && animationState !== 'closing' &&
+         config['expander-card-background-expanded'] ?
+         config['expander-card-background-expanded'] : config['expander-card-background']}
     ">
     {#if config['title-card']}
         <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
@@ -334,7 +336,7 @@
         background: var(--card-background,#fff);
     }
     .expander-card.animation {
-        transition: gap 0.35s ease;
+        transition: gap 0.35s ease, background-color 0.35s ease;
     }
     .children-wrapper {
         display: flex;
@@ -356,6 +358,7 @@
         background: none !important;
         background-color: transparent !important;
         border-style: none !important;
+        box-shadow: none !important;
     }
 
     .title-card-header {
