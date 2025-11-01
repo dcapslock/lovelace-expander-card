@@ -11,8 +11,7 @@
 		"strict": true,
         "module": "esnext",
         "moduleResolution": "bundler",
-		"lib": ["es2019", "dom"],
-		"target": "ES2019"
+		"lib": ["es2019", "dom"]
 	},
     "include": ["src/**/*"],
 }
