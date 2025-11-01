@@ -21,6 +21,7 @@
             'icon-rotate-degree': '180deg',
             'animation': true
         };
+        import { loadExpanderCardEditor } from './ExpanderCardEditor';
 </script>
 
 <!-- eslint-disable-next-line svelte/valid-compile -->
@@ -29,6 +30,19 @@
     extend: (customElementConstructor) => class extends customElementConstructor {
         // re-declare props used in customClass.
         public config!: ExpanderConfig;
+
+        public static async getConfigElement() {
+            await loadExpanderCardEditor();
+            return document.createElement('expander-card-editor');
+        }
+
+        public static getStubConfig() {
+            return {
+                type: 'custom:expander-card',
+                title: 'Expander Card',
+                cards: []
+            };
+        }
 
         public setConfig(conf = {}) {
             this.config = { ...defaults, ...conf };
@@ -50,14 +64,63 @@
     }: {hass: HomeAssistant; preview: boolean; config: ExpanderConfig} = $props();
 
     let touchPreventClick = $state(false);
-    let open = $state(false);
+    let open = $state(preview ? true : false);
+    let previewState = $state(preview ? true : false);
+    let showButtonUsers = $state(true);
     let animationState: AnimationState = $state<AnimationState>('idle');
     let animationTimeout: ReturnType<typeof setTimeout> | null = $state(null);
 
     const configId = config['storage-id'] ?? config['storgage-id'];
     const lastStorageOpenStateId = 'expander-open-' + configId;
-    const showButtonUsers = (config['show-button-users'] === undefined || config['show-button-users']?.includes(hass?.user.name));
+    showButtonUsers = preview || (userInList(config['show-button-users']) ?? true);
 
+    $effect(() => {
+        if (preview === previewState) return;
+        previewState = preview;
+        if (previewState) {
+            setOpenState(true);
+            showButtonUsers = true;
+        } else {
+            setDefaultOpenState();
+            showButtonUsers = userInList(config['show-button-users']) ?? true;
+        }
+    });
+
+    function userInList(userList: string[] | undefined): boolean | undefined {
+        if (userList === undefined) {
+            return undefined;
+        }
+        return hass?.user?.name !== undefined && userList.includes(hass?.user?.name);
+    }
+
+    function setDefaultOpenState() {
+        if (userInList(config['start-expanded-users'])) {
+            setOpenState(true);
+        } else if (configId !== undefined) {
+            try {
+                const storageValue = localStorage.getItem(lastStorageOpenStateId);
+                if(storageValue === null){
+                    // first time, set the state from config
+                    if (config.expanded !== undefined) {
+                        setOpenState(config.expanded);
+                    }
+                }
+                else {
+                    // last state is stored in local storage
+                    open = storageValue ? storageValue === 'true' : open;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }else{
+            // first time, set the state from config
+            if (config.expanded !== undefined) {
+                setOpenState(config.expanded);
+            } else {
+                setOpenState(false);
+            }
+        }
+    }
 
     function toggleOpen(openState?: boolean) {
         if (animationTimeout) {
@@ -128,29 +191,10 @@
             config.expanded = offsetWidth <= maxWidthExpanded;
         }
 
-        if (config['start-expanded-users']?.includes(hass?.user.name)) {
+        if (preview) {
             setOpenState(true);
-        } else if (configId !== undefined) {
-            try {
-                const storageValue = localStorage.getItem(lastStorageOpenStateId);
-                if(storageValue === null){
-                    // first time, set the state from config
-                    if (config.expanded !== undefined) {
-                        setOpenState(config.expanded);
-                    }
-                }
-                else {
-                    // last state is stored in local storage
-                    open = storageValue ? storageValue === 'true' : open;
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }else{
-            // first time, set the state from config
-            if (config.expanded !== undefined) {
-                setOpenState(config.expanded);
-            }
+        } else {
+            setDefaultOpenState();
         }
 
         document.body.addEventListener('ll-custom', handleDomEvent);
@@ -227,7 +271,7 @@
                     animation={false}
                     open={true}
                     animationState='idle'
-                    clearCardCss={config['clear-children'] || false}
+                    clearCardCss={config['clear-children']!}
                 />
             </div>
             {#if showButtonUsers}
@@ -274,9 +318,9 @@
                         type={card.type}
                         marginTop={config['child-margin-top']}
                         open={open}
-                        animation={config.animation || false}
+                        animation={config.animation!}
                         animationState={animationState}
-                        clearCardCss={config['clear-children'] || false}
+                        clearCardCss={config['clear-children']!}
                     />
                 {/each}
             </div>

@@ -7,13 +7,11 @@
 [![PayPal.Me][paypal-me-badge]][paypal-me-url]
 [![BuyMeCoffee][buy-me-a-coffee-shield]][buy-me-a-coffee-url]
 
-
 Expander/Collapsible card for HomeAssistant  
 
 ## Introduction
 
 First a few words to start with. A big thank you goes to @Alia5 (https://github.com/Alia5/lovelace-expander-card), who initially launched the card. I forked this card for my own HomeAssistant to make a few improvements. I give no guarantee for the functionality and no promise of lifelong maintenance, as I do the whole thing in my free time. Of course, I am happy about every contribution and PR
-
 
 ## Demo
 
@@ -32,15 +30,13 @@ You can even nest expanders!
 
 ---
 
-
 Clear Background (default theme):  
 
 ![Sample clear router](examples/clear_router.png)
 
 ## Options
 
-Graphical config Editor is currently not  supported. Contribution welcome!
-
+All options are available for editing in Graphical config editor. Title card config is in YAML at this time.
 
 Yaml Options:
 
@@ -49,38 +45,38 @@ Yaml Options:
 | type                      | string   | **Required**  | `custom:expander-card` | Type of the card.                                     |
 | title                     | string   | Empty         | *                      | Title (Not displayed if using Title-Card)             |
 | icon                      | string   | mdi:chevron-down         | mdi icon shortcut                      | Icon in button           |
-| clear                     | boolean  | _false_       | true\|false            | Remove Background, border                                   |
-| clear-children            | boolean  | _false_       | true\|false            | Remove Background, border from childs                                   |
 | expanded                  | boolean  | _false_       | true\|false            | Start expanded                                        |
+| animation                 | boolean   | _true_       | true\|false            | Should the opening/closing of expander be animated? |
 | min-width-expanded        | number   | 0             | number                 | Min screen width (px) to be expanded on start (use with start expanded above)                                     |
 | max-width-expanded        | number   | 0             | number            | Max screen width (px) to be expanded on start (use with start expanded above)                                        |
-| expander-card-background  | string   | ha-card-background, card-background-color,#fff | css-color              | Expander Card Background |
-| expander-card-background-expanded    | string   |  Empty    | css-color              | Expander Card Background when card is opened/expanded|
+| storage-id                | string   | **optional**  | *                      | Save last expander state in local browser storage     |
+| expander-card-id          | string    | **optional** | *                      | An id to use with [Set state via action](#set-state-via-action)        |
+| arrow-color               | string   | primary-text-color,#fff | css-color    | Color of ico expand button                     |
+| icon-rotate-degree        | string   | _180deg_      | css-rotate             | Changing the degrees of the button icon when clicked  |
 | header-color              | string   | primary-text-color,#fff  | css-color   | Color of expand button                     |
 | button-background         | string   | _transparent_ | css-color              | Background color of expand button                     |
-| arrow-color               | string   | primary-text-color,#fff | css-color    | Color of ico expand button                     |
-| gap                       | string   | _0.0em_       | css-size               | gap between cards when expander closed. This option depends on your CSS layout: You might need to use `expander-card-display: grid` for this.                 |
-| expanded-gap              | string   | _0.6em_       | css-size               | gap between child cards when expander open            |
+| expander-card-background  | string   | ha-card-background, card-background-color,#fff | css-color              | Expander Card Background |
+| expander-card-background-expanded    | string   |  Empty    | css-color              | Expander Card Background when card is opened/expanded|
+| expander-card-display     | string   | block         | css-display            | Layout/Display of the card                            |
+| clear                     | boolean  | _false_       | true\|false            | Remove Background, border                                   |
+| gap                       | string   | _0.0em_       | css-size               | gap between cards when expander closed. This option depends on your CSS layout: You might need to use `expander-card-display: grid` for this.                |
 | padding                   | string   | _1em_         | css-size               | padding of all card content                           |
+| expanded-gap              | string   | _0.6em_       | css-size               | gap between child cards when expander open            |
 | child-padding             | string   | _0.0em_       | css-size               | padding of child cards                                |
 | child-margin-top          | string   | _0.0em_       | css-size               | Margin top of child cards                             |
+| clear-children            | boolean  | _false_       | true\|false            | Remove Background, border from childs                                   |
 | title-card                | object   | **optional**  | LovelaceCardConfig     | Replace Title with card                               |
-| title-card-padding        | string   | _0px_         | css-size               | padding of title-card                                 |
-| title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card                 |
 | title-card-clickable      | boolean  | _false_       | true\|false            | Should the complete diff clickable?                   |
+| title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card                 |
 | overlay-margin            | string   | _0.0em_       | css-size               | Margin from top right of expander button (if overlay) |
-| storage-id                | string   | **optional**  | *                      | Save last expander state in local browser storage     |
+| title-card-padding        | string   | _0px_         | css-size               | padding of title-card                                 |
+| show-button-users         | object[] | **optional**  | *                      | Choose the persons/users that button is visible to them. |
+| start-expanded-users      | object[] | **optional**  | *                      | Choose the persons/users that card will be start expanded for them. |
 | cards                     | object[] | **optional**  | LovelaceCardConfig[]   | Child cards to show when expanded                     |
-| expander-card-display     | string   | block         | css-display            | Layout/Display of the card                            |
-| icon-rotate-degree        | string   | _180deg_      | css-rotate             | Changing the degrees of the button icon when clicked  |
-| show-button-users         | object[] | **optional**  | *                      | Choose the users that button is visible to them       |
-| start-expanded-users      | object[] | **optional**  | *                      | Choose the users that card will be start expanded for them|
-| animation                 | boolean   | _true_       | true\|false            | Should the opening/closing of expander be animated? |
-| expander-card-id          | string    | **optional** | *                      | An id to use with [Set state via action](#set-state-via-action)        |
-
 
 ### Deprecation Warning
-* `storgage-id` was introduced in v2.5.0 and is deprecated in favor of `storage-id`. The older `storgage-id` will be removed in a future release.
+
+* `storage-id` was introduced in v2.5.0 and is deprecated in favor of `storgage-id`. The older `storgage-id` will be removed in a future release.
 
 ## Examples
 
