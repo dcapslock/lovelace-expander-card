@@ -17,6 +17,7 @@ jobs:
         with:
           configuration-path: .github/labeler.yml
           include-title: 1
+          enable-versioned-regex: 1
           repo-token: ${{ github.token }}
       - uses: actions/checkout@v4
       - name: Setup Git
