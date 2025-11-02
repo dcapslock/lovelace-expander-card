@@ -6,4 +6,4 @@ bugfix:
 documentation:
     - '(doc:|docs:)'
 miscellaneous:
-    - '(misc:)'
+    - '(misc)'
