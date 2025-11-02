@@ -2,8 +2,8 @@
 breaking-change:
     - '(breaking-change|major-update)'
 bugfix:
-    - '(fix:)'
+    - '(fix)'
 documentation:
-    - '(doc:|docs:)'
+    - '(doc|docs)'
 miscellaneous:
     - '(misc)'
