@@ -16,10 +16,10 @@ export interface ExpanderConfig {
     clear?: boolean;
     'clear-children'?: boolean;
     cards?: { type: string }[];
-    gap: string;
-    'expanded-gap': string;
-    padding: string;
-    title: string;
+    gap?: string;
+    'expanded-gap'?: string;
+    padding?: string;
+    title?: string;
     'title-card'?: LovelaceCardConfig;
     'title-card-padding'?: string;
     'title-card-button-overlay'?: false;
@@ -31,7 +31,7 @@ export interface ExpanderConfig {
     'expander-card-background'?: string;
     'expander-card-background-expanded'?: string;
     'header-color'?: string;
-    'button-background': string;
+    'button-background'?: string;
     'arrow-color'?: string;
     'expander-card-display'?: string;
     'min-width-expanded'?: number;
@@ -40,8 +40,8 @@ export interface ExpanderConfig {
     'storgage-id'?: string;  // Deprecated as of 2.6.5
     'storage-id'?: string;
     'icon-rotate-degree'?: string;
-    'show-button-users'?: { type: string }[];
-    'start-expanded-users'?: { type: string }[];
+    'show-button-users'?: string[];
+    'start-expanded-users'?: string[];
     animation?: boolean;
     'expander-card-id'?: string;
 }
