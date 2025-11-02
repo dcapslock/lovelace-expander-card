@@ -70,7 +70,7 @@
     let animationState: AnimationState = $state<AnimationState>('idle');
     let animationTimeout: ReturnType<typeof setTimeout> | null = $state(null);
 
-    const configId = config['storage-id'] ?? config['storgage-id'];
+    const configId = config['storage-id'];
     const lastStorageOpenStateId = 'expander-open-' + configId;
     showButtonUsers = preview || (userInList(config['show-button-users']) ?? true);
 
