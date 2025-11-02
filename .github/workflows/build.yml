@@ -13,6 +13,12 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - uses: github/issue-labeler@v3.4
+        with:
+          configuration-path: .github/labeler.yml
+          include-title: 1
+          enable-versioned-regex: 0
+          repo-token: ${{ github.token }}
       - uses: actions/checkout@v4
       - name: Setup Git
         run: |
