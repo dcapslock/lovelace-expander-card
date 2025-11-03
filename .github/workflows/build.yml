@@ -19,7 +19,7 @@ jobs:
           include-title: 1
           include-body: 0
           enable-versioned-regex: 0
-          repo-token: ${{ github.token }}
+          repo-token: ${{ secrets.GITHUB_TOKEN  }}
       - uses: actions/checkout@v4
       - name: Setup Git
         run: |
