@@ -4,6 +4,9 @@ on:
   pull_request_target:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 permissions:
   issues: write
@@ -15,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: github/issue-labeler@v3.4
+        if: github.event_name == 'pull_request_target'
         with:
           configuration-path: .github/labeler.yml
           include-title: 1
