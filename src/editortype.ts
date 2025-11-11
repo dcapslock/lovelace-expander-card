@@ -173,7 +173,7 @@ export const ExpanderCardEditorSchema = [
                                 ...textField('child-margin-top', 'Card margin top')
                             },
                             {
-                                ...textField('clear-children', 'Clear card border and background')
+                                ...booleanField('clear-children', 'Clear card border and background')
                             }
                         ]
                     }
