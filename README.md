@@ -74,10 +74,6 @@ Yaml Options:
 | start-expanded-users      | object[] | **optional**  | *                      | Choose the persons/users that card will be start expanded for them. |
 | cards                     | object[] | **optional**  | LovelaceCardConfig[]   | Child cards to show when expanded                     |
 
-### Deprecation Warning
-
-* `storage-id` was introduced in v2.5.0 and is deprecated in favor of `storgage-id`. The older `storgage-id` will be removed in a future release.
-
 ## Examples
 
 Here are a few examples of usage.
