@@ -7,3 +7,5 @@ documentation:
     - '(doc|docs)'
 miscellaneous:
     - '(misc)'
+feature:
+    - '(feat)'
