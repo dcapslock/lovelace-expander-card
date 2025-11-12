@@ -17,10 +17,13 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/labeler@v6
+      - uses: github/issue-labeler@v3.4
         if: github.event_name == 'pull_request_target'
         with:
           configuration-path: .github/labeler.yml
+          include-title: 1
+          include-body: 0
+          enable-versioned-regex: 0
           repo-token: ${{ secrets.GITHUB_TOKEN  }}
       - uses: actions/checkout@v4
       - name: Setup Git

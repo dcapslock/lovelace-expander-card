@@ -1,10 +1,11 @@
+# Add/remove labels to PR
 breaking-change:
- - head-branch: ['^breaking-change', '^major-update']
+    - '(breaking-change|major-update)'
 bugfix:
- - head-branch: ['^fix']
+    - '(fix)'
 documentation:
- - head-branch: ['^doc', '^docs']
+    - '(doc|docs)'
 miscellaneous:
- - head-branch: ['^misc']
+    - '(misc)'
 feature:
- - head-branch: ['^feat']
+    - '(feat)'
