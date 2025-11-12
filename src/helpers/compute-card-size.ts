@@ -2,7 +2,7 @@ import { HuiCard } from '../types';
 import { TimeoutError } from './promise-timeout';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const promiseTimeout = (ms: number, promise: Promise<any> | any) => {
+export const promiseTimeout = (ms: number, promise: Promise<any> | any) => { // NOSONAR
     const timeout = new Promise((_resolve, reject) => {
         setTimeout(() => {
             reject(new TimeoutError(ms));

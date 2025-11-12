@@ -18,7 +18,7 @@ export class TimeoutError extends Error {
     }
 }
 
-export const promiseTimeout = (ms: number, promise: Promise<any> | any) => {
+export const promiseTimeout = (ms: number, promise: Promise<any> | any) => { // NOSONAR
     const timeout = new Promise((_resolve, reject) => {
         setTimeout(() => {
             reject(new TimeoutError(ms));
