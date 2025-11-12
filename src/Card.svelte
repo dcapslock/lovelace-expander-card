@@ -18,6 +18,7 @@ limitations under the License.
 <script lang="ts">
     import { onMount } from 'svelte';
     import type { AnimationState, HomeAssistant, HuiCard, LovelaceCardConfig } from './types';
+    import { computeCardSize } from './helpers/compute-card-size';
 
     const {
         type = 'div',
@@ -89,6 +90,10 @@ limitations under the License.
         }
 
         if (animation) {
+            // Start with an estimated height.
+            // Update with resize observer once we have the real height.
+            // 56px is the height of one card size unit
+            cardHeight = await computeCardSize(el) * 56;
             const resizeObserver = new ResizeObserver((entries) => {
                 for (const entry of entries) {
                     if (entry.contentBoxSize) {
