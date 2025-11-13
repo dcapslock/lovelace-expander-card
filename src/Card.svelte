@@ -52,7 +52,7 @@ limitations under the License.
         }
     });
     $effect(() => {
-        if (container) {
+        if (container && preview !== undefined) {
             container.preview = preview;
         }
     });
@@ -62,7 +62,7 @@ limitations under the License.
             // card disabled config sets hui-card to correctly update its display
             cardConfig.disabled = !open;
             // eslint-disable-next-line no-underscore-dangle
-            container._element?.dispatchEvent(new CustomEvent('card-visibility-changed'));
+            container._element?.dispatchEvent(new CustomEvent('card-visibility-changed', { detail: { value: open }, bubbles: true, composed: false }));
         }
     });
 
@@ -76,7 +76,7 @@ limitations under the License.
         el.config = cardConfig;
         el.load();
 
-        if (!container) {
+        if (!container || container === null) {
             return;
         }
 
@@ -88,6 +88,11 @@ limitations under the License.
             el.style.setProperty('--ha-card-border-radius', '0px');
             el.style.setProperty('--ha-card-backdrop-filter', 'none');
         }
+
+        // eslint-disable-next-line svelte/no-dom-manipulating
+        container.replaceWith(el);
+        container = el;
+        loading = false;
 
         if (animation) {
             // Start with an estimated height.
@@ -108,11 +113,6 @@ limitations under the License.
             });
             resizeObserver.observe(el);
         }
-
-        // eslint-disable-next-line svelte/no-dom-manipulating
-        container.replaceWith(el);
-        container = el;
-        loading = false;
     });
 
 </script>
