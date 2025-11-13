@@ -69,6 +69,7 @@
     let showButtonUsers = $state(true);
     let animationState: AnimationState = $state<AnimationState>('idle');
     let animationTimeout: ReturnType<typeof setTimeout> | null = $state(null);
+    let backgroundAnimationDuration = $state(0);
 
     const configId = config['storage-id'];
     const lastStorageOpenStateId = 'expander-open-' + configId;
@@ -158,6 +159,9 @@
                 /* eslint no-console: 0 */
                 console.error(e);
             }
+        }
+        if (open && backgroundAnimationDuration === 0) {
+            backgroundAnimationDuration = 0.35;
         }
     }
 
@@ -255,7 +259,8 @@
      --icon-rotate-degree:{config['icon-rotate-degree']};
      --card-background:{open && animationState !== 'closing' &&
          config['expander-card-background-expanded'] ?
-         config['expander-card-background-expanded'] : config['expander-card-background']}
+         config['expander-card-background-expanded'] : config['expander-card-background']};
+     --background-animation-duration:{backgroundAnimationDuration}s;
     ">
     {#if config['title-card']}
         <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
@@ -336,7 +341,7 @@
         background: var(--card-background,#fff);
     }
     .expander-card.animation {
-        transition: gap 0.35s ease, background-color 0.35s ease;
+        transition: gap 0.35s ease, background-color var(--background-animation-duration, 0) ease;
     }
     .children-wrapper {
         display: flex;
