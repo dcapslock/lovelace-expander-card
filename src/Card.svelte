@@ -76,7 +76,7 @@ limitations under the License.
         el.config = cardConfig;
         el.load();
 
-        if (!container || container === null) {
+        if (!container) {
             return;
         }
 
