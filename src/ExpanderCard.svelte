@@ -76,7 +76,7 @@
     showButtonUsers = preview || (userInList(config['show-button-users']) ?? true);
 
     $effect(() => {
-        if (preview === previewState) return;
+        if (preview === previewState || preview === undefined) return;
         previewState = preview;
         if (previewState) {
             setOpenState(true);
