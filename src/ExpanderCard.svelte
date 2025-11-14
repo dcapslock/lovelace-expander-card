@@ -313,7 +313,7 @@
             <div
                 style="--expander-card-display:{config['expander-card-display']};
                 --gap:{open && animationState !=='closing' ? config['expanded-gap'] : config.gap};
-                --child-padding:{open && animationState !=='closing' ? config['child-padding'] : '0px'};"
+                --child-padding:{open && animationState !=='closing' ? config['child-padding'] : `0px ${config['child-padding']}`};"
                 class="children-container{open ? ' open' : ' close'} {animationState} {config.animation ? 'animation' : ''}"
             >
                 {#each config.cards as card (card)}
