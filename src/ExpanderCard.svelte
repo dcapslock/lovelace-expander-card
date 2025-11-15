@@ -73,6 +73,7 @@
 
     const configId = config['storage-id'];
     const lastStorageOpenStateId = 'expander-open-' + configId;
+    const userStyle = `<style>${config.style}</style>`;
     showButtonUsers = preview || (userInList(config['show-button-users']) ?? true);
 
     $effect(() => {
@@ -252,7 +253,7 @@
 </script>
 
 <ha-card
-    class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'} ${animationState} ${config.animation ? 'animation' : ''}`}
+    class={`expander-card${config.clear ? ' clear' : ''}${open ? ' open' : ' close'} ${animationState}${config.animation ? ' animation ' + animationState : ''}`}
     style="--expander-card-display:{config['expander-card-display']};
      --gap:{open && animationState !=='closing' ? config['expanded-gap'] : config.gap}; --padding:{config.padding};
      --expander-state:{open};
@@ -263,9 +264,11 @@
      --background-animation-duration:{backgroundAnimationDuration}s;
     ">
     {#if config['title-card']}
-        <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ? '-overlay' : ''}`}>
-            <div id='id2' class="title-card-container"
-                style="--title-padding:{config['title-card-padding']}"
+        <div id='id1' class={`title-card-header${config['title-card-button-overlay'] ?
+            '-overlay' : ''}${open ? ' open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}>
+            <div id='id2'
+                class={`title-card-container${open ? ' open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}
+                style="--title-padding:{config['title-card-padding'] ? config['title-card-padding'] : '0px'};"
                 ontouchstart={touchStart} ontouchmove={touchMove} ontouchend={touchEnd}
                 onclick={config['title-card-clickable'] ? buttonClickDiv : null}
                 role={config['title-card-clickable'] ? 'button' : undefined}>
@@ -284,12 +287,13 @@
                     style="--overlay-margin:{config['overlay-margin']}; --button-background:{config[
                         'button-background'
                     ]}; --header-color:{config['header-color']};"
-                    class={`header ripple${config['title-card-button-overlay'] ? ' header-overlay' : ''}${open ? ' open' : ' close'}`}
+                    class={`header ripple${config['title-card-button-overlay'] ?
+                        ' header-overlay' : ''}${open ? ' open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}
                     aria-label="Toggle button"
                 >
                     <ha-icon style="--arrow-color:{config['arrow-color']}"
                       icon={config.icon}
-                      class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'} ${config.animation ? 'animation' : ''}`}>
+                      class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}>
                     </ha-icon>
                 </button>
             {/if}
@@ -297,24 +301,24 @@
     {:else}
         {#if showButtonUsers}
             <button onclick={buttonClick}
-                class={`header${config['expander-card-background-expanded'] ? '' : ' ripple'}${open ? ' open' : ' close'}`}
+                class={`header${config['expander-card-background-expanded'] ? '' : ' ripple'}${open ? ' open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}
                 style="--header-width:100%; --button-background:{config['button-background']};--header-color:{config['header-color']};"
             >
                 <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
                 <ha-icon style="--arrow-color:{config['arrow-color']}"
                   icon={config.icon}
-                  class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'} ${config.animation ? 'animation' : ''}`}>
+                  class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}>
                 </ha-icon>
             </button>
         {/if}
     {/if}
     {#if config.cards}
-        <div class="children-wrapper {config.animation ? 'animation ' + animationState : ''}">
+        <div class="children-wrapper {config.animation ? 'animation ' + animationState : ''}{open ? ' open' : ' close'}">
             <div
                 style="--expander-card-display:{config['expander-card-display']};
                 --gap:{open && animationState !=='closing' ? config['expanded-gap'] : config.gap};
-                --child-padding:{open && animationState !=='closing' ? config['child-padding'] : `0px ${config['child-padding']}`};"
-                class="children-container{open ? ' open' : ' close'} {animationState} {config.animation ? 'animation' : ''}"
+                --child-padding:{open && animationState !=='closing' ? config['child-padding'] : '0px'};"
+                class="children-container{open ? ' open' : ' close'}{config.animation ? ' animation ' + animationState : ''}"
             >
                 {#each config.cards as card (card)}
                     <Card hass={hass}
@@ -330,6 +334,10 @@
                 {/each}
             </div>
         </div>
+    {/if}
+    {#if userStyle}
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html userStyle}
     {/if}
 </ha-card>
 
