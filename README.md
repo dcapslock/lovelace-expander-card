@@ -383,42 +383,8 @@ Change the title size
 
 ## Card Mod
 
-Card mod still works, but it's recommended to use the `style` attribute directly for better integration.
+Before the `style` attribute, [card mod](https://github.com/thomasloven/lovelace-card-mod) was used to style the card. Although card-mod still works, it is better to switch everything to use the `style` attribute. Please do not open issue(s) when card mod is not working.
 
-With the help of the integration [card mod](https://github.com/thomasloven/lovelace-card-mod), the card can be flexibly adapted. This is also possible based on the card status. A CSS class “open” or “close” is always set.
-
-Using an example to set the background based on the status
-```yaml
-        card_mod:
-          style: |
-            ha-card.open {
-              background: red !important;
-            }
-            ha-card.close {
-              background: #C8A2C8 !important;
-            }
-```
-
-Only the background of the button
-```yaml
-        card_mod:
-          style: |
-            button.open {
-              background: red !important;
-            }
-            button.close {
-              background: #C8A2C8 !important;
-            }
-```
-
-Switching the arrow from right to left
-```
-        card_mod:
-          style: |
-            .header {
-              flex-direction: row-reverse !important;
-            }
-```
 
 ## Installation
 
