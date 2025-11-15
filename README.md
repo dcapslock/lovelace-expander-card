@@ -120,8 +120,39 @@ Example title card that is clickable and has 2 nested cards, which is directly e
           name: null
           show_wind: speed
 ```
+### Heading Title card
 
-### Title
+Example with [heading](https://www.home-assistant.io/dashboards/heading/) title card to the possiblity to style your title.
+
+```yaml
+      - type: custom:expander-card
+        title-card:
+          type: heading
+          heading: Title
+          heading_style: title
+          badges:
+            - type: entity
+              show_name: false
+              show_state: true
+              show_icon: true
+              entity: light.bed_light
+          icon: mdi:account
+```
+
+### Template Title card with Mushroom
+
+If you need templates in your title, you can make good use of the Mushroom cards. Here's an example using the [Mushroom title card](//github.com/piitaya/lovelace-mushroom/blob/main/docs/cards/title.md).
+https:
+
+```yaml
+      - type: custom:expander-card
+        title-card:
+          type: custom:mushroom-title-card
+          title: |-
+            {{ now().hour }}
+```
+
+### Simple Title
 
 Example with title that is clickable and has 2 nested cards.
 
@@ -186,6 +217,32 @@ Example with title that is clickable and has 2 nested cards with are automatical
             show_wind: speed
 ```
 
+### Title card with action 
+
+The configuration below will open or close the expander when you tap the Mushroom Light Card. This means you cannot switch the light on or off by tapping it, but you can still adjust the brightness.
+
+```yaml
+    type: custom:expander-card
+    title: Expander Card
+    expander-card-id: my-light-card
+    cards:
+      - type: entities
+        entities:
+          - entity: sun.sun
+    title-card:
+      type: tile
+      entity: light.bed_light
+      vertical: false
+      features_position: inline
+      features:
+        - type: light-brightness
+      tap_action:
+        action: fire-dom-event
+        expander-card:
+          data:
+            expander-card-id: my-light-card
+            action: toggle
+```
 ## Set state via action
 
 You can set the state of expander card(s) using the `fire-dom-event` action on any card that supports actions.
@@ -231,11 +288,11 @@ tap_action:
 
 You can do advanced styling using the `style` configuration parameter. Classes available are per the images below.
 
-![Expander Card Styling - Title](https://github.com/user-attachments/assets/e582975e-5f47-497a-8344-4378ad32f2d6)
+![Expander Card Styling - Title](examples/styling1.png)
 
-![Expander Card Styling - Card](https://github.com/user-attachments/assets/815d4af8-46a6-4ea8-a85f-b40ca594597b)
+![Expander Card Styling - Card](examples/styling2.png)
 
-![Expander Card Styling - Card & Overlay](https://github.com/user-attachments/assets/08a6234b-45f6-49c9-bd9a-b356dd748c4a)
+![Expander Card Styling - Card & Overlay](examples/styling3.png)
 
 ### State
 
@@ -315,6 +372,19 @@ style: |
     font-size: var(--ha-font-size-m);
   }
 ```
+
+Change the title size 
+```yaml
+    style: |
+      .title {
+        font-size: var(--ha-font-size-l);
+      }
+```
+
+## Card Mod
+
+Before the `style` attribute, [card mod](https://github.com/thomasloven/lovelace-card-mod) was used to style the card. Although card-mod still works, it is better to switch everything to use the `style` attribute. Please do not open issue(s) when card mod is not working.
+
 
 ## Installation
 
