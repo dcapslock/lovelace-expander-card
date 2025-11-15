@@ -43,4 +43,5 @@ export interface ExpanderConfig {
     'start-expanded-users'?: string[];
     animation?: boolean;
     'expander-card-id'?: string;
+    style?: string;
 }

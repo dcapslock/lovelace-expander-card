@@ -117,7 +117,7 @@ limitations under the License.
 
 </script>
 
-<div class="outer-container{open ? ' open' : ' close'} {animationState} {animation ? 'animation' : ''}"
+<div class="outer-container{open ? ' open' : ' close'}{animation ? ' animation ' + animationState : ''}"
   style="margin-top: {open ? marginTop : '0px'};{cardHeight ? ` --expander-animation-height: -${cardHeight}px;` : ''}">
     <svelte:element this={type} bind:this={container}/>
     {#if loading}

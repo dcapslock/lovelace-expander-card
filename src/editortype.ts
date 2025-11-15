@@ -22,11 +22,13 @@ export const ExpanderCardEditorNulls: ExpanderConfig = {
     'child-padding': '',
     'child-margin-top': '',
     'overlay-margin': '',
-    'title-card-padding': ''
+    'title-card-padding': '',
+    'style': ''
 };
 
 const iconSelector = { icon: {} };
 const textSelector = { text: {} };
+const multilineTextSelector = { text: { multiline: true } };
 const booleanSelector = { boolean: {} };
 const objectSelector = { object: {} };
 const numberSelector = (unit_of_measurement: string) => ({
@@ -45,6 +47,12 @@ const textField = (name: string, label: string) => ({
     name,
     label,
     selector: textSelector
+});
+
+const multilineTextField = (name: string, label: string) => ({
+    name,
+    label,
+    selector: multilineTextSelector
 });
 
 const booleanField = (name: string, label: string) => ({
@@ -242,6 +250,16 @@ export const ExpanderCardEditorSchema = [
                                 }
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                type: 'expandable',
+                label: 'Advanced styling',
+                icon: 'mdi:brush-outline',
+                schema: [
+                    {
+                        ...multilineTextField('style', 'Custom CSS style')
                     }
                 ]
             }

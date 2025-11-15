@@ -11,7 +11,7 @@ Expander/Collapsible card for HomeAssistant
 
 ## Introduction
 
-First a few words to start with. A big thank you goes to @Alia5 (https://github.com/Alia5/lovelace-expander-card), who initially launched the card. I forked this card for my own HomeAssistant to make a few improvements. I give no guarantee for the functionality and no promise of lifelong maintenance, as I do the whole thing in my free time. Of course, I am happy about every contribution and PR
+First a few words to start with. A big thank you goes to [@Alia5](https://github.com/Alia5/lovelace-expander-card), who initially launched the card. I forked this card for my own HomeAssistant to make a few improvements. I give no guarantee for the functionality and no promise of lifelong maintenance, as I do the whole thing in my free time. Of course, I am happy about every contribution and PR
 
 ## Demo
 
@@ -73,6 +73,7 @@ Yaml Options:
 | show-button-users         | object[] | **optional**  | *                      | Choose the persons/users that button is visible to them. |
 | start-expanded-users      | object[] | **optional**  | *                      | Choose the persons/users that card will be start expanded for them. |
 | cards                     | object[] | **optional**  | LovelaceCardConfig[]   | Child cards to show when expanded                     |
+| style                     | string   | **optional**. | css style rules        | Advanced css styling rules                        |
 
 ## Examples
 
@@ -81,7 +82,8 @@ Here are a few examples of usage.
 ### Title card
 
 Example title card that is clickable and has 2 nested cards, which is directly expanded
-```
+
+```yaml
     - type: custom:expander-card
       child-margin-top: 0.6em
       padding: 0
@@ -118,11 +120,12 @@ Example title card that is clickable and has 2 nested cards, which is directly e
           name: null
           show_wind: speed
 ```
+
 ### Title
 
 Example with title that is clickable and has 2 nested cards.
 
-```
+```yaml
       - type: custom:expander-card
         child-margin-top: 0.6em
         padding: 0
@@ -154,7 +157,7 @@ Example with title that is clickable and has 2 nested cards.
 
 Example with title that is clickable and has 2 nested cards with are automatically expanded when the screen is more than 300px.
 
-```
+```yaml
       - type: custom:expander-card
         child-margin-top: 0.6em
         padding: 0
@@ -224,41 +227,93 @@ tap_action:
       action: open
 ```
 
-## Card Mod
+## Style
 
-With the help of the integration [card mod](https://github.com/thomasloven/lovelace-card-mod), the card can be flexibly adapted. This is also possible based on the card status. A CSS class “open” or “close” is always set.
+You can do advanced styling using the `style` configuration parameter. Classes available are per the images below.
 
-Using an example to set the background based on the status
-```
-        card_mod:
-          style: |
-            ha-card.open {
-              background: red !important;
-            }
-            ha-card.close {
-              background: #C8A2C8 !important;
-            }
+![Expander Card Styling - Title](https://github.com/user-attachments/assets/e582975e-5f47-497a-8344-4378ad32f2d6)
+
+![Expander Card Styling - Card](https://github.com/user-attachments/assets/815d4af8-46a6-4ea8-a85f-b40ca594597b)
+
+![Expander Card Styling - Card & Overlay](https://github.com/user-attachments/assets/08a6234b-45f6-49c9-bd9a-b356dd748c4a)
+
+### State
+
+For all elements shown, the class `open` will be added when the Expander card is open, and `closed` added when the Expander is closed.
+
+### Animation
+
+When Expander card animation is enabled, for all elements except those listed below, the class `opening` will be added when the expander is in the process of opening and the class `closing` will be added when the expander is in the process of closing. When not `opening` or `closing`, the class `idle` will be added. The class `animation` will also be added. You may wish to use these classes for transition affects. Expander card uses `0.35s ease` for transitions. See the final example below for transitioning title font size and color.
+
+> NOTE: `.outer-container` for Title card will not have `animation` or `opening`/`closing` applied.
+
+### Special considerations
+
+1. `.children-wrapper` is used for opening/closing animation and hiding children cards. You should not style this element. It is shown for completeness.
+2. `margin-bottom` on each children card's `.outer-container` is used to transition cards sliding down and up while animating. Do not style `margin-bottom` and if altering any transitions, extend the included `transition` style for `opening` and `closing`.
+3. As much as possible, use class selector combinations to get your styles to a higher specificity. e.g. `.expander-card.animation.open` is more specific than any built in classes so if you use that selector, you as less likely to need to use `!important`.
+4. For animation, during opening, the classes will be `open` and `opening`. During closing, classes will be `open` and `closing` until the close sequence has ended after which the classes will be `close` and `idle`.
+5. If you are considering any transition affects, check those already applied and extend those with any styling you add.
+
+### Styling Examples
+
+Using an example to set the background based on the status. As background color is a transition element, you need to style both `open` & `opening` and `close` and `closing` to get the background to transition during opening/closing. Otherwise the transition will take place after the expander has opened/closed.
+
+```yaml
+style: |-
+  .expander-card.animation.open,
+  .expander-card.animation.opening {
+    background-color: red;
+  }
+  .expander-card.animation.close,
+  .expander-card.animation.closing {
+    background-color: #C8A2C8;
+  }
 ```
 
-Only the background of the button
-```
-        card_mod:
-          style: |
-            button.open {
-              background: red !important;
-            }
-            button.close {
-              background: #C8A2C8 !important;
-            }
+Only the background of the button. Here `!important` is needed to override the hover ripple.
+
+```yaml
+style: |
+  .header.animation.open,
+  .header.animation.opening {
+    background-color: red !important;
+  }
+  .header.animation.close,
+  .header.animation.closing {
+    background-color: #C8A2C8 !important;
+  }
 ```
 
-Switching the arrow from right to left
+Switching the arrow from right to left, with reduced horizontal padding of the button.
+
+```yaml
+style: |
+  .header {
+    flex-direction: row-reverse !important;
+    padding: 0.8em 0 !important;
+  }
 ```
-        card_mod:
-          style: |
-            .header {
-              flex-direction: row-reverse !important;
-            }
+
+Transitioning the title font size and color. Here the `!important` on `close`/`closing` is to make sure that the font size and color both change on `closing` as `open` will still be added until fully closed at which stage `close` will be added and `open` removed.
+
+```yaml
+style: |
+  .header > .title {
+    transition: color 0.35s ease, font-size 0.35s ease;
+  }
+  .header.animation.close > .title, 
+  .header.animation.closing > .title
+  {
+    color: green !important;
+    font-size: var(--ha-font-size-l) !important;
+  }
+  .header.animation.open > .title,
+  .header.animation.opening > .title
+  {
+    color: red;
+    font-size: var(--ha-font-size-m);
+  }
 ```
 
 ## Installation
@@ -273,7 +328,6 @@ Expander-Card is not available in [HACS][hacs] (Home Assistant Community Store) 
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MelleD&repository=lovelace-expander-card&category=plugin)
 
-
 ### Manual
 
 1. Download `expander-card.js` file from the [latest release][release-url].
@@ -282,20 +336,23 @@ Expander-Card is not available in [HACS][hacs] (Home Assistant Community Store) 
     - **Using UI:** _Settings_ → _Dashboards_ → _More Options icon_ → _Resources_ → _Add Resource_ → Set _Url_ as `/local/expander-card.js` → Set _Resource type_ as `JavaScript Module`.
       **Note:** If you do not see the Resources menu, you will need to enable _Advanced Mode_ in your _User Profile_
     - **Using YAML:** Add following code to `lovelace` section.
-        ```yaml
+
+      ```yaml
         resources:
             - url: /local/expander-card.js
               type: module
         ```
 
-
 ## FAQ
 
-### Issue after upgrade to HA 2025.6 
+### Issue after upgrade to HA 2025.6
+
 There is/was an issue after upgrading to HA 2025.6 (maybe with newer version is not valid anymore)
 See [forum](https://community.home-assistant.io/t/expander-accordion-collapsible-card/738817/56?u=melled) and [issue](https://github.com/MelleD/lovelace-expander-card/issues/506) 
 a) For the view type [sections](https://www.home-assistant.io/blog/2024/03/04/dashboard-chapter-1/) `cards` is not working anymore. You have to rename it to `sections`.
+
 Before
+
  ```yaml
 views:
   - title: MyView
@@ -304,6 +361,7 @@ views:
 ```
 
 Now
+
  ```yaml
 views:
   - title: MyView
@@ -345,4 +403,3 @@ Please ⭐️ or sponsor this repo when you like it.
 [release-url]: https://github.com/MelleD/lovelace-expander-card/releases
 [paypal-me-url]: https://www.paypal.me/MelleDennis
 [buy-me-a-coffee-url]: https://www.buymeacoffee.com/melled
-
