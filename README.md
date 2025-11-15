@@ -138,6 +138,20 @@ Example with [heading](https://www.home-assistant.io/dashboards/heading/) title 
               entity: light.bed_light
           icon: mdi:account
 ```
+
+### Template Title card with Mushroom
+
+If you need templates in your title, you can make good use of the Mushroom cards. Here's an example using the [Mushroom title card](//github.com/piitaya/lovelace-mushroom/blob/main/docs/cards/title.md).
+https:
+
+```yaml
+      - type: custom:expander-card
+        title-card:
+          type: custom:mushroom-title-card
+          title: |-
+            {{ now().hour }}
+```
+
 ### Simple Title
 
 Example with title that is clickable and has 2 nested cards.
