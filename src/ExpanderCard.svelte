@@ -211,7 +211,6 @@
         if (touchPreventClick) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            touchPreventClick = false;
             return false;
         }
         toggleOpen();
@@ -246,9 +245,15 @@
     const touchEnd = (event: TouchEvent) => {
         if (!isScrolling && touchElement === event.target && config['title-card-clickable']) {
             toggleOpen();
+            touchPreventClick = true;
+            // We only need to prevent clicks for this event cycle
+            // setTimeout((),0) may be a few event cycles but approx 4ms at most
+            // queueMicrotask would be better but not supported by out target es2017 and no need for polyfill
+            window.setTimeout(() => {
+                touchPreventClick = false;
+            }, 0);
         }
         touchElement = undefined;
-        touchPreventClick = true;
     };
 </script>
 
