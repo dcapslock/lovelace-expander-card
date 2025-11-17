@@ -352,6 +352,17 @@ style: |
   }
 ```
 
+If you have a title-card
+
+```yaml
+style: |
+.title-card-header {
+  flex-direction: row-reverse !important;
+  padding: 0.8em 0 !important;
+}
+```
+
+
 Transitioning the title font size and color. Here the `!important` on `close`/`closing` is to make sure that the font size and color both change on `closing` as `open` will still be added until fully closed at which stage `close` will be added and `open` removed.
 
 ```yaml
