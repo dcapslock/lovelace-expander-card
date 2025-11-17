@@ -401,11 +401,11 @@ Before the `style` attribute, [card mod](https://github.com/thomasloven/lovelace
 
 ### HACS
 
-Expander-Card is not available in [HACS][hacs] (Home Assistant Community Store) by default, but you can add it as custom repositories.
+Expander-Card is available in [HACS][hacs] (Home Assistant Community Store) by default.
 
 1. Install HACS if you don't have it already
 2. Open HACS in Home Assistant 
-3. Add this repository (https://github.com/MelleD/lovelace-expander-card) via HACS Custom repositories ([How to add Custom Repositories](https://hacs.xyz/docs/faq/custom_repositories/))
+3. Searching for expander card
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MelleD&repository=lovelace-expander-card&category=plugin)
 
