@@ -64,6 +64,7 @@
     }: {hass: HomeAssistant; preview: boolean; config: ExpanderConfig} = $props();
 
     let touchPreventClick = $state(false);
+    let touchPreventClickTimeout: ReturnType<typeof setTimeout> | null = $state(null);
     let open = $state(preview ? true : false);
     let previewState = $state(preview ? true : false);
     let showButtonUsers = $state(true);
@@ -211,6 +212,11 @@
         if (touchPreventClick) {
             event.preventDefault();
             event.stopImmediatePropagation();
+            touchPreventClick = false;
+            if (touchPreventClickTimeout) {
+                clearTimeout(touchPreventClickTimeout);
+                touchPreventClickTimeout = null;
+            }
             return false;
         }
         toggleOpen();
@@ -246,8 +252,10 @@
         if (!isScrolling && touchElement === event.target && config['title-card-clickable']) {
             toggleOpen();
             touchPreventClick = true;
-            window.setTimeout(() => {
+            // A touch event may not always be followed by a click event so we set a timeout to reset
+            touchPreventClickTimeout = window.setTimeout(() => {
                 touchPreventClick = false;
+                touchPreventClickTimeout = null;
             }, 100);
         }
         touchElement = undefined;
