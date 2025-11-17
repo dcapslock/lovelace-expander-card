@@ -56,7 +56,7 @@
     import { onMount } from 'svelte';
     import type { ExpanderConfig } from './configtype';
     import type { AnimationState } from './types';
-  import { forwardHaptic } from './helpers/forward-haptic';
+    import { forwardHaptic } from './helpers/forward-haptic';
 
     const {
         hass,

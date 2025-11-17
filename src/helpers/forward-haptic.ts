@@ -11,7 +11,7 @@ declare global {
 }
 
 export const forwardHaptic = (node: HTMLElement, hapticType: HapticType) => {
-    node.dispatchEvent && node.dispatchEvent(
+    node.dispatchEvent?.(
         new CustomEvent('haptic',
             { detail: hapticType, bubbles: true, composed: true }
         )
