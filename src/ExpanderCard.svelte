@@ -56,6 +56,7 @@
     import { onMount } from 'svelte';
     import type { ExpanderConfig } from './configtype';
     import type { AnimationState } from './types';
+    import { forwardHaptic } from './helpers/forward-haptic';
 
     const {
         hass,
@@ -219,6 +220,7 @@
             }
             return false;
         }
+        forwardHaptic(event.currentTarget as HTMLElement, 'light');
         toggleOpen();
     };
 
@@ -250,6 +252,7 @@
 
     const touchEnd = (event: TouchEvent) => {
         if (!isScrolling && touchElement === event.target && config['title-card-clickable']) {
+            forwardHaptic(touchElement, 'light');
             toggleOpen();
             touchPreventClick = true;
             // A touch event may not always be followed by a click event so we set a timeout to reset
