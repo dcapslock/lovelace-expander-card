@@ -317,7 +317,6 @@
                 <Card hass={hass}
                     preview={preview}
                     config={config['title-card']}
-                    type={config['title-card'].type}
                     animation={false}
                     open={true}
                     animationState='idle'
@@ -376,7 +375,6 @@
                     <Card hass={hass}
                         preview={open && preview}
                         config={card}
-                        type={card.type}
                         marginTop={config['child-margin-top']}
                         open={open}
                         animation={config.animation!}

@@ -21,7 +21,6 @@ limitations under the License.
     import { computeCardSize } from './helpers/compute-card-size';
 
     const {
-        type = 'div',
         config,
         hass,
         preview,
@@ -31,7 +30,6 @@ limitations under the License.
         animationState,
         clearCardCss = false
     }: {
-        type?: string;
         config: LovelaceCardConfig;
         hass: HomeAssistant | undefined;
         preview: boolean;
@@ -42,7 +40,8 @@ limitations under the License.
         clearCardCss: boolean;
     } = $props();
 
-    let container = $state<HuiCard>();
+    let outerContainer: HTMLElement | null = null;
+    let container = $state<HuiCard | null>(null);
     let loading = $state(true);
     let cardHeight = $state(0);
     const cardConfig: LovelaceCardConfig = JSON.parse(JSON.stringify(config));
@@ -76,9 +75,21 @@ limitations under the License.
         el.config = cardConfig;
         el.load();
 
-        if (!container) {
-            return;
-        }
+        // eslint-disable-next-line svelte/no-dom-manipulating
+        outerContainer?.appendChild(el);
+        container = el;
+        loading = false;
+
+        // hui-card will fire card-updated on ll-upgrade which causes some view to reload
+        // so we capture ll-upgrade, stop propagation and set hass on the upgraded element ourselves
+        container.addEventListener('ll-upgrade', (ev) => {
+            ev.stopPropagation();
+            // eslint-disable-next-line no-underscore-dangle
+            if (container?._element && hass) {
+                // eslint-disable-next-line no-underscore-dangle
+                container._element.hass = hass;
+            }
+        }, { capture: true });
 
         if (clearCardCss) {
             el.style.setProperty('--ha-card-background', 'transparent');
@@ -88,11 +99,6 @@ limitations under the License.
             el.style.setProperty('--ha-card-border-radius', '0px');
             el.style.setProperty('--ha-card-backdrop-filter', 'none');
         }
-
-        // eslint-disable-next-line svelte/no-dom-manipulating
-        container.replaceWith(el);
-        container = el;
-        loading = false;
 
         if (animation) {
             // Start with an estimated height.
@@ -118,8 +124,8 @@ limitations under the License.
 </script>
 
 <div class="outer-container{open ? ' open' : ' close'}{animation ? ' animation ' + animationState : ''}"
-  style="margin-top: {open ? marginTop : '0px'};{cardHeight ? ` --expander-animation-height: -${cardHeight}px;` : ''}">
-    <svelte:element this={type} bind:this={container}/>
+  style="margin-top: {open ? marginTop : '0px'};{cardHeight ? ` --expander-animation-height: -${cardHeight}px;` : ''}"
+  bind:this={outerContainer}>
     {#if loading}
         <span class="loading"> Loading... </span>
     {/if}
