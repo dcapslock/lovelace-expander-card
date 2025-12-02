@@ -16,7 +16,7 @@
         "lint": "eslint ."
     },
     "devDependencies": {
-        "@eslint/eslintrc": "^3.3.1",
+        "@eslint/eslintrc": "^3.3.3",
         "@eslint/js": "^9.39.1",
         "@stylistic/eslint-plugin": "^5.6.1",
         "@sveltejs/adapter-node": "^5.4.0",
