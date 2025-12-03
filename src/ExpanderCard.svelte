@@ -273,6 +273,19 @@
             touchEventElement.addEventListener('touchend', touchEndAction, { passive: false, capture: false });
         }
 
+        if (config['title-card-clickable'] && config['title-card-button-overlay'] && titleCardDiv) {
+            const resizeObserver = new ResizeObserver(() => {
+                if (buttonElement && titleCardDiv) {
+                    const titleRect = titleCardDiv.getBoundingClientRect();
+                    // While margin set by expander-card is equal, users may have styled different marginTop and marginBottom
+                    buttonElement.style.height = `${titleRect.height -
+                        parseFloat(getComputedStyle(buttonElement).marginTop) -
+                        parseFloat(getComputedStyle(buttonElement).marginBottom)}px`;
+                }
+            });
+            resizeObserver.observe(titleCardDiv);
+        }
+
         return cleanup;
     });
 
