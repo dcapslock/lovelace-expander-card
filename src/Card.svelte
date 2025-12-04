@@ -105,15 +105,32 @@ limitations under the License.
             // Update with resize observer once we have the real height.
             // 56px is the height of one card size unit
             cardHeight = await computeCardSize(el) * 56;
+            if (outerContainer) {
+                cardHeight += window.getComputedStyle(outerContainer).marginTop
+                    ? parseFloat(window.getComputedStyle(outerContainer).marginTop)
+                    : 0;
+            }
             const resizeObserver = new ResizeObserver((entries) => {
                 for (const entry of entries) {
                     if (entry.contentBoxSize) {
                         const contentBoxSize = Array.isArray(entry.contentBoxSize)
                             ? entry.contentBoxSize[0]
                             : entry.contentBoxSize;
-                        cardHeight = contentBoxSize.blockSize || cardHeight;
-                    } else {
-                        cardHeight = entry.contentRect.height || cardHeight;
+                        if (contentBoxSize.blockSize) {
+                            cardHeight = contentBoxSize.blockSize;
+                            if (outerContainer) {
+                                cardHeight += window.getComputedStyle(outerContainer).marginTop
+                                    ? parseFloat(window.getComputedStyle(outerContainer).marginTop)
+                                    : 0;
+                            }
+                        }
+                    } else if (entry.contentRect) {
+                        cardHeight = entry.contentRect.height;
+                        if (outerContainer) {
+                            cardHeight += window.getComputedStyle(outerContainer).marginTop
+                                ? parseFloat(window.getComputedStyle(outerContainer).marginTop)
+                                : 0;
+                        }
                     }
                 }
             });
