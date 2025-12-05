@@ -276,14 +276,15 @@
 
         if (config['title-card-clickable'] && config['title-card-button-overlay'] && titleCardDiv) {
             const resizeObserver = new ResizeObserver(() => {
-                if (buttonElement && titleCardDiv &&expanderCard) {
+                if (buttonElement && titleCardDiv && expanderCard) {
                     const titleRect = titleCardDiv.getBoundingClientRect();
                     // While margin/padding set by expander-card is equal, users may have styled different margin/padding
-                    buttonElement.style.height = `${titleRect.height -
+                    expanderCard.style.setProperty('--expander-card-overlay-height', `${titleRect.height -
                         parseFloat(getComputedStyle(buttonElement).marginTop) -
                         parseFloat(getComputedStyle(buttonElement).marginBottom) +
                         parseFloat(getComputedStyle(expanderCard).paddingTop) +
-                        parseFloat(getComputedStyle(expanderCard).paddingBottom)}px`;
+                        parseFloat(getComputedStyle(expanderCard).paddingBottom)}px`
+                    );
                 }
             });
             resizeObserver.observe(titleCardDiv);
@@ -479,6 +480,7 @@
         top: 0;
         right: 0;
         margin: var(--overlay-margin);
+        height: var(--expander-card-overlay-height, auto);
     }
     .title-card-header-overlay.clickable  > .header-overlay {
         width: calc(100% - var(--overlay-margin) * 2);
