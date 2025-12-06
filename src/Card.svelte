@@ -118,17 +118,17 @@ limitations under the License.
                             : entry.contentBoxSize;
                         if (contentBoxSize.blockSize) {
                             cardHeight = contentBoxSize.blockSize;
-                            if (outerContainer) {
-                                cardHeight += window.getComputedStyle(outerContainer).marginTop
-                                    ? parseFloat(window.getComputedStyle(outerContainer).marginTop)
+                            if (container) {
+                                cardHeight += window.getComputedStyle(container).marginTop
+                                    ? parseFloat(window.getComputedStyle(container).marginTop)
                                     : 0;
                             }
                         }
                     } else if (entry.contentRect) {
                         cardHeight = entry.contentRect.height;
-                        if (outerContainer) {
-                            cardHeight += window.getComputedStyle(outerContainer).marginTop
-                                ? parseFloat(window.getComputedStyle(outerContainer).marginTop)
+                        if (container) {
+                            cardHeight += window.getComputedStyle(container).marginTop
+                                ? parseFloat(window.getComputedStyle(container).marginTop)
                                 : 0;
                         }
                     }
@@ -141,7 +141,7 @@ limitations under the License.
 </script>
 
 <div class="outer-container{open ? ' open' : ' close'}{animation ? ' animation ' + animationState : ''}"
-  style="margin-top: {open ? marginTop : '0px'};{cardHeight ? ` --expander-animation-height: -${cardHeight}px;` : ''}"
+  style="--child-card-margin-top: {open ? marginTop : '0px'};{cardHeight ? ` --expander-animation-height: -${cardHeight}px;` : ''}"
   bind:this={outerContainer}>
     {#if loading}
         <span class="loading"> Loading... </span>
@@ -178,6 +178,9 @@ limitations under the License.
   .outer-container.animation.closing {
       animation: fadeOutOpacity 0.5s forwards ease;
       -webkit-animation: fadeOutOpacity 0.5s forwards ease;
+  }
+  .outer-container > :global(hui-card) {
+    margin-top: var(--child-card-margin-top, 0px);
   }
   @keyframes fadeInOpacity {
       0% {
