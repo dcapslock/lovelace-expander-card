@@ -72,6 +72,7 @@
     let animationState: AnimationState = $state<AnimationState>('idle');
     let animationTimeout: ReturnType<typeof setTimeout> | null = $state(null);
     let backgroundAnimationDuration = $state(0);
+    let overlayHeight = $state(0);
     let expanderCard: HTMLElement | null = $state(null);
     let titleCardDiv: HTMLElement | null = $state(null);
     let buttonElement: HTMLElement | null = $state(null);
@@ -279,12 +280,11 @@
                 if (buttonElement && titleCardDiv && expanderCard) {
                     const titleRect = titleCardDiv.getBoundingClientRect();
                     // While margin/padding set by expander-card is equal, users may have styled different margin/padding
-                    expanderCard.style.setProperty('--expander-card-overlay-height', `${titleRect.height -
+                    overlayHeight = titleRect.height -
                         parseFloat(getComputedStyle(buttonElement).marginTop) -
                         parseFloat(getComputedStyle(buttonElement).marginBottom) +
                         parseFloat(getComputedStyle(expanderCard).paddingTop) +
-                        parseFloat(getComputedStyle(expanderCard).paddingBottom)}px`
-                    );
+                        parseFloat(getComputedStyle(expanderCard).paddingBottom);
                 }
             });
             resizeObserver.observe(titleCardDiv);
@@ -319,6 +319,7 @@
          config['expander-card-background-expanded'] ?
          config['expander-card-background-expanded'] : config['expander-card-background']};
      --background-animation-duration:{backgroundAnimationDuration}s;
+     --expander-card-overlay-height:{overlayHeight ? `${overlayHeight}px` : 'auto'};
     "
     bind:this={expanderCard}>
     {#if config['title-card']}
@@ -481,6 +482,7 @@
         right: 0;
         margin: var(--overlay-margin);
         height: var(--expander-card-overlay-height, auto);
+        z-index: 1;
     }
     .title-card-header-overlay.clickable  > .header-overlay {
         width: calc(100% - var(--overlay-margin) * 2);
