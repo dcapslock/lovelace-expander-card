@@ -67,7 +67,7 @@ Yaml Options:
 | clear-children            | boolean  | _false_       | true\|false            | Remove Background, border from childs                                   |
 | title-card                | object   | **optional**  | LovelaceCardConfig     | Replace Title with card                               |
 | title-card-clickable      | boolean  | _false_       | true\|false            | Should the complete div be clickable?               |
-| title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card. If you set `title-card-clickable: true` the overlay will extend across the expander and capture the click before the title-card. |
+| title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card. If you set `title-card-clickable: true` the overlay will extend across the expander, both horizontally and vertically, and capture the click before the title-card. If you wish to adjust the overlay height you can style `height` on `.header-overlay`. See [Style](#style) |
 | overlay-margin            | string   | _0.0em_       | css-size               | Margin from top right of expander button (if overlay) |
 | title-card-padding        | string   | _0px_         | css-size               | padding of title-card                                 |
 | show-button-users         | object[] | **optional**  | *                      | Choose the persons/users that button is visible to them. |
@@ -401,6 +401,24 @@ Change the title size
 style: |
   .title {
     font-size: var(--ha-font-size-l);
+  }
+```
+
+Change the height of the title-card overlay - match arrow height.
+
+```yaml
+style: |
+  .header-overlay {
+    height: unset !important;
+  }
+```
+
+Change the height of title-card overlay - relative to title-card. The CSS var `--expander-card-overlay-height` is set automatically based on title-card height and overlay margin.
+
+```yaml
+style: |
+  .header-overlay {
+    height: calc(var(--expander-card-overlay-height) * 0.66 ) !important;
   }
 ```
 
