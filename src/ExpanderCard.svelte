@@ -175,7 +175,7 @@
 
     function handleDomEvent(event: Event) {
         const data: ExpanderCardDomEventDetail = (event as CustomEvent).detail?.['expander-card']?.data;
-        if (data?.['expander-card-id'] === config['expander-card-id']) {
+        if (data?.['expander-card-id'] && data['expander-card-id'] === config['expander-card-id']) {
             if (data.action === 'open' && !open) {
                 toggleOpen(true);
             } else if (data.action === 'close' && open) {
