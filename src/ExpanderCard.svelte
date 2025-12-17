@@ -112,16 +112,20 @@
                     // first time, set the state from config
                     if (config.expanded !== undefined) {
                         setOpenState(config.expanded);
+                    } else {
+                        setOpenState(false);
                     }
                 }
                 else {
                     // last state is stored in local storage
-                    open = storageValue ? storageValue === 'true' : open;
+                    const openStateByStorage = storageValue ? storageValue === 'true' : open;
+                    setOpenState(openStateByStorage);
                 }
             } catch (e) {
                 console.error(e);
+                setOpenState(false);
             }
-        }else{
+        } else {
             // first time, set the state from config
             if (config.expanded !== undefined) {
                 setOpenState(config.expanded);
@@ -160,7 +164,7 @@
 
     function setOpenState(openState: boolean) {
         open = openState;
-        if (configId !== undefined) {
+        if (!preview && configId !== undefined) {
             try {
                 localStorage.setItem(lastStorageOpenStateId, open ? 'true' : 'false');
             } catch (e) {
