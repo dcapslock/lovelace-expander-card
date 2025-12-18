@@ -1,8 +1,8 @@
-import HomeAssistantJavaScriptTemplates, { HomeAssistantJavaScriptTemplatesRenderer } from 'home-assistant-javascript-templates';
+import HomeAssistantJavaScriptTemplates, { HomeAssistant, HomeAssistantJavaScriptTemplatesRenderer } from 'home-assistant-javascript-templates';
 
 export function getJSTemplateRenderer(variables: Record<string, unknown> = {}, refs: Record<string, unknown> = {}): Promise<HomeAssistantJavaScriptTemplatesRenderer> {
     return new HomeAssistantJavaScriptTemplates(
-        document.querySelector('home-assistant')!,
+        document.querySelector('home-assistant') as HomeAssistant,
         {
             autoReturn: false,
             variables,
