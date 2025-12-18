@@ -93,7 +93,7 @@
             setOpenState(true);
             showButtonUsers = true;
         } else {
-            if (!isJSTemplate(config.expanded)) {
+            if (!isJSTemplate(config.templates?.expanded)) {
                 setDefaultOpenState();
             }
             showButtonUsers = userInList(config['show-button-users']) ?? true;
@@ -109,7 +109,7 @@
 
     function setDefaultOpenState() {
         // Do not run setDefaultOpenState if config.expanded is a JS template
-        if (isJSTemplate(config.expanded)) return;
+        if (isJSTemplate(config.templates?.expanded)) return;
         if (userInList(config['start-expanded-users'])) {
             setOpenState(true);
         } else if (configId !== undefined) {
@@ -118,7 +118,7 @@
                 if(storageValue === null){
                     // first time, set the state from config
                     if (config.expanded !== undefined) {
-                        setOpenState(Boolean(config.expanded));
+                        setOpenState(config.expanded);
                     } else {
                         setOpenState(false);
                     }
@@ -135,7 +135,7 @@
         } else {
             // first time, set the state from config
             if (config.expanded !== undefined) {
-                setOpenState(Boolean(config.expanded));
+                setOpenState(config.expanded);
             } else {
                 setOpenState(false);
             }
@@ -252,14 +252,14 @@
     };
 
     const bindTemplateVariables = (haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer>) => {
-        for (const [k, v] of Object.entries(config.variables ?? {})) {
+        for (const [k, v] of Object.entries(config.templates?.variables ?? {})) {
             if (isJSTemplate(v)) {
                 trackJSTemplate(
                     haJS,
                     (res) => {
                         setJSTemplateRef(haJS, k, res);
                     },
-                    v as string,
+                    v,
                     { config: config }
                 );
             } else {
@@ -269,8 +269,8 @@
     };
 
     onMount(() => {
-        if (isJSTemplate(config.expanded)) {
-            const refs = Object.keys(config.variables || {}).reduce(
+        if (config.templates?.expanded && isJSTemplate(config.templates.expanded)) {
+            const refs = Object.keys(config.templates?.variables || {}).reduce(
                 (obj, key) => {
                     obj[key] = undefined;
                     return obj;
@@ -292,7 +292,7 @@
                         }
                     }
                 },
-                config.expanded as string,
+                config.templates.expanded,
                 { config: config }
             );
         } else {
@@ -311,7 +311,7 @@
 
         if (preview) {
             setOpenState(true);
-        } else if (!isJSTemplate(config.expanded)) {
+        } else if (!isJSTemplate(config.templates?.expanded)) {
             setDefaultOpenState();
         }
 

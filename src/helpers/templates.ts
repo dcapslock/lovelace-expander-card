@@ -12,7 +12,7 @@ export function getJSTemplateRenderer(variables: Record<string, unknown> = {}, r
     ).getRenderer();
 }
 
-export function isJSTemplate(template: unknown): boolean {
+export function isJSTemplate(template: string | undefined): boolean {
     if (!template || typeof template !== 'string') return false;
     return String(template).trim().startsWith('[[[') && String(template).trim().endsWith(']]]');
 }

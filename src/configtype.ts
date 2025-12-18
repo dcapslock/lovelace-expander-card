@@ -27,7 +27,7 @@ export interface ExpanderConfig {
     'overlay-margin'?: string;
     'child-padding'?: string;
     'child-margin-top'?: string;
-    expanded?: boolean | string;
+    expanded?: boolean;
     'expander-card-background'?: string;
     'expander-card-background-expanded'?: string;
     'header-color'?: string;
@@ -44,5 +44,8 @@ export interface ExpanderConfig {
     animation?: boolean;
     'expander-card-id'?: string;
     style?: string;
-    variables?: Record<string, unknown>;
+    templates?: {
+        variables?: Record<string, string>;
+        expanded?: string;
+    };
 }
