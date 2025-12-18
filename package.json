@@ -41,6 +41,7 @@
         "vite": "^6.4.1"
     },
     "dependencies": {
+        "home-assistant-javascript-templates": "^6.0.0",
         "svelte": "5.45.8"
     },
     "pnpm": {

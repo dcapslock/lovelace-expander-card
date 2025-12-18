@@ -16,7 +16,7 @@ limitations under the License.
 <svelte:options customElement='expander-sub-card' />
 
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import { onMount, untrack } from 'svelte';
     import type { AnimationState, HomeAssistant, HuiCard, LovelaceCardConfig } from './types';
     import { computeCardSize } from './helpers/compute-card-size';
 
@@ -44,7 +44,7 @@ limitations under the License.
     let container = $state<HuiCard | null>(null);
     let loading = $state(true);
     let cardHeight = $state(0);
-    const cardConfig: LovelaceCardConfig = JSON.parse(JSON.stringify(config));
+    const cardConfig: LovelaceCardConfig = untrack(() => JSON.parse(JSON.stringify(config)));
     $effect(() => {
         if (container) {
             container.hass = hass;
