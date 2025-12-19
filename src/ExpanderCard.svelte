@@ -54,7 +54,7 @@
     import type { ExpanderCardDomEventDetail, HaRipple, HomeAssistant } from './types';
     import Card from './Card.svelte';
     import { onMount, untrack } from 'svelte';
-    import type { ExpanderConfig } from './configtype';
+    import type { ExpanderCardTemplates, ExpanderConfig } from './configtype';
     import type { AnimationState } from './types';
     import { forwardHaptic } from './helpers/forward-haptic';
     import { isJSTemplate, getJSTemplateRenderer, trackJSTemplate, setJSTemplateRef } from './helpers/templates';
@@ -100,6 +100,15 @@
         }
     });
 
+    function configTemplate(templateKey: string): ExpanderCardTemplates | undefined {
+        const template = config.templates && Array.isArray(config.templates) ?
+            config.templates.find((t) => t.template === templateKey) : undefined;
+        if (template && isJSTemplate(template.value_template)) {
+            return template;
+        }
+        return undefined;
+    }
+
     function userInList(userList: string[] | undefined): boolean | undefined {
         if (userList === undefined) {
             return undefined;
@@ -109,7 +118,7 @@
 
     function setDefaultOpenState() {
         // Do not run setDefaultOpenState if config.expanded is a JS template
-        if (isJSTemplate(config.templates?.expanded)) return;
+        if (configTemplate('expanded')) return;
         if (userInList(config['start-expanded-users'])) {
             setOpenState(true);
         } else if (configId !== undefined) {
@@ -252,27 +261,27 @@
     };
 
     const bindTemplateVariables = (haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer>) => {
-        for (const [k, v] of Object.entries(config.templates?.variables ?? {})) {
-            if (isJSTemplate(v)) {
+        for (const v of Object.values(config.variables ?? {})) {
+            if (isJSTemplate(v.value_template)) {
                 trackJSTemplate(
                     haJS,
                     (res) => {
-                        setJSTemplateRef(haJS, k, res);
+                        setJSTemplateRef(haJS, v.variable, res);
                     },
-                    v,
+                    v.value_template as string,
                     { config: config }
                 );
             } else {
-                setJSTemplateRef(haJS, k, v);
+                setJSTemplateRef(haJS, v.variable, v.value_template);
             }
         }
     };
 
     onMount(() => {
-        if (config.templates?.expanded && isJSTemplate(config.templates.expanded)) {
-            const refs = Object.keys(config.templates?.variables || {}).reduce(
-                (obj, key) => {
-                    obj[key] = undefined;
+        if (configTemplate('expanded')) {
+            const refs = Object.values(config.variables || {}).reduce(
+                (obj, value) => {
+                    obj[value.variable] = undefined;
                     return obj;
                 },
                 {} as Record<string, unknown>
@@ -292,7 +301,7 @@
                         }
                     }
                 },
-                config.templates.expanded,
+                configTemplate('expanded')?.value_template as string,
                 { config: config }
             );
         } else {
@@ -311,7 +320,7 @@
 
         if (preview) {
             setOpenState(true);
-        } else if (!isJSTemplate(config.templates?.expanded)) {
+        } else if (!configTemplate('expanded')) {
             setDefaultOpenState();
         }
 
