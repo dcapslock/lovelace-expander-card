@@ -267,6 +267,8 @@ Javascript for variables and templates are set using `value_template` string, en
 
 Variables are defined in the `variables` list of expander card config.
 
+**IMPORTANT**: As variables are evaluated asynchronously, their initial value will be `undefined`. Your templates need to be written to handle this initial case.
+
 | List item | Type | Config |
 | --------- | ---- | ------ |
 | `variable` | string | The `<name>` of the variable which will be available in templates as `variable.<name>`. |
@@ -303,7 +305,7 @@ templates:
        ]]]
 ```
 
-Same template using variable `weather_warnings`.
+Same template using variable `weather_warnings`. Note the use of the nullish coalescing (??) operator to handle variables being undefined until their value is set.
 
 ```yaml
 variables:
@@ -316,7 +318,7 @@ templates:
   - template: expanded
     value_template: |
        [[[
-         return variables.weather_warnings;
+         return variables.weather_warnings ?? false;
        ]]]
 ```
 
