@@ -11,7 +11,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import type { LovelaceCardConfig } from './types';
+export interface ExpanderCardVariables  {
+    variable: string;
+    value_template: unknown;
+}
 
+export interface ExpanderCardTemplates {
+    template: string;
+    value_template: unknown;
+}
 export interface ExpanderConfig {
     clear?: boolean;
     'clear-children'?: boolean;
@@ -44,4 +52,6 @@ export interface ExpanderConfig {
     animation?: boolean;
     'expander-card-id'?: string;
     style?: string;
+    variables?: Record<string, ExpanderCardVariables>;
+    templates?: Record<string, ExpanderCardTemplates>;
 }
