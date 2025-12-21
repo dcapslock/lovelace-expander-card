@@ -64,7 +64,7 @@ Yaml Options:
 | expanded-gap              | string   | _0.6em_       | css-size               | gap between child cards when expander open            |
 | child-padding             | string   | _0.0em_       | css-size               | padding of child cards                                |
 | child-margin-top          | string   | _0.0em_       | css-size               | Margin top of child cards                             |
-| clear-children            | boolean  | _false_       | true\|false            | Remove Background, border from childs                                   |
+| clear-children            | boolean  | _false_       | true\|false            | Remove Background, border from children                                   |
 | title-card                | object   | **optional**  | LovelaceCardConfig     | Replace Title with card                               |
 | title-card-clickable      | boolean  | _false_       | true\|false            | Should the complete div be clickable?               |
 | title-card-button-overlay | boolean  | _false_       | true\|false            | Overlay expand button over title-card. If you set `title-card-clickable: true` the overlay will extend across the expander, both horizontally and vertically, and capture the click before the title-card. If you wish to adjust the overlay height you can style `height` on `.header-overlay`. See [Style](#style) |
@@ -74,6 +74,8 @@ Yaml Options:
 | start-expanded-users      | object[] | **optional**  | *                      | Choose the persons/users that card will be start expanded for them. |
 | cards                     | object[] | **optional**  | LovelaceCardConfig[]   | Child cards to show when expanded                     |
 | style                     | string   | **optional**. | css style rules        | Advanced css styling rules. if you wish to style/hide the hover/press ripple of the expander-card button you can use advanced styling. See [Hover/press ripple](#hoverpress-ripple). |
+| variables                 | dictionary | **optional**| List                   | See Advanced javascript templates |
+| templates                 | dictionary | **optional**| List                   | See Advanced javascript templates |
 
 ## Examples
 
@@ -123,7 +125,7 @@ Example title card that is clickable and has 2 nested cards, which is directly e
 
 ### Heading Title card
 
-Example with [heading](https://www.home-assistant.io/dashboards/heading/) title card to the possiblity to style your title.
+Example with [heading](https://www.home-assistant.io/dashboards/heading/) title card to the possibility to style your title.
 
 ```yaml
       - type: custom:expander-card
@@ -218,7 +220,7 @@ Example with title that is clickable and has 2 nested cards with are automatical
             show_wind: speed
 ```
 
-### Title card with action 
+### Title card with action
 
 The configuration below will open or close the expander when you tap the Mushroom Light Card. This means you cannot switch the light on or off by tapping it, but you can still adjust the brightness.
 
@@ -244,6 +246,81 @@ The configuration below will open or close the expander when you tap the Mushroo
             expander-card-id: my-light-card
             action: toggle
 ```
+
+## Advanced javascript templates
+
+Expander card supports javascript templates for the config items listed below. This list may be added to over time based on user feature requests. If you wish for a config item to be supported by javascript template please submit a feature request.
+
+| Config item | Accepts value | Overrides config items |
+| ----------- | ------------- | ---------------------- |
+| `expanded`  | boolean (`true\|false`) | `expanded`, `min-width-expanded`, `max-width-expanded`, `start-expanded-users` |
+
+Javascript templates are implemented using the [home-assistant-javascript-templates](https://github.com/elchininet/home-assistant-javascript-templates) library by @elchininet. For objects and methods supported see [Objects and methods available in the templates](https://github.com/elchininet/home-assistant-javascript-templates#objects-and-methods-available-in-the-templates). The `config` object is also available which is the config object for the expander card where all config items can be read. e.g. `config['expander-card-id']`.
+
+Templates may also use `variables`, which are also javascript templates or just values. Templates are reactive to `variables` such that if a variable template value changes, the template using the variable itself will be evaluated and return its value. Expander card uses the [home-assistant-javascript-templates](https://github.com/elchininet/home-assistant-javascript-templates) `refs` feature using `variables` as the `refsVariableName`. You are best to ignore anything about `refs` in the library unless you know what you are doing.
+
+Templates are not continually evaluated but rely on reactive properties for updates. Follow the guidelines in [Objects and methods available in the templates](https://github.com/elchininet/home-assistant-javascript-templates#objects-and-methods-available-in-the-templates).
+
+Javascript for variables and templates are set using `value_template` string, enclosing javascript with `[[[]]]`, that is three open square bracket `[[[` followed by three close square bracket `]]]`. This follows the convention followed by other custom cards for javascript templates. Variables and templates can also return a straight value, which will follow YAML syntax converted to the type required for the config item being templated e.g. for a config item that accepts `boolean`, `true`, `"True"`, `1`, `"1"` are all considered `true`.
+
+### Variables
+
+Variables are defined in the `variables` list of expander card config.
+
+| List item | Type | Config |
+| --------- | ---- | ------ |
+| `variable` | string | The `<name>` of the variable which will be available in templates as `variable.<name>`. |
+| `value_template` | string \| value \| object | Either javascript that returns a value or a straight value. Javascript must be enclosed by `[[[]]]` with only whitespace preceding of following. |
+
+Variable `weather_warnings` tracking the state of `input_boolean.weather_warnings`.
+
+```yaml
+variables:
+  - variable: weather_warnings
+    value_template: |
+      [[[
+        return is_state('input_boolean.weather_warnings', 'on');
+      ]]]
+```
+
+### Templates
+
+Templates are defined in the `templates` list of expander card config.
+
+| List item | Type | Config |
+| --------- | ---- | ------ |
+| `template` | string | The config item being templated. Only supported config items will be read by expander card. See list in main [Advanced javascript templates](#advanced-javascript-templates) section. |
+| `value_template` | string \| value \| object | Either javascript that returns a value or a straight value. Javascript must be enclosed by `[[[]]]` with only whitespace preceding of following. The type of the value \| object returned/set must be applicable to the config item being templated. |
+
+Template for `expanded` config item tracking state of `input_boolean.weather_warnings`.
+
+```yaml
+templates:
+  - template: expanded
+    value_template: |
+       [[[
+         return is_state('input_boolean.weather_warnings', 'on');
+       ]]]
+```
+
+Same template using variable `weather_warnings`.
+
+```yaml
+variables:
+  - variable: weather_warnings
+    value_template: |
+      [[[
+        return is_state('input_boolean.weather_warnings', 'on');
+      ]]]
+templates:
+  - template: expanded
+    value_template: |
+       [[[
+         return variables.weather_warnings;
+       ]]]
+```
+
+More user examples can be found in [Show and tell](https://github.com/MelleD/lovelace-expander-card/discussions/categories/show-and-tell) discussion topic. If you have an example please submit to this discussion topic.
 
 ## Set state via action
 
@@ -449,7 +526,7 @@ style: |
 | `--ha-ripple-hover-color` | Hover ripple color. Set if you wish it to be different from pressed color. | CSS color | `var(--ha-ripple-color, var(--secondary-text-color))` |
 | `--ha-ripple-pressed-color` | Pressed ripple color. Set if you wish to be different from hover color. | CSS color | `var(--ha-ripple-color, var(--secondary-text-color))` |
 | `--ha-ripple-hover-opacity` | Opacity of the hover ripple. | CSS opacity | 0.08 |
-| `--ha-ripple-pressed-opacity` | Opacity of the pressed ripple. | CSS opacity | 0.12 | 
+| `--ha-ripple-pressed-opacity` | Opacity of the pressed ripple. | CSS opacity | 0.12 |
 
 ## Card Mod
 
@@ -462,7 +539,7 @@ Before the `style` attribute, [card mod](https://github.com/thomasloven/lovelace
 Expander-Card is available in [HACS][hacs] (Home Assistant Community Store) by default.
 
 1. Install HACS if you don't have it already
-2. Open HACS in Home Assistant 
+2. Open HACS in Home Assistant
 3. Searching for expander card
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MelleD&repository=lovelace-expander-card&category=plugin)
@@ -487,8 +564,8 @@ Expander-Card is available in [HACS][hacs] (Home Assistant Community Store) by d
 ### Issue after upgrade to HA 2025.6
 
 There is/was an issue after upgrading to HA 2025.6 (maybe with newer version is not valid anymore)
-See [forum](https://community.home-assistant.io/t/expander-accordion-collapsible-card/738817/56?u=melled) and [issue](https://github.com/MelleD/lovelace-expander-card/issues/506) 
-a) For the view type [sections](https://www.home-assistant.io/blog/2024/03/04/dashboard-chapter-1/) `cards` is not working anymore. You have to rename it to `sections`.
+See [forum](https://community.home-assistant.io/t/expander-accordion-collapsible-card/738817/56?u=melled) and [issue](https://github.com/MelleD/lovelace-expander-card/issues/506).
+For the view type [sections](https://www.home-assistant.io/blog/2024/03/04/dashboard-chapter-1/) `cards` is not working anymore. You have to rename it to `sections`.
 
 Before
 
