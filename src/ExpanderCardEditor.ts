@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ExpanderCardEditorNulls, ExpanderCardEditorSchema } from './editortype';
+import { ExpanderCardEditorNulls, ExpanderCardEditorSchema, expanderCardEditorTemplates } from './editortype';
 import { HomeAssistantUser } from './types';
 
 const wdw = window; // NOSONAR es2019
@@ -56,7 +56,12 @@ const loader = async (): Promise<any> => {
             const usersEscaped = this._users
                 .map((u: string) => u.replace(/\\/g, '\\\\').replace(/"/g, '\\"')) // NOSONAR es2019
                 .join('","');
-            const populatedSchemaJSON = schemaJSON.replace(/\[\[users\]\]/g, usersEscaped); // NOSONAR es2019
+            let populatedSchemaJSON = schemaJSON.replace(/\[\[users\]\]/g, usersEscaped); // NOSONAR es2019
+            // populate templates options, but only those not already in config
+            populatedSchemaJSON = populatedSchemaJSON.replace(/\[\[templates\]\]/g, // NOSONAR es2019
+                expanderCardEditorTemplates
+                    .filter((t: any) => !this._config.templates?.some((ct: any) => ct.template === t))
+                    .join('","'));
             const populatedSchema = JSON.parse(populatedSchemaJSON);
             return populatedSchema;
         }

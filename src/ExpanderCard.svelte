@@ -53,10 +53,12 @@
 <script lang="ts">
     import type { ExpanderCardDomEventDetail, HaRipple, HomeAssistant } from './types';
     import Card from './Card.svelte';
-    import { onMount } from 'svelte';
-    import type { ExpanderConfig } from './configtype';
+    import { onMount, untrack } from 'svelte';
+    import type { ExpanderCardTemplates, ExpanderConfig } from './configtype';
     import type { AnimationState } from './types';
     import { forwardHaptic } from './helpers/forward-haptic';
+    import { isJSTemplate, getJSTemplateRenderer, trackJSTemplate, setJSTemplateRef } from './helpers/templates';
+    import type { HomeAssistantJavaScriptTemplatesRenderer } from 'home-assistant-javascript-templates';
 
     const {
         hass,
@@ -66,8 +68,9 @@
 
     let touchPreventClick = $state(false);
     let touchPreventClickTimeout: ReturnType<typeof setTimeout> | null = $state(null);
-    let open = $state(preview ? true : false);
-    let previewState = $state(preview ? true : false);
+
+    let open = $state(untrack(() => preview) ? true : false);
+    let previewState = $state(untrack(() => preview) ? true : false);
     let showButtonUsers = $state(true);
     let animationState: AnimationState = $state<AnimationState>('idle');
     let animationTimeout: ReturnType<typeof setTimeout> | null = $state(null);
@@ -78,10 +81,10 @@
     let buttonElement: HTMLElement | null = $state(null);
     let ripple: HaRipple | null = $state(null);
 
-    const configId = config['storage-id'];
+    const configId = untrack(() => config['storage-id']);
     const lastStorageOpenStateId = 'expander-open-' + configId;
-    const userStyle = `<style>${config.style}</style>`;
-    showButtonUsers = preview || (userInList(config['show-button-users']) ?? true);
+    const userStyle = untrack(() => `<style>${config.style}</style>`);
+    showButtonUsers = untrack(() => preview || (userInList(config['show-button-users']) ?? true));
 
     $effect(() => {
         if (preview === previewState || preview === undefined) return;
@@ -90,10 +93,21 @@
             setOpenState(true);
             showButtonUsers = true;
         } else {
-            setDefaultOpenState();
+            if (!isJSTemplate(config.templates?.expanded)) {
+                setDefaultOpenState();
+            }
             showButtonUsers = userInList(config['show-button-users']) ?? true;
         }
     });
+
+    function configTemplate(templateKey: string): ExpanderCardTemplates | undefined {
+        const template = config.templates && Array.isArray(config.templates) ?
+            config.templates.find((t) => t.template === templateKey) : undefined;
+        if (template && isJSTemplate(template.value_template)) {
+            return template;
+        }
+        return undefined;
+    }
 
     function userInList(userList: string[] | undefined): boolean | undefined {
         if (userList === undefined) {
@@ -103,6 +117,8 @@
     }
 
     function setDefaultOpenState() {
+        // Do not run setDefaultOpenState if config.expanded is a JS template
+        if (configTemplate('expanded')) return;
         if (userInList(config['start-expanded-users'])) {
             setOpenState(true);
         } else if (configId !== undefined) {
@@ -244,22 +260,67 @@
         isScrolling = false;
     };
 
-    onMount(() => {
-        const minWidthExpanded = config['min-width-expanded'];
-        const maxWidthExpanded = config['max-width-expanded'];
-        const offsetWidth = document.body.offsetWidth;
+    const bindTemplateVariables = (haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer>) => {
+        for (const v of Object.values(config.variables ?? {})) {
+            if (isJSTemplate(v.value_template)) {
+                trackJSTemplate(
+                    haJS,
+                    (res) => {
+                        setJSTemplateRef(haJS, v.variable, res);
+                    },
+                    v.value_template as string,
+                    { config: config }
+                );
+            } else {
+                setJSTemplateRef(haJS, v.variable, v.value_template);
+            }
+        }
+    };
 
-        if (minWidthExpanded && maxWidthExpanded) {
-            config.expanded = offsetWidth >= minWidthExpanded && offsetWidth <= maxWidthExpanded;
-        } else if (minWidthExpanded) {
-            config.expanded = offsetWidth >= minWidthExpanded;
-        } else if (maxWidthExpanded) {
-            config.expanded = offsetWidth <= maxWidthExpanded;
+    onMount(() => {
+        if (configTemplate('expanded')) {
+            const refs = Object.values(config.variables || {}).reduce(
+                (obj, value) => {
+                    obj[value.variable] = undefined;
+                    return obj;
+                },
+                {} as Record<string, unknown>
+            );
+            const haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer> = getJSTemplateRenderer( { config: config }, refs );
+            bindTemplateVariables(haJS);
+            trackJSTemplate(
+                haJS,
+                (result) => {
+                    if (preview) return;
+                    if (result === undefined) {
+                        setDefaultOpenState();
+                    } else {
+                        const resultBoolean = Boolean(result);
+                        if (resultBoolean !== open) {
+                            toggleOpen(resultBoolean);
+                        }
+                    }
+                },
+                configTemplate('expanded')?.value_template as string,
+                { config: config }
+            );
+        } else {
+            const minWidthExpanded = config['min-width-expanded'];
+            const maxWidthExpanded = config['max-width-expanded'];
+            const offsetWidth = document.body.offsetWidth;
+
+            if (minWidthExpanded && maxWidthExpanded) {
+                config.expanded = offsetWidth >= minWidthExpanded && offsetWidth <= maxWidthExpanded;
+            } else if (minWidthExpanded) {
+                config.expanded = offsetWidth >= minWidthExpanded;
+            } else if (maxWidthExpanded) {
+                config.expanded = offsetWidth <= maxWidthExpanded;
+            }
         }
 
         if (preview) {
             setOpenState(true);
-        } else {
+        } else if (!configTemplate('expanded')) {
             setDefaultOpenState();
         }
 

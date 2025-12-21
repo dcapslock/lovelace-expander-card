@@ -26,6 +26,10 @@ export const ExpanderCardEditorNulls: ExpanderConfig = {
     'style': ''
 };
 
+export const expanderCardEditorTemplates = [
+    'expanded'
+];
+
 const iconSelector = { icon: {} };
 const textSelector = { text: {} };
 const multilineTextSelector = { text: { multiline: true } };
@@ -260,6 +264,77 @@ export const ExpanderCardEditorSchema = [
                 schema: [
                     {
                         ...multilineTextField('style', 'Custom CSS style')
+                    }
+                ]
+            },
+            {
+                type: 'expandable',
+                label: 'Advanced templates',
+                icon: 'mdi:code-brackets',
+                schema: [
+                    {
+                        type: 'expandable',
+                        label: 'Variables',
+                        icon: 'mdi:variable',
+                        schema: [
+                            {
+                                name: 'variables',
+                                label: 'Variables',
+                                selector: {
+                                    object: {
+                                        label_field: 'variable',
+                                        multiple: true,
+                                        fields: {
+                                            variable: {
+                                                label: 'Variable name',
+                                                required: true,
+                                                selector: { text: {} }
+                                            },
+                                            value_template: {
+                                                label: 'Value template',
+                                                required: true,
+                                                selector: { text: { multiline: true } }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        type: 'expandable',
+                        label: 'Templates',
+                        icon: 'mdi:code-brackets',
+                        schema: [
+                            {
+                                name: 'templates',
+                                label: 'Templates',
+                                selector: {
+                                    object: {
+                                        label_field: 'template',
+                                        multiple: true,
+                                        fields: {
+                                            template: {
+                                                label: 'Config item',
+                                                required: true,
+                                                selector: {
+                                                    select: {
+                                                        mode: 'dropdown',
+                                                        sort: true,
+                                                        options: ['[[templates]]'] // to be populated dynamically
+                                                    }
+                                                }
+                                            },
+                                            value_template: {
+                                                label: 'Value template',
+                                                required: true,
+                                                selector: { text: { multiline: true } }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ]
                     }
                 ]
             }
