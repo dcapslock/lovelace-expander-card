@@ -80,6 +80,9 @@
     let titleCardDiv: HTMLElement | null = $state(null);
     let buttonElement: HTMLElement | null = $state(null);
     let ripple: HaRipple | null = $state(null);
+    const variableRenders: Record<string, Promise<(() => void)>> = {};
+    const templateRenderers: Record<string, Promise<(() => void)>> = {};
+    const templateValues: Record<string, unknown> = $state({});
 
     const configId = untrack(() => config['storage-id']);
     const lastStorageOpenStateId = 'expander-open-' + configId;
@@ -93,7 +96,9 @@
             setOpenState(true);
             showButtonUsers = true;
         } else {
-            if (!isJSTemplate(config.templates?.expanded)) {
+            if (configTemplate('expanded') && templateValues.expanded !== undefined) {
+                toggleOpen(Boolean(templateValues.expanded));
+            } else {
                 setDefaultOpenState();
             }
             showButtonUsers = userInList(config['show-button-users']) ?? true;
@@ -208,6 +213,18 @@
 
     function cleanup() {
         document.body.removeEventListener('ll-custom', handleDomEvent);
+        Object.entries(templateRenderers).forEach(([key, renderer]) => {
+            renderer.then((untrackFunc) => {
+                untrackFunc();
+                delete templateRenderers[key];
+            }).catch(() => {});
+        });
+        Object.entries(variableRenders).forEach(([key, renderer]) => {
+            renderer.then((untrackFunc) => {
+                untrackFunc();
+                delete variableRenders[key];
+            }).catch(() => {});
+        });
     };
 
     let touchElement: HTMLElement | undefined;
@@ -263,7 +280,7 @@
     const bindTemplateVariables = (haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer>) => {
         for (const v of Object.values(config.variables ?? {})) {
             if (isJSTemplate(v.value_template)) {
-                trackJSTemplate(
+                variableRenders[v.variable] = trackJSTemplate(
                     haJS,
                     (res) => {
                         setJSTemplateRef(haJS, v.variable, res);
@@ -288,13 +305,12 @@
             );
             const haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer> = getJSTemplateRenderer( { config: config }, refs );
             bindTemplateVariables(haJS);
-            trackJSTemplate(
+            templateRenderers.expanded = trackJSTemplate(
                 haJS,
                 (result) => {
+                    templateValues.expanded = result;
                     if (preview) return;
-                    if (result === undefined) {
-                        setDefaultOpenState();
-                    } else {
+                    if (result !== undefined) {
                         const resultBoolean = Boolean(result);
                         if (resultBoolean !== open) {
                             toggleOpen(resultBoolean);
