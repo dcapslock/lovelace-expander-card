@@ -27,7 +27,8 @@ export const ExpanderCardEditorNulls: ExpanderConfig = {
 };
 
 export const expanderCardEditorTemplates = [
-    'expanded'
+    'expanded',
+    'style'
 ];
 
 const iconSelector = { icon: {} };
@@ -320,6 +321,7 @@ export const ExpanderCardEditorSchema = [
                                                 selector: {
                                                     select: {
                                                         mode: 'dropdown',
+                                                        custom_value: true, // to allow for current templates not in dropdown
                                                         sort: true,
                                                         options: ['[[templates]]'] // to be populated dynamically
                                                     }

@@ -32,14 +32,12 @@ export function trackJSTemplate(
     templatesRenderer: Promise<HomeAssistantJavaScriptTemplatesRenderer>,
     callback: (result: unknown) => void,
     template: string,
-    variables: Record<string, unknown> = {}) {
+    variables: Record<string, unknown> = {}): Promise<(() => void)> {
     if (!isJSTemplate(template)) {
         throw new Error('Not a valid JS template');
     }
     template = String(template).trim().slice(3, -3);
-    void templatesRenderer.then((renderer) => {
-        renderer.trackTemplate(template, callback, { variables });
-    });
+    return templatesRenderer.then((renderer) => renderer.trackTemplate(template, callback, { variables }));
 }
 
 export function setJSTemplateRef(
