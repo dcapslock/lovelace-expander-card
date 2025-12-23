@@ -84,20 +84,37 @@
     const templateRenderers: Record<string, Promise<(() => void)>> = {};
     const templateValues: Record<string, unknown> = $state({});
 
+    const userStyleTemplateOrConfig: string | null = $derived(templateValues.style !== undefined ?
+        `<style>${String(templateValues.style)}</style>` :
+        (config.style ? `<style>${config.style}</style>` : null));
     const configId = untrack(() => config['storage-id']);
     const lastStorageOpenStateId = 'expander-open-' + configId;
-    const userStyle = untrack(() => `<style>${config.style}</style>`);
     showButtonUsers = untrack(() => preview || (userInList(config['show-button-users']) ?? true));
 
     $effect(() => {
+        // effect for template 'expanded'. We untrack preview and open to avoid infinite loop effect loops.
+        if (templateValues.expanded === undefined) return;
+        if (untrack(() => preview)) return;
+        const resultBoolean = Boolean(templateValues.expanded);
+        if (resultBoolean !== untrack(() => open)) {
+            // Use queueMicrotask to avoid effect loop as open needs to be updated after this effect completes.
+            queueMicrotask(() => toggleOpen(resultBoolean));
+        }
+    });
+
+    $effect(() => {
+        // effect for preview changes. We untrack templateValues.expanded to avoid unnecessary effect triggering.
         if (preview === previewState || preview === undefined) return;
         previewState = preview;
         if (previewState) {
             setOpenState(true);
             showButtonUsers = true;
         } else {
-            if (configTemplate('expanded') && templateValues.expanded !== undefined) {
-                toggleOpen(Boolean(templateValues.expanded));
+            if (configTemplate('expanded')) {
+                const templateExpanded = untrack(() => templateValues.expanded);
+                if (templateExpanded !== undefined) {
+                    toggleOpen(Boolean(templateExpanded));
+                }
             } else {
                 setDefaultOpenState();
             }
@@ -294,33 +311,36 @@
         }
     };
 
+    const bindTemplates = () => {
+        if (!config.templates) return;
+        const refs = Object.values(config.variables || {}).reduce(
+            (obj, value) => {
+                obj[value.variable] = undefined;
+                return obj;
+            },
+            {} as Record<string, unknown>
+        );
+        const haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer> = getJSTemplateRenderer( { config: config }, refs );
+        bindTemplateVariables(haJS);
+        Object.values(config.templates || {}).forEach((t) => {
+            if (isJSTemplate(t.value_template)) {
+                templateRenderers[t.template] = trackJSTemplate(
+                    haJS,
+                    (res) => {
+                        templateValues[t.template] = res;
+                    },
+                    t.value_template as string,
+                    { config: config }
+                );
+            } else {
+                templateValues[t.template] = t.value_template;
+            }
+        });
+    };
+
     onMount(() => {
-        if (configTemplate('expanded')) {
-            const refs = Object.values(config.variables || {}).reduce(
-                (obj, value) => {
-                    obj[value.variable] = undefined;
-                    return obj;
-                },
-                {} as Record<string, unknown>
-            );
-            const haJS: Promise<HomeAssistantJavaScriptTemplatesRenderer> = getJSTemplateRenderer( { config: config }, refs );
-            bindTemplateVariables(haJS);
-            templateRenderers.expanded = trackJSTemplate(
-                haJS,
-                (result) => {
-                    templateValues.expanded = result;
-                    if (preview) return;
-                    if (result !== undefined) {
-                        const resultBoolean = Boolean(result);
-                        if (resultBoolean !== open) {
-                            toggleOpen(resultBoolean);
-                        }
-                    }
-                },
-                configTemplate('expanded')?.value_template as string,
-                { config: config }
-            );
-        } else {
+        bindTemplates();
+        if (!configTemplate('expanded')) {
             const minWidthExpanded = config['min-width-expanded'];
             const maxWidthExpanded = config['max-width-expanded'];
             const offsetWidth = document.body.offsetWidth;
@@ -485,9 +505,9 @@
             </div>
         </div>
     {/if}
-    {#if userStyle}
+    {#if userStyleTemplateOrConfig}
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-        {@html userStyle}
+        {@html userStyleTemplateOrConfig}
     {/if}
 </ha-card>
 

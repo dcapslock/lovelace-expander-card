@@ -254,6 +254,7 @@ Expander card supports javascript templates for the config items listed below. T
 | Config item | Accepts value | Overrides config items |
 | ----------- | ------------- | ---------------------- |
 | `expanded`  | boolean (`true\|false`) | `expanded`, `min-width-expanded`, `max-width-expanded`, `start-expanded-users` |
+| `style`     | string        | `style` |
 
 Javascript templates are implemented using the [home-assistant-javascript-templates](https://github.com/elchininet/home-assistant-javascript-templates) library by @elchininet. For objects and methods supported see [Objects and methods available in the templates](https://github.com/elchininet/home-assistant-javascript-templates#objects-and-methods-available-in-the-templates). The `config` object is also available which is the config object for the expander card where all config items can be read. e.g. `config['expander-card-id']`.
 
@@ -305,7 +306,7 @@ templates:
        ]]]
 ```
 
-Same template using variable `weather_warnings`. Note the use of the nullish coalescing (??) operator to handle variables being undefined until their value is set.
+Same template using variable `weather_warnings` and adding a `style` template. Note the use of the nullish coalescing (??) operator to handle variables being undefined until their value is set.
 
 ```yaml
 variables:
@@ -320,6 +321,17 @@ templates:
        [[[
          return variables.weather_warnings ?? false;
        ]]]
+  - template: style
+    value_template: |
+      [[[
+        return `
+          .title 
+          { 
+            transition: color 0.35s ease, font-weight 0.35s ease;
+            color: ${variables.weather_warnings ? 'red' : 'var(--primary-text-color)'};
+            font-weight: ${variables.weather_warnings ? '700' : 'var(--ha-font-weight-body)'};
+          }`;
+      ]]]
 ```
 
 More user examples can be found in [Show and tell](https://github.com/MelleD/lovelace-expander-card/discussions/categories/show-and-tell) discussion topic. If you have an example please submit to this discussion topic.
