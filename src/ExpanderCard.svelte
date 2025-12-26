@@ -87,6 +87,18 @@
     const userStyleTemplateOrConfig: string | null = $derived(templateValues.style !== undefined ?
         `<style>${String(templateValues.style)}</style>` :
         (config.style ? `<style>${config.style}</style>` : null));
+    const iconConfigOrTemplate: string | undefined = $derived(
+        templateValues.icon !== undefined ?
+            String(templateValues.icon) :
+            config.icon);
+    const titleConfigOrTemplate: string | undefined = $derived(
+        templateValues.title !== undefined ?
+            String(templateValues.title) :
+            config.title);
+    const arrowColorConfigOrTemplate: string | undefined = $derived(
+        templateValues['arrow-color'] !== undefined ?
+            String(templateValues['arrow-color']) :
+            config['arrow-color']);
     const configId = untrack(() => config['storage-id']);
     const lastStorageOpenStateId = 'expander-open-' + configId;
     showButtonUsers = untrack(() => preview || (userInList(config['show-button-users']) ?? true));
@@ -454,8 +466,8 @@
                     aria-label="Toggle button"
                     bind:this={buttonElement}
                 >
-                    <ha-icon style="--arrow-color:{config['arrow-color']}"
-                      icon={config.icon}
+                    <ha-icon style="--arrow-color:{arrowColorConfigOrTemplate}"
+                      icon={iconConfigOrTemplate}
                       class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}>
                     </ha-icon>
                     {#if !config['title-card-clickable'] || config['title-card-button-overlay'] }
@@ -474,9 +486,9 @@
                 style="--header-width:100%; --button-background:{config['button-background']};--header-color:{config['header-color']};"
                 bind:this={buttonElement}
                 >
-                <div class={`primary title${open ? ' open' : ' close'}`}>{config.title}</div>
-                <ha-icon style="--arrow-color:{config['arrow-color']}"
-                  icon={config.icon}
+                <div class={`primary title${open ? ' open' : ' close'}`}>{titleConfigOrTemplate}</div>
+                <ha-icon style="--arrow-color:{arrowColorConfigOrTemplate}"
+                  icon={iconConfigOrTemplate}
                   class={`ico${open && animationState !=='closing' ? ' flipped open' : ' close'}${config.animation ? ' animation ' + animationState : ''}`}>
                 </ha-icon>
                 <ha-ripple bind:this={ripple}></ha-ripple>

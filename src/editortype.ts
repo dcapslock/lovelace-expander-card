@@ -28,6 +28,9 @@ export const ExpanderCardEditorNulls: ExpanderConfig = {
 
 export const expanderCardEditorTemplates = [
     'expanded',
+    'icon',
+    'arrow-color',
+    'title',
     'style'
 ];
 
@@ -330,7 +333,7 @@ export const ExpanderCardEditorSchema = [
                                             value_template: {
                                                 label: 'Value template',
                                                 required: true,
-                                                selector: { text: { multiline: true } }
+                                                selector: { template: {} }
                                             }
                                         }
                                     }
