@@ -12,6 +12,7 @@ limitations under the License.
 */
 export { default } from './ExpanderCard.svelte';
 import { version } from '../package.json';
+import { TitleCardEditForm } from './title-card/titleCardEditForm';
 declare global {
     interface Window {
         customCards?: {
@@ -30,8 +31,8 @@ console.info(
     'color: white; font-weight: bold; background: dimgray'
 );
 
-window.customCards = window.customCards || [];
-window.customCards.push(...[
+window.customCards = window.customCards || []; // NOSONAR es2019
+window.customCards.push(...[ // NOSONAR es2019
     {
         type: 'expander-card',
         name: 'Expander Card',
@@ -39,3 +40,5 @@ window.customCards.push(...[
         description: 'Expander card'
     }
 ]);
+
+customElements.define('expander-card-title-card-edit-form', TitleCardEditForm);

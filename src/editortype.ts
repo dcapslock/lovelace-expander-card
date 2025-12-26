@@ -34,7 +34,6 @@ const iconSelector = { icon: {} };
 const textSelector = { text: {} };
 const multilineTextSelector = { text: { multiline: true } };
 const booleanSelector = { boolean: {} };
-const objectSelector = { object: {} };
 const numberSelector = (unit_of_measurement: string) => ({
     number: {
         unit_of_measurement
@@ -65,21 +64,10 @@ const booleanField = (name: string, label: string) => ({
     selector: booleanSelector
 });
 
-const objectField = (name: string, label: string) => ({
-    name,
-    label,
-    selector: objectSelector
-});
-
 const numberField = (name: string, label: string, unit_of_measurement: string) => ({
     name,
     label,
     selector: numberSelector(unit_of_measurement)
-});
-
-const labelField = (label: string) => ({
-    label,
-    type: 'constant'
 });
 
 // See https://www.home-assistant.io/docs/blueprint/selectors
@@ -197,10 +185,26 @@ export const ExpanderCardEditorSchema = [
                 icon: 'mdi:subtitles-outline',
                 schema: [
                     {
-                        ...labelField('Use YAML to specify a title card to replace the expander title')
-                    },
-                    {
-                        ...objectField('title-card', '')
+                        // title-card selector. We will override Add and Edit to show card UI editor
+                        name: 'title-card',
+                        label: 'Title card',
+                        selector: {
+                            object: {
+                                label_field: 'type',
+                                fields: {
+                                    type: {
+                                        label: 'Card type',
+                                        required: true,
+                                        selector: { text: {} }
+                                    },
+                                    // include a marker field so we can identify schema in show-dialog event
+                                    expander_card_title_card_marker: {
+                                        required: false,
+                                        selector: { text: {} }
+                                    }
+                                }
+                            }
+                        }
                     },
                     {
                         type: 'grid',

@@ -10,6 +10,7 @@ export interface HomeAssistantUser {
 export interface HomeAssistant {
     user?: HomeAssistantUser;
     [key: string]: unknown;
+    localize(key: string, ...args: unknown[]): string;
 }
 
 export interface LovelaceCardConfig {
@@ -42,4 +43,10 @@ export interface HaRipple extends HTMLElement {
 export interface ExpanderCardDomEventDetail {
     'expander-card-id'?: string;
     action?: 'open' | 'close' | 'toggle';
+}
+
+export interface HuiElementEditor extends HTMLElement {
+    lovelace?: unknown;
+    hasError?: boolean;
+    toggleMode(): void;
 }
