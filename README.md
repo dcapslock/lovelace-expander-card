@@ -254,6 +254,9 @@ Expander card supports javascript templates for the config items listed below. T
 | Config item | Accepts value | Overrides config items |
 | ----------- | ------------- | ---------------------- |
 | `expanded`  | boolean (`true\|false`) | `expanded`, `min-width-expanded`, `max-width-expanded`, `start-expanded-users` |
+| `title`     | string        | `title` |
+| `icon`      | string        | `icon`  |
+| `arrow-color` | CSS color (string)  | `arrow-color` |
 | `style`     | string        | `style` |
 
 Javascript templates are implemented using the [home-assistant-javascript-templates](https://github.com/elchininet/home-assistant-javascript-templates) library by @elchininet. For objects and methods supported see [Objects and methods available in the templates](https://github.com/elchininet/home-assistant-javascript-templates#objects-and-methods-available-in-the-templates). The `config` object is also available which is the config object for the expander card where all config items can be read. e.g. `config['expander-card-id']`.
