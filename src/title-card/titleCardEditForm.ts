@@ -33,7 +33,7 @@ export class TitleCardEditForm extends LitElement {
 
     public async showDialog(params: TitleCardEditFormParams): Promise<void> {
         this._params = params;
-        this._config = params.config || {};
+        this._config = params.config ?? {};
         this.lovelace = params.lovelace;
         this.large = false;
     }
