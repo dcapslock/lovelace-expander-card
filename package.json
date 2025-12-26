@@ -13,7 +13,8 @@
     "scripts": {
         "build": "eslint . && vite build",
         "srv": "pnpx serve -l 5000 --cors dist",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "lint-fix": "eslint . --fix"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3.3.3",
