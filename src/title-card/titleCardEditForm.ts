@@ -262,6 +262,7 @@ export class TitleCardEditForm extends LitElement {
             .content {
                 display: flex;
                 flex-direction: column;
+                gap: 24px;
             }
             .content hui-card {
                 display: block;
@@ -270,6 +271,9 @@ export class TitleCardEditForm extends LitElement {
                 max-width: 390px;
             }
             .content .element-editor {
+                margin: 0 10px;
+            }
+            .content .element-preview {
                 margin: 0 10px;
             }
 
@@ -287,6 +291,9 @@ export class TitleCardEditForm extends LitElement {
                     padding: 8px 10px;
                     margin: auto 0px;
                     max-width: 500px;
+                }
+                .content .element-preview {
+                    margin: unset;
                 }
             }
             .hidden {
