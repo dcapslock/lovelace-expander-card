@@ -29,7 +29,7 @@ export class TitleCardEditForm extends LitElement {
     @state() private _cardGUIModeAvailable = true;
     @state() private _error = false;
 
-    @query('hui-card-element-editor') private _cardEditorEl?: HuiElementEditor;
+    @query('hui-card-element-editor') private _cardEditorEl?: HuiElementEditor; // NOSONAR Lit @query decorator updates
 
     public async showDialog(params: TitleCardEditFormParams): Promise<void> {
         this._params = params;
@@ -72,10 +72,10 @@ export class TitleCardEditForm extends LitElement {
         let heading: string = this._params.title ?? '';
         if (this._config.type) {
             let cardName: string | undefined;
-            if (isCustomType(String(this._config.type))) {
+            if (isCustomType(this._config.type)) {
             // prettier-ignore
                 cardName = getCustomCardEntry(
-                    stripCustomPrefix(String(this._config.type))
+                    stripCustomPrefix(this._config.type)
                 )?.name;
                 // Trim names that end in " Card" so as not to redundantly duplicate it
                 if (cardName?.toLowerCase().endsWith(' card')) {

@@ -1,4 +1,6 @@
-export type TitleCardConfig = Record<string, unknown>;
+export type TitleCardConfig = {
+    type?: string;
+} & Record<string, unknown>;
 
 export interface TitleCardEditFormParams {
     title: string;
