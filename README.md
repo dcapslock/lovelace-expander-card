@@ -343,7 +343,7 @@ More user examples can be found in [Show and tell](https://github.com/MelleD/lov
 
 ### Templates - tracking expanded state of other expander cards
 
-If you set `expander-card-id` in an expander card it will broadcast its state to all expander cards on the open Dashboard. When using templates, the expanded state will be in special variables of the form `variables.['\<expander-card-id\>_open']`.
+If you set `expander-card-id` in an expander card it will broadcast its state to all expander cards on the open Dashboard. When using templates, the expanded state will be in special variables of the form `variables.['<expander-card-id>_open']`.
 
 If you have an expander card with `expander-card-id: my-expander-id` its expanded state will be available in templates via `variables['my-expander-id_open']`. Note here that Javascript access to the variable is via `[]` due to the `expander-card-id` having `-` in it. If you use `_` so that the `expander-card-id` is a valid object accessor, you can use `.` accessor. e.g. `expander-card-id: my_expander_id` => `variables.my_expander_id_open`.
 
