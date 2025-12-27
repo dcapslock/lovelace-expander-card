@@ -226,7 +226,6 @@
             setOpenState(newOpenState);
             // animation state is always 'idle' if no animation
         }
-        dispatchOpenStateEvent(newOpenState);
     }
 
     function setOpenState(openState: boolean) {
@@ -242,6 +241,7 @@
         if (open && backgroundAnimationDuration === 0) {
             backgroundAnimationDuration = 0.35;
         }
+        dispatchOpenStateEvent(open);
     }
 
     function handleLlCustomEvent(event: Event) {
