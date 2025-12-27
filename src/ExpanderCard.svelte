@@ -179,36 +179,36 @@
             return;
         }
         if (userInList(config['start-expanded-users'])) {
-            setOpenState(true);
+            setOpenStateAndDispatchEvent(true);
             return;
         }
         if (configId === undefined) {
-            seOpenStateFromConfig();
+            setOpenStateFromConfig();
             return;
         }
         try {
             const storageValue = localStorage.getItem(lastStorageOpenStateId);
             if(storageValue === null){
-                seOpenStateFromConfig();
+                setOpenStateFromConfig();
                 return;
             }
             // last state is stored in local storage
             const openStateByStorage = storageValue ? storageValue === 'true' : open;
-            setOpenState(openStateByStorage);
+            setOpenStateAndDispatchEvent(openStateByStorage);
         } catch (e) {
             console.error(e);
-            setOpenState(false);
+            setOpenStateAndDispatchEvent(false);
         }
 
     }
 
-    function seOpenStateFromConfig() {
+    function setOpenStateFromConfig() {
         // first time, set the state from config
         if (config.expanded !== undefined) {
-            setOpenState(config.expanded);
+            setOpenStateAndDispatchEvent(config.expanded);
             return;
         }
-        setOpenState(false);
+        setOpenStateAndDispatchEvent(false);
     }
 
     function toggleOpen(openState?: boolean) {
@@ -218,10 +218,11 @@
         }
         const newOpenState = openState !== undefined ? openState : !open;
         if (!config.animation) {
-            setOpenState(newOpenState);
+            setOpenStateAndDispatchEvent(newOpenState);
             return;
         }
 
+        dispatchOpenStateEvent(newOpenState);
         animationState = newOpenState ? 'opening' : 'closing';
         if (newOpenState) {
             setOpenState(true);
@@ -236,7 +237,11 @@
             animationState = 'idle';
             animationTimeout = null;
         }, 350);
+    }
 
+    function setOpenStateAndDispatchEvent(openState: boolean) {
+        setOpenState(openState);
+        dispatchOpenStateEvent(openState);
     }
 
     function setOpenState(openState: boolean) {
@@ -252,7 +257,6 @@
         if (open && backgroundAnimationDuration === 0) {
             backgroundAnimationDuration = 0.35;
         }
-        dispatchOpenStateEvent(open);
     }
 
     function handleLlCustomEvent(event: Event) {
@@ -416,6 +420,7 @@
 
     function setStateByPreview() {
         if (preview) {
+            // all expanders will be open so we don't dispatch event
             setOpenState(true);
             return;
         }
@@ -437,6 +442,8 @@
 
     onMount(() => {
         bindTemplates();
+        // dispatch initial state to listeners once templates are bound
+        dispatchOpenStateEvent(false);
         setExpandedFromConfig();
         setStateByPreview();
 
