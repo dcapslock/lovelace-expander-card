@@ -106,8 +106,12 @@
 
     $effect(() => {
         // effect for template 'expanded'. We untrack preview and open to avoid infinite loop effect loops.
-        if (templateValues.expanded === undefined) return;
-        if (untrack(() => preview)) return;
+        if (templateValues.expanded === undefined) {
+            return;
+        }
+        if (untrack(() => preview)) {
+            return;
+        }
         const resultBoolean = Boolean(templateValues.expanded);
         if (resultBoolean !== untrack(() => open)) {
             // Use queueMicrotask to avoid effect loop as open needs to be updated after this effect completes.
@@ -117,22 +121,25 @@
 
     $effect(() => {
         // effect for preview changes. We untrack templateValues.expanded to avoid unnecessary effect triggering.
-        if (preview === previewState || preview === undefined) return;
+        if (preview === previewState || preview === undefined) {
+            return;
+        }
         previewState = preview;
         if (previewState) {
             setOpenState(true);
             showButtonUsers = true;
-        } else {
-            if (configTemplate('expanded')) {
-                const templateExpanded = untrack(() => templateValues.expanded);
-                if (templateExpanded !== undefined) {
-                    toggleOpen(Boolean(templateExpanded));
-                }
-            } else {
-                setDefaultOpenState();
-            }
-            showButtonUsers = userInList(config['show-button-users']) ?? true;
+            return;
         }
+        showButtonUsers = userInList(config['show-button-users']) ?? true;
+
+        if (configTemplate('expanded')) {
+            const templateExpanded = untrack(() => templateValues.expanded);
+            if (templateExpanded !== undefined) {
+                toggleOpen(Boolean(templateExpanded));
+            }
+            return;
+        }
+        setDefaultOpenState();
     });
 
     function configTemplate(templateKey: string): ExpanderCardTemplates | undefined {
@@ -168,37 +175,40 @@
 
     function setDefaultOpenState() {
         // Do not run setDefaultOpenState if config.expanded is a JS template
-        if (configTemplate('expanded')) return;
+        if (configTemplate('expanded')) {
+            return;
+        }
         if (userInList(config['start-expanded-users'])) {
             setOpenState(true);
-        } else if (configId !== undefined) {
-            try {
-                const storageValue = localStorage.getItem(lastStorageOpenStateId);
-                if(storageValue === null){
-                    // first time, set the state from config
-                    if (config.expanded !== undefined) {
-                        setOpenState(config.expanded);
-                    } else {
-                        setOpenState(false);
-                    }
-                }
-                else {
-                    // last state is stored in local storage
-                    const openStateByStorage = storageValue ? storageValue === 'true' : open;
-                    setOpenState(openStateByStorage);
-                }
-            } catch (e) {
-                console.error(e);
-                setOpenState(false);
-            }
-        } else {
-            // first time, set the state from config
-            if (config.expanded !== undefined) {
-                setOpenState(config.expanded);
-            } else {
-                setOpenState(false);
-            }
+            return;
         }
+        if (configId === undefined) {
+            seOpenStateFromConfig();
+            return;
+        }
+        try {
+            const storageValue = localStorage.getItem(lastStorageOpenStateId);
+            if(storageValue === null){
+                seOpenStateFromConfig();
+                return;
+            }
+            // last state is stored in local storage
+            const openStateByStorage = storageValue ? storageValue === 'true' : open;
+            setOpenState(openStateByStorage);
+        } catch (e) {
+            console.error(e);
+            setOpenState(false);
+        }
+
+    }
+
+    function seOpenStateFromConfig() {
+        // first time, set the state from config
+        if (config.expanded !== undefined) {
+            setOpenState(config.expanded);
+            return;
+        }
+        setOpenState(false);
     }
 
     function toggleOpen(openState?: boolean) {
@@ -207,25 +217,26 @@
             animationTimeout  = null;
         }
         const newOpenState = openState !== undefined ? openState : !open;
-        if (config.animation) {
-            animationState = newOpenState ? 'opening' : 'closing';
-            if (newOpenState) {
-                setOpenState(true);
-                animationTimeout = setTimeout(() => {
-                    animationState = 'idle';
-                    animationTimeout = null;
-                }, 350);
-            } else {
-                animationTimeout = setTimeout(() => {
-                    setOpenState(false);
-                    animationState = 'idle';
-                    animationTimeout = null;
-                }, 350);
-            }
-        } else {
+        if (!config.animation) {
             setOpenState(newOpenState);
-            // animation state is always 'idle' if no animation
+            return;
         }
+
+        animationState = newOpenState ? 'opening' : 'closing';
+        if (newOpenState) {
+            setOpenState(true);
+            animationTimeout = setTimeout(() => {
+                animationState = 'idle';
+                animationTimeout = null;
+            }, 350);
+            return;
+        }
+        animationTimeout = setTimeout(() => {
+            setOpenState(false);
+            animationState = 'idle';
+            animationTimeout = null;
+        }, 350);
+
     }
 
     function setOpenState(openState: boolean) {
@@ -249,9 +260,15 @@
         if (data?.['expander-card-id'] && data['expander-card-id'] === config['expander-card-id']) {
             if (data.action === 'open' && !open) {
                 toggleOpen(true);
-            } else if (data.action === 'close' && open) {
+                return;
+            }
+
+            if (data.action === 'close' && open) {
                 toggleOpen(false);
-            } else if (data.action === 'toggle') {
+                return;
+            }
+
+            if (data.action === 'toggle') {
                 toggleOpen();
             }
         }
@@ -292,9 +309,7 @@
     const touchMove = (event: TouchEvent) => {
         const currentX = event.touches[0].clientX;
         const currentY = event.touches[0].clientY;
-        if (Math.abs(currentX - startX) > 10 || Math.abs(currentY - startY) > 10) {
-            isScrolling = true;
-        }
+        isScrolling = Math.abs(currentX - startX) > 10 || Math.abs(currentY - startY) > 10;
     };
 
     const touchCancel = () => {
@@ -376,36 +391,59 @@
         });
     };
 
-    onMount(() => {
-        bindTemplates();
-        if (!configTemplate('expanded')) {
-            const minWidthExpanded = config['min-width-expanded'];
-            const maxWidthExpanded = config['max-width-expanded'];
-            const offsetWidth = document.body.offsetWidth;
-
-            if (minWidthExpanded && maxWidthExpanded) {
-                config.expanded = offsetWidth >= minWidthExpanded && offsetWidth <= maxWidthExpanded;
-            } else if (minWidthExpanded) {
-                config.expanded = offsetWidth >= minWidthExpanded;
-            } else if (maxWidthExpanded) {
-                config.expanded = offsetWidth <= maxWidthExpanded;
-            }
+    function setExpandedFromConfig(){
+        if (configTemplate('expanded')) {
+            return;
         }
 
+        const minWidthExpanded = config['min-width-expanded'];
+        const maxWidthExpanded = config['max-width-expanded'];
+        const offsetWidth = document.body.offsetWidth;
+
+        if (minWidthExpanded && maxWidthExpanded) {
+            config.expanded = offsetWidth >= minWidthExpanded && offsetWidth <= maxWidthExpanded;
+            return;
+        }
+        if (minWidthExpanded) {
+            config.expanded = offsetWidth >= minWidthExpanded;
+            return;
+        }
+
+        if (maxWidthExpanded) {
+            config.expanded = offsetWidth <= maxWidthExpanded;
+        }
+    }
+
+    function setStateByPreview() {
         if (preview) {
             setOpenState(true);
-        } else if (!configTemplate('expanded')) {
+            return;
+        }
+
+        if (!configTemplate('expanded')) {
             setDefaultOpenState();
         }
+    }
+
+    function getTouchEventElement(): HTMLElement | undefined {
+        if (config['title-card-clickable'] && !config['title-card-button-overlay'] && titleCardDiv) {
+            return titleCardDiv;
+        }
+        if (buttonElement) {
+            return buttonElement;
+        }
+        return undefined;
+    }
+
+    onMount(() => {
+        bindTemplates();
+        setExpandedFromConfig();
+        setStateByPreview();
 
         document.body.addEventListener('ll-custom', handleLlCustomEvent);
 
-        let touchEventElement: HTMLElement | undefined;
-        if (config['title-card-clickable'] && !config['title-card-button-overlay'] && titleCardDiv) {
-            touchEventElement = titleCardDiv;
-        } else if (buttonElement) {
-            touchEventElement = buttonElement;
-        }
+        const touchEventElement = getTouchEventElement();
+
         if (touchEventElement) {
             touchEventElement.addEventListener('touchstart', touchStart, { passive: true, capture: true });
             touchEventElement.addEventListener('touchmove', touchMove, { passive: true,capture: true });
@@ -433,18 +471,20 @@
     });
 
     const buttonClick = (event: MouseEvent) => {
-        if (touchPreventClick) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            touchPreventClick = false;
-            if (touchPreventClickTimeout) {
-                clearTimeout(touchPreventClickTimeout);
-                touchPreventClickTimeout = null;
-            }
-            return false;
+        if (!touchPreventClick) {
+            forwardHaptic(event.currentTarget as HTMLElement, 'light');
+            toggleOpen();
+            return undefined;
         }
-        forwardHaptic(event.currentTarget as HTMLElement, 'light');
-        toggleOpen();
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        touchPreventClick = false;
+        if (touchPreventClickTimeout) {
+            clearTimeout(touchPreventClickTimeout);
+            touchPreventClickTimeout = null;
+        }
+        return false;
     };
 </script>
 

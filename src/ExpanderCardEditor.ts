@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ExpanderCardEditorNulls, ExpanderCardEditorSchema, expanderCardEditorTemplates } from './editortype';
+import { showTitleCardEditFormDialog, TitleCardEditFormParams } from './title-card/showTitleCardEditForm';
 import { HomeAssistantUser } from './types';
 
 const wdw = window; // NOSONAR es2019
@@ -32,8 +33,10 @@ const loader = async (): Promise<any> => {
     // create a temporary vertical-stack card to inherit from
     const verticalStackCard = await helperPromise.then(() =>
         helpers.createCardElement({ type: 'vertical-stack', cards: [] }));
-    // get its editor class
-    const verticalStackEditor = await verticalStackCard.constructor.getConfigElement();
+    // get its editor class once hui-vertical-stack-card is defined
+    // we need check hui-vertical-stack-card is defined as it is lazily loaded
+    const verticalStackEditor = await customElements.whenDefined('hui-vertical-stack-card')
+        .then(() => verticalStackCard.constructor.getConfigElement());
     // fetch users
     const users = await fetchUsers();
     // return a new class that extends the vertical-stack editor
@@ -70,6 +73,44 @@ const loader = async (): Promise<any> => {
         public set _schema(_) {
             // do nothing
         }
+
+        public connectedCallback(): void {
+            super.connectedCallback();
+
+            this.addEventListener('show-dialog', this.showDialogCallback.bind(this), true);
+        }
+
+        public disconnectedCallback(): void {
+            super.disconnectedCallback();
+            this.removeEventListener('show-dialog', this.showDialogCallback.bind(this), true);
+        }
+
+        private readonly showDialogCallback = (ev: CustomEvent): void => {
+            const isExpanderCardTitleCardSchema =
+                ev.detail?.dialogParams?.schema?.find((s: any) => s.name === 'expander_card_title_card_marker');
+            if (isExpanderCardTitleCardSchema) {
+                ev.stopPropagation();
+                // load the form-dialog element to make sure ha-dialog is defined
+                // then show the title card edit form dialog
+                if (ev.detail?.dialogImport) {
+                    ev.detail.dialogImport().then(async () => {
+                        const params: TitleCardEditFormParams = {
+                            title: 'Title card',
+                            config: this._config['title-card'] || {},
+                            submit: ev.detail?.dialogParams?.submit,
+                            cancel: ev.detail?.dialogParams?.cancel,
+                            submitText: ev.detail?.dialogParams?.submitText,
+                            cancelText: ev.detail?.dialogParams?.cancelText,
+                            lovelace: this.lovelace
+                        };
+                        await showTitleCardEditFormDialog(
+                            this as unknown as HTMLElement,
+                            params
+                        );
+                    });
+                }
+            }
+        };
 
         // override _computeLabelCallback to show label or name
         public _computeLabelCallback = (item: any): string => item.label ?? item.name ?? '';

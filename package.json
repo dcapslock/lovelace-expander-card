@@ -13,7 +13,8 @@
     "scripts": {
         "build": "eslint . && vite build",
         "srv": "pnpx serve -l 5000 --cors dist",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "lint-fix": "eslint . --fix"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3.3.3",
@@ -42,6 +43,7 @@
     },
     "dependencies": {
         "home-assistant-javascript-templates": "^6.0.0",
+        "lit": "^3.3.1",
         "svelte": "5.46.1"
     },
     "pnpm": {
