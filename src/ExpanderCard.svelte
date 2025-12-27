@@ -131,7 +131,6 @@
         }
         showButtonUsers = userInList(config['show-button-users']) ?? true;
 
-
         if (configTemplate('expanded')) {
             const templateExpanded = untrack(() => templateValues.expanded);
             if (templateExpanded !== undefined) {
@@ -389,7 +388,7 @@
         }
     }
 
-    function setStaeByPreview() {
+    function setStateByPreview() {
         if (preview) {
             setOpenState(true);
             return;
@@ -413,7 +412,7 @@
     onMount(() => {
         bindTemplates();
         setExpandedFromConfig();
-        setStaeByPreview();
+        setStateByPreview();
 
         document.body.addEventListener('ll-custom', handleDomEvent);
 
