@@ -23,8 +23,7 @@ export const ExpanderCardEditorNulls: ExpanderConfig = {
     'child-margin-top': '',
     'overlay-margin': '',
     'title-card-padding': '',
-    'style': '',
-    'haptic': 'light'
+    'style': ''
 };
 
 export const expanderCardEditorTemplates = [

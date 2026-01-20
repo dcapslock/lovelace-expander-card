@@ -20,7 +20,7 @@
             'icon': 'mdi:chevron-down',
             'icon-rotate-degree': '180deg',
             'animation': true,
-            'haptic': 'light'
+            'haptic': 'light' as const
         };
         import { loadExpanderCardEditor } from './ExpanderCardEditor';
 </script>
