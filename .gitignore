@@ -12,3 +12,4 @@ vite.config.ts.timestamp-*
 .venv
 .npm
 docs/site
+package-lock.json
