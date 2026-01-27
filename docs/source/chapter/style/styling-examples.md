@@ -274,6 +274,9 @@ style:
   .header.animation.open > .title, .header.animation.opening > .title:
     color: '#fbbf24'
     font-size: var(--ha-font-size-xl)
+  .header.animation.close > .title, .header.animation.closing > .title:
+    color: '#ffffff'
+    font-size: var(--ha-font-size-l)
   .arrow:
     color: '#fbbf24'
 cards:
