@@ -1,6 +1,33 @@
 # Style
 
-You can do advanced styling using the `style` configuration parameter. Classes available are per the images below.
+You can do advanced styling using the `style` configuration parameter. The `style` parameter supports two formats:
+
+1. **String format**: CSS rules as a string (traditional)
+2. **Object format**: Structured object with CSS selectors as keys and property objects as values (new)
+
+## Style Format Examples
+
+### String Format
+```yaml
+style: |
+  .expander-card {
+    background-color: red;
+  }
+```
+
+### Object Format
+```yaml
+style:
+  .expander-card:
+    background-color: red
+    padding: 1em
+```
+
+Both formats produce the same result. See [Styling Examples](styling-examples.md) for more details and comprehensive examples.
+
+## CSS Classes
+
+Classes available are per the images below.
 
 ![Expander Card Styling - Title](../assets/styling2.png)
 
