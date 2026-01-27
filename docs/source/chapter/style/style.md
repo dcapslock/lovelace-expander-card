@@ -2,8 +2,8 @@
 
 You can do advanced styling using the `style` configuration parameter. The `style` parameter supports two formats:
 
-1. **String format**: CSS rules as a string (traditional)
-2. **Object format**: Structured object with CSS selectors as keys and property objects as values (new)
+1. **String format**: CSS rules as a string
+2. **Object format**: Structured object with CSS selectors as keys and property objects as values
 
 ## Style Format Examples
 
