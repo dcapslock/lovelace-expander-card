@@ -52,22 +52,6 @@ const loader = async (): Promise<any> => {
             this._config = config;
         }
 
-        // override _computeLabel to provide special handling for style field
-        public _computeLabel = (schema: any, key: string): string => {
-            if (key === 'style' && this._config?.style && typeof this._config.style === 'object' && !Array.isArray(this._config.style)) {
-                return 'Custom CSS style (Object format - edit in YAML)';
-            }
-            return schema.label || schema.name || key;
-        };
-
-        // override _getValue to convert object style to message for display
-        public _getValue = (key: string): any => {
-            if (key === 'style' && this._config?.style && typeof this._config.style === 'object' && !Array.isArray(this._config.style)) {
-                return '[Style is configured as an object. Use YAML editor to modify.]';
-            }
-            return this._config?.[key];
-        };
-
         // define _schema getter to return our own schema
         public get _schema(): any {
             const schema = ExpanderCardEditorSchema;
@@ -82,32 +66,6 @@ const loader = async (): Promise<any> => {
                     .filter((t: any) => !this._config.templates?.some((ct: any) => ct.template === t))
                     .join('","'));
             const populatedSchema = JSON.parse(populatedSchemaJSON);
-
-            // Check if style is an object and modify the schema accordingly
-            if (this._config.style && typeof this._config.style === 'object' && !Array.isArray(this._config.style)) {
-                // Find the Advanced styling section in the schema
-                const expanderCardSettings = populatedSchema.find((s: any) => s.label === 'Expander Card Settings');
-                if (expanderCardSettings) {
-                    const advancedStyling = expanderCardSettings.schema.find((s: any) => s.label === 'Advanced styling');
-                    if (advancedStyling) {
-                        // Replace the style field with a disabled text field showing a message
-                        advancedStyling.schema = [
-                            {
-                                name: 'style',
-                                label: 'Custom CSS style',
-                                selector: {
-                                    text: {
-                                        multiline: true,
-                                        disabled: true
-                                    }
-                                },
-                                helper: 'Style is configured as an object. Please use the YAML editor to modify advanced object-based styles.'
-                            }
-                        ];
-                    }
-                }
-            }
-
             return populatedSchema;
         }
 
@@ -172,15 +130,6 @@ const loader = async (): Promise<any> => {
                     delete config[key];
                 }
             }
-
-            // Special handling for style field: if it was an object in original config and
-            // the new value is the placeholder message, restore the original object
-            if (this._config?.style && typeof this._config.style === 'object' && !Array.isArray(this._config.style)) {
-                if (config.style === '[Style is configured as an object. Use YAML editor to modify.]') {
-                    config.style = this._config.style;
-                }
-            }
-
             this._config = config;
             this.dispatchEvent(new CustomEvent('config-changed', { detail: { config: this._config } }));
         };
