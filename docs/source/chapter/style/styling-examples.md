@@ -279,11 +279,10 @@ style:
 cards:
   - type: entity
     entity: light.living_room
-  - type: entity
-    entity: climate.thermostat
 ```
 
 This example demonstrates:
+
 - Background color transitions between states
 - Title color and size changes with smooth transitions
 - Custom arrow color
@@ -295,6 +294,7 @@ This example demonstrates:
 ### Style Format Choice
 
 Choose the format that works best for your use case:
+
 - **String format**: Better for copy-pasting existing CSS or when using complex selectors
 - **Object format**: More readable and easier to maintain, especially for configurations with many style rules
 

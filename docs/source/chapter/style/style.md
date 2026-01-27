@@ -8,6 +8,7 @@ You can do advanced styling using the `style` configuration parameter. The `styl
 ## Style Format Examples
 
 ### String Format
+
 ```yaml
 style: |
   .expander-card {
@@ -16,6 +17,7 @@ style: |
 ```
 
 ### Object Format
+
 ```yaml
 style:
   .expander-card:
