@@ -5,15 +5,18 @@ You can do advanced styling using the `style` configuration parameter. The `styl
 1. **String format**: CSS rules as a string
 2. **Object format**: Structured object with CSS selectors as keys and property objects as values
 
+!!! tip "Editing `style` in Graphical config editor"
+    When editing `style` in Graphical config editor the default mode is CSS text. To enabled Structured object editing, switch to code editor mode, set style to be a YAML object, and switch back to visual editor mode. Your config will now always view as an Structured object in the visual editor.
+
 ## Style Format Examples
 
 ### String Format
 
 ```yaml
-style: |
-  .expander-card {
-    background-color: red;
-  }
+  style: |
+    .expander-card {
+      background-color: red;
+    }
 ```
 
 ### Object Format
