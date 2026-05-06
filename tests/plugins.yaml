@@ -1,0 +1,14 @@
+# Third-party Lovelace plugins to download on every HA instance startup.
+#
+# Each entry requires:
+#   repo     - GitHub repository in "owner/name" format
+#   asset    - name of the JS asset to download from the latest release
+#   filename - filename to write inside www/ (usually the same as `asset`)
+#
+# Resolution order: release asset → repo root → dist/ folder.
+#
+# Note: expander-card.js itself is not listed here — it is copied from
+# the local build (dist/expander-card.js) by tests/conftest.py.
+# Add third-party cards used in test scenarios below.
+
+[]

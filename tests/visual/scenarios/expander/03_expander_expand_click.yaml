@@ -1,0 +1,44 @@
+id: expander_expand_click
+description: "Clicking the expander button opens the card and reveals child cards"
+view_path: expander-expand-click
+
+card:
+  type: custom:expander-card
+  title: Lights
+  cards:
+    - type: entities
+      entities:
+        - light.bed_light
+
+interactions:
+  - type: click
+    root: expander-card
+    selector: ".header"
+    settle_ms: 800
+
+assertions:
+  - type: element_present
+    root: expander-card
+    selector: ".header"
+
+  - type: snapshot
+    name: "03_expander_expand_click"
+    threshold: 0.02
+
+doc_animation:
+  output: docs/source/chapter/assets/expander-expand.gif
+  root: expander-card
+  padding: 8
+  interval_ms: 80
+  threshold: 0.02
+  segments:
+    - frames: 6
+    - interactions:
+        - type: click
+          root: expander-card
+          selector: ".header"
+          settle_ms: 800
+      frames: 10
+      click_circle: true
+    - frames: 8
+      cursor: none
