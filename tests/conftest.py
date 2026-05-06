@@ -37,7 +37,6 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-import yaml
 
 # ---------------------------------------------------------------------------
 # Expander-card-specific env-var defaults — consumed by ha_testcontainer
@@ -77,68 +76,42 @@ else:
 
 
 # ---------------------------------------------------------------------------
-# Register Lovelace resources after the HA container starts.
+# Register expander-card.js as a Lovelace resource after the HA container
+# starts.
 #
-# Because configuration.yaml uses ``lovelace: mode: storage`` (not
-# ``resource_mode: yaml``), resources cannot be declared in a static YAML
-# file.  Instead, they are registered once per session via the HA WebSocket
-# ``lovelace/resources/create`` command after the container is up.
-#
-# This keeps plugins.yaml as the single source of truth for ALL third-party
-# plugins: ha_testcontainer's ``ha`` fixture downloads them into www/ and
-# this fixture then registers them as Lovelace resources alongside the
-# locally-built expander-card.js.
+# Third-party plugins listed in tests/plugins.yaml are downloaded and
+# registered automatically by ha_testcontainer: the ``ha`` fixture calls
+# ``download_lovelace_plugins`` which writes ``lovelace_resources.yaml``;
+# HA loads that file at startup via ``resource_mode: yaml`` in
+# configuration.yaml.  This fixture only handles the locally-built
+# expander-card.js, which is not part of plugins.yaml.
 # ---------------------------------------------------------------------------
 
 
 @pytest.fixture(scope="session", autouse=True)
 def _ha_lovelace_resources(ha: Any) -> None:
-    """Register expander-card.js and any plugins.yaml entries as Lovelace resources.
+    """Register the locally-built expander-card.js as a Lovelace resource.
 
-    Runs once per test session after the HA container is ready.  Using the
-    WebSocket Lovelace resource API (storage mode) means any plugin added to
-    ``tests/plugins.yaml`` is automatically registered here in addition to
-    the locally-built ``expander-card.js`` — no changes to
-    ``configuration.yaml`` or static resource YAML files are required.
+    Runs once per test session after the HA container is ready.  Uses the
+    WebSocket ``lovelace/resources/create`` command to add
+    ``/local/expander-card.js`` to the resource list.
+
+    Third-party plugins from ``tests/plugins.yaml`` are handled entirely by
+    ha_testcontainer (downloaded to ``www/`` and written into
+    ``lovelace_resources.yaml``, which HA loads at startup).
     """
-    # Always include the locally-built card.
-    resources: list[str] = ["/local/expander-card.js"]
-
-    # Also include every plugin downloaded by ha_testcontainer's ha fixture.
-    plugins_yaml_env = os.environ.get("HA_PLUGINS_YAML", "").strip()
-    if plugins_yaml_env:
-        plugins_yaml_path = Path(plugins_yaml_env)
-        if plugins_yaml_path.exists():
-            try:
-                plugins = yaml.safe_load(plugins_yaml_path.read_text()) or []
-            except yaml.YAMLError as exc:
-                warnings.warn(
-                    f"Could not parse {plugins_yaml_path}: {exc}. "
-                    "Third-party plugins will not be registered.",
-                    stacklevel=1,
-                )
-                plugins = []
-            if isinstance(plugins, list):
-                for plugin in plugins:
-                    if isinstance(plugin, dict) and "filename" in plugin:
-                        resources.append(f"/local/{plugin['filename']}")
-
-    # Use a high base ID to avoid collisions with other WebSocket operations.
-    for command_id, url in enumerate(resources, start=10000):
-        try:
-            # ha_testcontainer does not expose a public API for registering
-            # Lovelace resources; _ws_call is the supported low-level interface
-            # used throughout ha_testcontainer (e.g. push_lovelace_config,
-            # setup_integration).
-            ha._ws_call({
-                "id": command_id,
-                "type": "lovelace/resources/create",
-                "res_type": "module",
-                "url": url,
-            })
-        except (RuntimeError, OSError) as exc:
-            warnings.warn(
-                f"Could not register Lovelace resource {url!r}: {exc}",
-                stacklevel=1,
-            )
-
+    try:
+        # ha_testcontainer does not expose a public API for registering
+        # Lovelace resources; _ws_call is the supported low-level interface
+        # (also used by push_lovelace_config and setup_integration).
+        ha._ws_call({
+            "id": 10000,
+            "type": "lovelace/resources/create",
+            "res_type": "module",
+            "url": "/local/expander-card.js",
+        })
+    except (RuntimeError, OSError) as exc:
+        warnings.warn(
+            f"Could not register Lovelace resource /local/expander-card.js: {exc}",
+            stacklevel=1,
+        )
