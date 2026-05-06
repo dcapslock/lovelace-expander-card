@@ -124,10 +124,14 @@ def _ha_lovelace_resources(ha: Any) -> None:
                         resources.append(f"/local/{plugin['filename']}")
 
     # Use a high base ID to avoid collisions with other WebSocket operations.
-    for idx, url in enumerate(resources, start=10000):
+    for command_id, url in enumerate(resources, start=10000):
         try:
+            # ha_testcontainer does not expose a public API for registering
+            # Lovelace resources; _ws_call is the supported low-level interface
+            # used throughout ha_testcontainer (e.g. push_lovelace_config,
+            # setup_integration).
             ha._ws_call({
-                "id": idx,
+                "id": command_id,
                 "type": "lovelace/resources/create",
                 "res_type": "module",
                 "url": url,
