@@ -20,3 +20,4 @@ tests/ha-config/www/expander-card.js
 __pycache__/
 *.pyc
 .pytest_cache/
+src/*.egg-info/

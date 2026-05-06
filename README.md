@@ -28,6 +28,37 @@ Clone and create a PR to help make the card even better.
 
 Please ⭐️ or sponsor this repo when you like it.
 
+## 🛠️ Development & Testing
+
+### One-time setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e '.[test]'
+playwright install chromium
+```
+
+### Running tests
+
+**VS Code** — open the *Terminal › Run Task* palette and choose any `pytest:` task (setup, run all, run single scenario, update snapshots, etc.).
+
+**Command line** — activate the virtual environment first, then:
+
+| Goal | Command |
+|---|---|
+| All tests | `pytest tests/` |
+| All tests — update snapshots & doc images | `SNAPSHOT_UPDATE=1 DOC_IMAGE_UPDATE=1 pytest tests/` |
+| Scenario tests only | `pytest tests/visual/test_scenarios.py` |
+| Update scenario snapshots | `SNAPSHOT_UPDATE=1 pytest tests/visual/test_scenarios.py` |
+| Single scenario | `pytest tests/visual/test_scenarios.py -k expander_01_collapsed` |
+| Single scenario — update snapshot | `SNAPSHOT_UPDATE=1 pytest tests/visual/test_scenarios.py -k expander_01_collapsed` |
+| Doc images — generate / verify | `pytest tests/visual/test_doc_images.py` |
+| Doc images — update all | `DOC_IMAGE_UPDATE=1 pytest tests/visual/test_doc_images.py` |
+| Doc image audit (no HA needed) | `pytest tests/test_doc_audit.py` |
+
+> **Tip:** Start the persistent HA server (`python -m ha_testcontainer.ha_server` or the *HA: Start persistent server* VS Code task) before running tests to skip the Docker boot wait on every run.
+
 ## Sponsor ❤️
 
 <a href="" target="_blank"><img src="https://img.shields.io/static/v1.svg?label=%20&message=PayPal.Me&logo=paypal" alt="PayPal.Me MelleDennis" style="height: auto !important;width: auto !important;" ></a>
