@@ -147,6 +147,35 @@ npm run lint
 npm run lint-fix
 ```
 
+#### Visual Tests
+
+One-time setup:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e '.[test]'
+playwright install chromium
+```
+
+**VS Code** — open the *Terminal › Run Task* palette and choose any `pytest:` task (setup, run all, run single scenario, update snapshots, etc.).
+
+**Command line** — activate the virtual environment first, then:
+
+| Goal | Command |
+|---|---|
+| All tests | `pytest tests/` |
+| All tests — update snapshots & doc images | `SNAPSHOT_UPDATE=1 DOC_IMAGE_UPDATE=1 pytest tests/` |
+| Scenario tests only | `pytest tests/visual/test_scenarios.py` |
+| Update scenario snapshots | `SNAPSHOT_UPDATE=1 pytest tests/visual/test_scenarios.py` |
+| Single scenario | `pytest tests/visual/test_scenarios.py -k expander_01_collapsed` |
+| Single scenario — update snapshot | `SNAPSHOT_UPDATE=1 pytest tests/visual/test_scenarios.py -k expander_01_collapsed` |
+| Doc images — generate / verify | `pytest tests/visual/test_doc_images.py` |
+| Doc images — update all | `DOC_IMAGE_UPDATE=1 pytest tests/visual/test_doc_images.py` |
+| Doc image audit (no HA needed) | `pytest tests/test_doc_audit.py` |
+
+> **Tip:** Start the persistent HA server (`python -m ha_testcontainer.ha_server` or the *HA: Start persistent server* VS Code task) before running tests to skip the Docker boot wait on every run.
+
 #### Docs
 
 Go to docs folder and install [zensical](https://zensical.org/docs/get-started/)
