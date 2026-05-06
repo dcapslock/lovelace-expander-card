@@ -16,6 +16,10 @@ assertions:
     root: expander-card
     selector: ".header"
 
+  - type: element_present
+    root: expander-card
+    selector: ".children-container.open"
+
   - type: snapshot
     name: "02_expander_expanded"
     threshold: 0.02
