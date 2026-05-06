@@ -178,6 +178,8 @@ playwright install chromium
 
 > **Tip:** Start the persistent HA server (`python -m ha_testcontainer.ha_server` or the *HA: Start persistent server* VS Code task) before running tests to skip the Docker boot wait on every run.
 
+> **Tip (debugging):** When the persistent server is running, its URL is logged in the terminal. You can open that URL in a browser and log in with the ha-testcontainer default credentials — username `testadmin`, password `testpassword123` — to inspect the HA instance manually. **Do not browse to the instance before running tests**; doing so may interfere with the test session. If you have already browsed to it, stop the server and start it again before running tests.
+
 #### Docs
 
 Go to docs folder and install [zensical](https://zensical.org/docs/get-started/)
