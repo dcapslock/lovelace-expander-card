@@ -34,6 +34,7 @@ import os
 import shutil
 import warnings
 from pathlib import Path
+from typing import Any
 
 import pytest
 import yaml
@@ -91,7 +92,7 @@ else:
 
 
 @pytest.fixture(scope="session", autouse=True)
-def _ha_lovelace_resources(ha) -> None:
+def _ha_lovelace_resources(ha: Any) -> None:
     """Register expander-card.js and any plugins.yaml entries as Lovelace resources.
 
     Runs once per test session after the HA container is ready.  Using the
@@ -108,13 +109,22 @@ def _ha_lovelace_resources(ha) -> None:
     if plugins_yaml_env:
         plugins_yaml_path = Path(plugins_yaml_env)
         if plugins_yaml_path.exists():
-            plugins = yaml.safe_load(plugins_yaml_path.read_text()) or []
+            try:
+                plugins = yaml.safe_load(plugins_yaml_path.read_text()) or []
+            except yaml.YAMLError as exc:
+                warnings.warn(
+                    f"Could not parse {plugins_yaml_path}: {exc}. "
+                    "Third-party plugins will not be registered.",
+                    stacklevel=1,
+                )
+                plugins = []
             if isinstance(plugins, list):
                 for plugin in plugins:
                     if isinstance(plugin, dict) and "filename" in plugin:
                         resources.append(f"/local/{plugin['filename']}")
 
-    for idx, url in enumerate(resources, start=1):
+    # Use a high base ID to avoid collisions with other WebSocket operations.
+    for idx, url in enumerate(resources, start=10000):
         try:
             ha._ws_call({
                 "id": idx,
@@ -122,7 +132,7 @@ def _ha_lovelace_resources(ha) -> None:
                 "res_type": "module",
                 "url": url,
             })
-        except Exception as exc:  # noqa: BLE001
+        except (RuntimeError, OSError) as exc:
             warnings.warn(
                 f"Could not register Lovelace resource {url!r}: {exc}",
                 stacklevel=1,
