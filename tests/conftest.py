@@ -47,8 +47,8 @@ import pytest
 
 _REPO_ROOT = Path(__file__).parent.parent
 
-os.environ.setdefault("HA_CONFIG_PATH", str(_REPO_ROOT / "tests" / "ha-config"))
-os.environ.setdefault("HA_PLUGINS_YAML", str(_REPO_ROOT / "tests" / "plugins.yaml"))
+os.environ.setdefault("HA_CONFIG_PATH", str(_REPO_ROOT / "tests" / "ha-config"))  # NOSONAR
+os.environ.setdefault("HA_PLUGINS_YAML", str(_REPO_ROOT / "tests" / "plugins.yaml"))  # NOSONAR
 
 # ---------------------------------------------------------------------------
 # Copy the locally-built expander-card.js into the HA config www/ directory
@@ -65,7 +65,7 @@ _WWW_JS = _WWW_DIR / "expander-card.js"
 
 if _DIST_JS.exists():
     _WWW_DIR.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(_DIST_JS, _WWW_JS)
+    shutil.copy2(_DIST_JS, _WWW_JS)  # NOSONAR
 else:
     warnings.warn(
         f"Built card file not found at {_DIST_JS}. "
