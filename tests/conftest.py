@@ -35,6 +35,9 @@ import shutil
 import warnings
 from pathlib import Path
 
+import pytest
+import yaml
+
 # ---------------------------------------------------------------------------
 # Expander-card-specific env-var defaults — consumed by ha_testcontainer
 # ---------------------------------------------------------------------------
@@ -70,3 +73,58 @@ else:
         "Visual tests will fail because the card cannot be loaded.",
         stacklevel=1,
     )
+
+
+# ---------------------------------------------------------------------------
+# Register Lovelace resources after the HA container starts.
+#
+# Because configuration.yaml uses ``lovelace: mode: storage`` (not
+# ``resource_mode: yaml``), resources cannot be declared in a static YAML
+# file.  Instead, they are registered once per session via the HA WebSocket
+# ``lovelace/resources/create`` command after the container is up.
+#
+# This keeps plugins.yaml as the single source of truth for ALL third-party
+# plugins: ha_testcontainer's ``ha`` fixture downloads them into www/ and
+# this fixture then registers them as Lovelace resources alongside the
+# locally-built expander-card.js.
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _ha_lovelace_resources(ha) -> None:
+    """Register expander-card.js and any plugins.yaml entries as Lovelace resources.
+
+    Runs once per test session after the HA container is ready.  Using the
+    WebSocket Lovelace resource API (storage mode) means any plugin added to
+    ``tests/plugins.yaml`` is automatically registered here in addition to
+    the locally-built ``expander-card.js`` — no changes to
+    ``configuration.yaml`` or static resource YAML files are required.
+    """
+    # Always include the locally-built card.
+    resources: list[str] = ["/local/expander-card.js"]
+
+    # Also include every plugin downloaded by ha_testcontainer's ha fixture.
+    plugins_yaml_env = os.environ.get("HA_PLUGINS_YAML", "").strip()
+    if plugins_yaml_env:
+        plugins_yaml_path = Path(plugins_yaml_env)
+        if plugins_yaml_path.exists():
+            plugins = yaml.safe_load(plugins_yaml_path.read_text()) or []
+            if isinstance(plugins, list):
+                for plugin in plugins:
+                    if isinstance(plugin, dict) and "filename" in plugin:
+                        resources.append(f"/local/{plugin['filename']}")
+
+    for idx, url in enumerate(resources, start=1):
+        try:
+            ha._ws_call({
+                "id": idx,
+                "type": "lovelace/resources/create",
+                "res_type": "module",
+                "url": url,
+            })
+        except Exception as exc:  # noqa: BLE001
+            warnings.warn(
+                f"Could not register Lovelace resource {url!r}: {exc}",
+                stacklevel=1,
+            )
+

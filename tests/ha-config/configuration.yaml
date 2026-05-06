@@ -10,7 +10,3 @@ demo:
 
 lovelace:
   mode: storage
-  resource_mode: yaml
-  resources:
-    - url: /local/expander-card.js
-      type: module

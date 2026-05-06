@@ -7,8 +7,12 @@
 #
 # Resolution order: release asset → repo root → dist/ folder.
 #
-# Note: expander-card.js itself is not listed here — it is copied from
-# the local build (dist/expander-card.js) by tests/conftest.py.
-# Add third-party cards used in test scenarios below.
+# Plugins listed here are automatically:
+#   1. Downloaded into tests/ha-config/www/ by ha_testcontainer at startup.
+#   2. Registered as Lovelace resources (type: module) via the WebSocket API
+#      by the _ha_lovelace_resources fixture in tests/conftest.py.
+#
+# Note: expander-card.js itself is not listed here — it is copied from the
+# local build (dist/expander-card.js) and registered automatically.
 
 []
