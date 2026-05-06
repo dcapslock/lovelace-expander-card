@@ -16,7 +16,7 @@ assertions:
     selector: ".header"
 
   - type: snapshot
-    name: "01_expander_collapsed"
+    name: "expander_01_collapsed"
     threshold: 0.02
 
 doc_image:
