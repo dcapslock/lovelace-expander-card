@@ -149,7 +149,9 @@ npm run lint-fix
 
 #### Visual Tests
 
-One-time setup:
+One-time setup — **VS Code**: open the *Terminal › Run Task* palette and choose *Python: Set up virtual environment*.
+
+One-time setup — **Command line**:
 
 ```bash
 python3 -m venv .venv
@@ -158,7 +160,7 @@ pip install -e '.[test]'
 playwright install chromium
 ```
 
-**VS Code** — open the *Terminal › Run Task* palette and choose any `pytest:` task (setup, run all, run single scenario, update snapshots, etc.).
+**VS Code** — open the *Terminal › Run Task* palette and choose any `pytest:` task (run all, run single scenario, update snapshots, etc.).
 
 **Command line** — activate the virtual environment first, then:
 
