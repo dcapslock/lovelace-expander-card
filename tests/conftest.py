@@ -31,12 +31,7 @@ HA_PLUGINS_YAML
 from __future__ import annotations
 
 import os
-import shutil
-import warnings
 from pathlib import Path
-from typing import Any
-
-import pytest
 
 # ---------------------------------------------------------------------------
 # Expander-card-specific env-var defaults — consumed by ha_testcontainer
@@ -49,69 +44,3 @@ _REPO_ROOT = Path(__file__).parent.parent
 
 os.environ.setdefault("HA_CONFIG_PATH", str(_REPO_ROOT / "tests" / "ha-config"))  # NOSONAR
 os.environ.setdefault("HA_PLUGINS_YAML", str(_REPO_ROOT / "tests" / "plugins.yaml"))  # NOSONAR
-
-# ---------------------------------------------------------------------------
-# Copy the locally-built expander-card.js into the HA config www/ directory
-# so the test container can serve it at /local/expander-card.js.
-#
-# The built file is produced by ``pnpm run build`` and lives at
-# ``dist/expander-card.js``.  It is not committed to git; run the build step
-# before running the tests.
-# ---------------------------------------------------------------------------
-
-_DIST_JS = _REPO_ROOT / "dist" / "expander-card.js"
-_WWW_DIR = _REPO_ROOT / "tests" / "ha-config" / "www"
-_WWW_JS = _WWW_DIR / "expander-card.js"
-
-if _DIST_JS.exists():
-    _WWW_DIR.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(_DIST_JS, _WWW_JS)  # NOSONAR
-else:
-    warnings.warn(
-        f"Built card file not found at {_DIST_JS}. "
-        "Run 'pnpm run build' before running the tests. "
-        "Visual tests will fail because the card cannot be loaded.",
-        stacklevel=1,
-    )
-
-
-# ---------------------------------------------------------------------------
-# Register expander-card.js as a Lovelace resource after the HA container
-# starts.
-#
-# Third-party plugins listed in tests/plugins.yaml are downloaded and
-# registered automatically by ha_testcontainer: the ``ha`` fixture calls
-# ``download_lovelace_plugins`` which writes ``lovelace_resources.yaml``;
-# HA loads that file at startup via ``resource_mode: yaml`` in
-# configuration.yaml.  This fixture only handles the locally-built
-# expander-card.js, which is not part of plugins.yaml.
-# ---------------------------------------------------------------------------
-
-
-@pytest.fixture(scope="session", autouse=True)
-def _ha_lovelace_resources(ha: Any) -> None:
-    """Register the locally-built expander-card.js as a Lovelace resource.
-
-    Runs once per test session after the HA container is ready.  Uses the
-    WebSocket ``lovelace/resources/create`` command to add
-    ``/local/expander-card.js`` to the resource list.
-
-    Third-party plugins from ``tests/plugins.yaml`` are handled entirely by
-    ha_testcontainer (downloaded to ``www/`` and written into
-    ``lovelace_resources.yaml``, which HA loads at startup).
-    """
-    try:
-        # ha_testcontainer does not expose a public API for registering
-        # Lovelace resources; _ws_call is the supported low-level interface
-        # (also used by push_lovelace_config and setup_integration).
-        ha._ws_call({
-            "id": 10000,
-            "type": "lovelace/resources/create",
-            "res_type": "module",
-            "url": "/local/expander-card.js",
-        })
-    except (RuntimeError, OSError) as exc:
-        warnings.warn(
-            f"Could not register Lovelace resource /local/expander-card.js: {exc}",
-            stacklevel=1,
-        )
