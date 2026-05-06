@@ -47,7 +47,7 @@ SCENARIO_DIRS = [
 EXCLUSIONS_FILE = Path(__file__).parent / "doc-image-audit-exclusions.txt"
 
 # Matches Markdown image syntax:  ![alt text](path/to/image.png)
-_IMG_RE = re.compile(r"!\[.*?\]\(([^)]+)\)")
+_IMG_RE = re.compile(r"!\[.*?\]\(([^)]+)\)") #NOSONAR
 
 # Extensions considered "documentation images" for audit purposes.
 _IMAGE_EXTS = {".png", ".gif"}
@@ -72,7 +72,7 @@ def _collect_referenced_images() -> set[str]:
             # Strip URL fragment and surrounding whitespace.
             raw = match.group(1).split("#")[0].strip()
             # Skip absolute HTTP URLs and absolute local paths.
-            if raw.startswith(("http://", "https://", "//", "/")):
+            if raw.startswith(("http://", "https://", "//", "/")): #NOSONAR
                 continue
             # Only care about PNG/GIF files.
             if Path(raw).suffix.lower() not in _IMAGE_EXTS:
