@@ -41,7 +41,12 @@ from pathlib import Path
 # value (e.g. from ``source .ha_env``) unchanged.
 
 _REPO_ROOT = Path(__file__).parent.parent
-_DEFAULT_HA_VERSION = (_REPO_ROOT / "tests" / "HA_VERSION").read_text().strip()
+_HA_VERSION_FILE = _REPO_ROOT / "tests" / "HA_VERSION"
+
+try:
+    _DEFAULT_HA_VERSION = _HA_VERSION_FILE.read_text().strip()
+except OSError as exc:
+    raise RuntimeError(f"Failed to read default HA version from {_HA_VERSION_FILE}") from exc
 
 os.environ.setdefault("HA_VERSION", _DEFAULT_HA_VERSION)  # NOSONAR
 os.environ.setdefault("HA_CONFIG_PATH", str(_REPO_ROOT / "tests" / "ha-config"))  # NOSONAR
